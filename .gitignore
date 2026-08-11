@@ -1,0 +1,38 @@
+# Local SDK and CLI state
+.dotnet/
+.dotnet-home/
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Aa]rtifacts/
+TestResults/
+coverage/
+*.trx
+*.coverage
+*.coveragexml
+
+# Visual Studio and Rider
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Local application data
+*.db
+*.db-shm
+*.db-wal
+logs/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
