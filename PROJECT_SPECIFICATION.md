@@ -6,7 +6,7 @@
 **Default project language:** English  
 **Primary audience:** Freelancers and small businesses  
 **MVP currency:** EUR  
-**Project status:** Planning / Foundation not started
+**Project status:** Milestone 1 in progress / Solution foundation complete
 
 ---
 
@@ -160,6 +160,7 @@ invoice-manager-desktop/
 │   └── pull_request_template.md
 │
 ├── docs/
+│   ├── README.md
 │   ├── project-overview.md
 │   ├── requirements.md
 │   ├── architecture.md
@@ -167,14 +168,17 @@ invoice-manager-desktop/
 │   ├── business-rules.md
 │   ├── testing-strategy.md
 │   ├── roadmap.md
+│   ├── case-study.md
 │   │
 │   ├── decisions/
+│   │   ├── README.md
 │   │   ├── 0001-use-clean-architecture.md
 │   │   ├── 0002-use-wpf-and-mvvm.md
 │   │   ├── 0003-use-sqlite.md
 │   │   ├── 0004-document-numbering.md
 │   │   ├── 0005-preserve-document-snapshots.md
-│   │   └── 0006-use-recorded-payments.md
+│   │   ├── 0006-use-recorded-payments.md
+│   │   └── 0007-use-explicit-date-time-policy.md
 │   │
 │   └── images/
 │       ├── dashboard.png
@@ -299,6 +303,8 @@ Rules:
 Id
 Number
 CustomerId
+IssuerSnapshot
+CustomerSnapshot
 IssueDate
 ValidUntil
 Status
@@ -345,6 +351,8 @@ GrossAmount
 Id
 Number
 CustomerId
+IssuerSnapshot
+CustomerSnapshot
 IssueDate
 DueDate
 Status
@@ -443,7 +451,24 @@ VatRate
 
 instead of dynamically reading current values from `ProductService`.
 
-The same rule applies to customer data used in a document.
+The same rule applies to customer and issuer data used in a document.
+
+Each quotation and invoice preserves the issuer details required to render the original document. At minimum, the issuer snapshot contains:
+
+```text
+IssuerCompanyName
+IssuerStreet
+IssuerPostalCode
+IssuerCity
+IssuerCountry
+IssuerVatNumber
+IssuerChamberOfCommerceNumber
+IssuerIban
+IssuerEmail
+IssuerPhone
+```
+
+The implementation may use an owned type or value object such as `IssuerSnapshot`. Historical views and regenerated PDFs use the persisted issuer, customer, and line-item snapshots. They must not substitute current values from `CompanySettings`, `Customer`, or `ProductService`. Historical logo preservation is finalized with PDF implementation in M6.
 
 Example:
 
@@ -799,6 +824,8 @@ PDF library
 
 The PDF library is selected before Milestone 6.
 
+Historical PDF generation uses persisted issuer, customer, and line-item snapshots. It must not read current company, customer, or catalog values in place of document snapshots.
+
 PDF output should include:
 
 - company logo,
@@ -830,6 +857,27 @@ Default application directory:
 ```
 
 Generated PDFs are exported to a user-selected location.
+
+### Date and Time Storage Policy
+
+Business dates and audit timestamps are separate concepts:
+
+```text
+Business dates (DateOnly, stored as yyyy-MM-dd):
+IssueDate
+DueDate
+ValidUntil
+PaymentDate
+
+Audit timestamps (DateTimeOffset, normalized to UTC):
+CreatedAt
+UpdatedAt
+Payment.CreatedAt
+```
+
+Business dates are never converted between time zones. Audit timestamps are persisted as round-trippable UTC instants and converted to the operating system's local time zone only for display.
+
+Application and Domain code obtain `UtcNow` and the current local business date from an injected clock abstraction. The production clock derives `Today` using the operating system's local time zone; tests use a controlled clock. Business rules must not read system time directly. The overdue rule compares `DueDate` with `clock.Today`.
 
 ---
 
@@ -1001,6 +1049,9 @@ invoice status
 overdue status
 document numbering
 quote totals
+issuer, customer and item snapshots
+date-only business dates
+UTC audit timestamps
 ```
 
 ### 16.2 Application Tests
@@ -1523,6 +1574,7 @@ Initial ADR list:
 0004 Assign document numbers on first save
 0005 Preserve document snapshots
 0006 Use recorded payments instead of Paid checkbox
+0007 Use explicit business-date and UTC timestamp semantics
 ```
 
 ---
@@ -1717,11 +1769,15 @@ Any AI working on the repository must follow these rules:
 | Business rules | DESIGNED |
 | Testing strategy | DESIGNED |
 | GitHub workflow | DESIGNED |
+| Documentation foundation | DONE |
+| ADR foundation | DONE |
 | PDF implementation | TO DECIDE — M6 |
-| Source code | NOT STARTED |
-| GitHub repository | NOT STARTED |
+| Solution and project foundation | DONE |
+| Source code | FOUNDATION STARTED |
+| Local Git repository | DONE |
+| GitHub remote repository | NOT STARTED |
 | CI | NOT STARTED |
-| UI | NOT STARTED |
+| UI | WPF PROJECT GENERATED / SHELL NOT STARTED |
 
 ---
 
@@ -1730,13 +1786,13 @@ Any AI working on the repository must follow these rules:
 ### M1 — Foundation
 
 ```text
-#1  Initialize Git repository and solution
-#2  Add Domain project
-#3  Add Application project
-#4  Add Infrastructure project
-#5  Add WPF App project
-#6  Add test projects
-#7  Configure project dependencies
+#1  Initialize Git repository and solution — DONE
+#2  Add Domain project — DONE
+#3  Add Application project — DONE
+#4  Add Infrastructure project — DONE
+#5  Add WPF App project — DONE
+#6  Add test projects — DONE
+#7  Configure project dependencies — DONE
 #8  Configure Generic Host and DI
 #9  Configure application logging
 #10 Add EF Core and SQLite
@@ -1747,8 +1803,8 @@ Any AI working on the repository must follow these rules:
 #15 Implement application navigation
 #16 Configure GitHub Actions CI
 #17 Add repository templates
-#18 Create initial project documentation
-#19 Add README
+#18 Verify documentation consistency before implementation — DONE
+#19 Verify README and documentation navigation — DONE
 #20 Verify clean clone build
 ```
 

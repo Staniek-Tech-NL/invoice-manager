@@ -11,7 +11,7 @@ Customer 1 ---- * Invoice 1 -- * InvoiceItem
 
 ProductService supplies editable source data for new document items.
 DocumentNumberSequence allocates numbers per type and year.
-Documents retain customer and item snapshots independently of source records.
+Documents retain issuer, customer, and item snapshots independently of source records.
 ```
 
 ## Entities
@@ -30,7 +30,7 @@ Stores name, description, unit, unit price, VAT rate, active state, and audit ti
 
 ### Quote and QuoteItem
 
-A quote contains a unique number, customer association and snapshot, issue and validity dates, status, notes, totals, timestamps, and one or more item snapshots.
+A quote contains a unique number, issuer snapshot, customer association and snapshot, issue and validity dates, status, notes, totals, timestamps, and one or more item snapshots.
 
 Quote statuses:
 
@@ -42,7 +42,7 @@ Draft/Sent -> Expired when validity rules apply
 
 ### Invoice and InvoiceItem
 
-An invoice contains a unique number, customer association and snapshot, issue and due dates, status, notes, totals, timestamps, and one or more item snapshots.
+An invoice contains a unique number, issuer snapshot, customer association and snapshot, issue and due dates, status, notes, totals, timestamps, and one or more item snapshots.
 
 Invoice statuses are `Draft`, `Sent`, `Paid`, `Overdue`, and `Cancelled`. Paid and Overdue are derived from payment and due-date rules rather than arbitrary user toggles.
 
@@ -77,9 +77,22 @@ The MVP has one currency, EUR, but money calculations must still be explicit and
 
 ## Document Snapshots
 
-Documents must preserve what was issued. Quote and invoice items therefore store description, quantity, unit, unit price, VAT rate, net amount, VAT amount, and gross amount. Documents also store the customer details needed to render the original document.
+Documents must preserve what was issued. Each quote and invoice stores:
 
-Changing a customer address, catalog price, description, or VAT rate affects new documents only. Existing documents retain their stored snapshot.
+- an issuer snapshot containing company name, address, country, VAT number, chamber of commerce number, IBAN, email, and phone;
+- the customer details needed to render the original document;
+- item snapshots containing description, quantity, unit, unit price, VAT rate, net amount, VAT amount, and gross amount.
+
+The implementation may model the issuer fields as an owned type or value object such as `IssuerSnapshot`. The exact persistence shape may be refined before the document migration, but the snapshot boundary is mandatory. Historical rendering never reads current `CompanySettings` in place of the persisted issuer snapshot.
+
+Changing company settings, a customer address, catalog price, description, or VAT rate affects new documents only. Existing documents retain their stored snapshots. The strategy for preserving a historical logo asset is finalized with PDF implementation in M6; textual issuer fields are part of the document model from the first applicable migration.
+
+## Date and Time Model
+
+- `IssueDate`, `DueDate`, `ValidUntil`, and `PaymentDate` are business dates modeled as `DateOnly` values. They have no time or time zone.
+- `CreatedAt`, `UpdatedAt`, and `Payment.CreatedAt` are audit instants modeled as UTC `DateTimeOffset` values with offset zero.
+- The application obtains UTC time and the current local business date through an injected clock.
+- Audit timestamps are converted to the operating system's local time zone for display only; business dates are displayed without conversion.
 
 ## Aggregate Invariants
 

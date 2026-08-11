@@ -94,7 +94,9 @@ SQLite stores application data locally at:
 
 The same directory contains `logs/` and application-managed `assets/`. Generated documents are exported separately to a location selected by the user.
 
-EF Core entity configurations define relationships, decimal storage strategy, indexes, constraints, and snapshot columns. Migrations are committed and verified through infrastructure tests.
+EF Core entity configurations define relationships, decimal storage strategy, indexes, constraints, and snapshot columns. Quote and invoice persistence includes issuer, customer, and line-item snapshots. Migrations are committed and verified through infrastructure tests.
+
+Business dates (`IssueDate`, `DueDate`, `ValidUntil`, and `PaymentDate`) use date-only values and are stored as ISO `yyyy-MM-dd` values without time-zone conversion. Audit timestamps (`CreatedAt`, `UpdatedAt`, and `Payment.CreatedAt`) are UTC instants and are persisted in a round-trippable UTC representation. The concrete EF Core conversions are centralized and covered by persistence tests.
 
 ## Consistency and Transactions
 
@@ -107,6 +109,10 @@ SQLite concurrency behavior and the precise number-allocation transaction will b
 `Microsoft.Extensions.Hosting` provides application startup, configuration, logging, and dependency injection. Registration is grouped by layer. The WPF App is responsible for starting and stopping the host and resolving the main shell.
 
 No static service locator is permitted.
+
+## Date and Time Boundary
+
+Application and Domain code obtain `UtcNow` and the application-local `Today` through an injected clock abstraction. The production implementation derives `Today` from the operating system's local time zone; tests use a controlled clock. Audit timestamps are converted from UTC to local time only for display. Business dates are never shifted through a time-zone conversion. See [ADR-0007](decisions/0007-use-explicit-date-time-policy.md).
 
 ## PDF Boundary
 
@@ -136,5 +142,6 @@ docs/
 - Package versions and common build settings are centralized.
 - I/O APIs are asynchronous and accept `CancellationToken` where useful.
 - Financial calculations are centralized and never duplicated in UI or PDF code.
+- Historical document rendering reads persisted issuer, customer, and line-item snapshots.
 - Statuses use domain types, not magic strings.
 - Accepted architectural changes require an ADR update or a superseding ADR.

@@ -39,6 +39,7 @@ Integration tests against temporary SQLite databases:
 - unique constraints and sequence allocation;
 - decimal persistence;
 - snapshot persistence;
+- UTC audit timestamp and date-only business-date persistence;
 - cascade behavior;
 - repository queries and archive filters;
 - migrations from an empty database;
@@ -58,7 +59,9 @@ The MVP prioritizes testable view models and manual workflow verification. Autom
 | Sent invoice due yesterday; outstanding 100 | Status Overdue |
 | Draft invoice due yesterday | Status remains Draft |
 | Cancelled invoice due yesterday | Status remains Cancelled |
-| Customer or service edited after issue | Existing document snapshot unchanged |
+| Company, customer, or service edited after issue | Existing issuer, customer, and item snapshots unchanged |
+| Historical PDF regenerated after company edit | Persisted issuer snapshot is used |
+| Same UTC instant evaluated with a controlled local zone | `Today` and overdue result are deterministic |
 | New unsaved document editor cancelled | No number consumed |
 | First quote and invoice in same year | Independent `Q` and `INV` sequences |
 | Concurrent number allocation | Unique, ordered persisted numbers |
@@ -67,7 +70,7 @@ The MVP prioritizes testable view models and manual workflow verification. Autom
 
 - Test names describe behavior and expected result.
 - Arrange, Act, and Assert sections remain visually clear.
-- Tests use fixed dates through an injected clock.
+- Tests control UTC instants and local business dates through an injected clock.
 - Decimal expectations are explicit.
 - One test should fail for one understandable reason.
 - Shared test builders may reduce noise but must not hide important inputs.

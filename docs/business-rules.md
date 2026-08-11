@@ -66,7 +66,13 @@ Examples: `INV-2026-0001` and `Q-2026-0001`.
 
 ## Historical Snapshots
 
-Quote and invoice items copy description, unit, unit price, VAT rate, and calculated values. Documents also retain the customer details needed for historical rendering. Later edits or archival of source records do not alter existing documents.
+Each quote and invoice persists three historical boundaries:
+
+- issuer snapshot: company name, address, country, VAT number, chamber of commerce number, IBAN, email, and phone;
+- customer snapshot: the customer details required to render the document;
+- line-item snapshots: description, unit, unit price, VAT rate, quantity, and calculated values.
+
+Later edits to `CompanySettings`, customer records, or catalog entries do not alter existing documents. The textual issuer snapshot is required from the first applicable document migration. Historical logo preservation is finalized with the PDF implementation in M6.
 
 ## Customer Archiving
 
@@ -96,8 +102,17 @@ The exact policy for repeat conversion and the link between source quote and res
 
 ## PDF Rules
 
-PDF generation reads persisted snapshot data. It must not rehydrate current customer or catalog values in place of document snapshots. Invoice output includes issuer and customer details, number, dates, item table, VAT breakdown, totals, IBAN, and payment term. Quote output uses validity information instead of invoice due/payment fields where appropriate.
+PDF generation reads persisted issuer, customer, and line-item snapshot data. It must not rehydrate current `CompanySettings`, customer, or catalog values in place of document snapshots. Invoice output includes issuer and customer details, number, dates, item table, VAT breakdown, totals, IBAN, and payment term. Quote output uses validity information instead of invoice due/payment fields where appropriate.
 
 ## Time and Audit Data
 
-Timestamps use a consistent application policy. Business rules based on “today” must use an injectable clock. The UTC/local-time storage convention will be finalized before persistence implementation and documented here.
+Business dates and audit timestamps are distinct concepts:
+
+- `IssueDate`, `DueDate`, `ValidUntil`, and `PaymentDate` use `DateOnly` and are stored as ISO `yyyy-MM-dd` values. They are never converted between time zones.
+- `CreatedAt`, `UpdatedAt`, and `Payment.CreatedAt` represent instants. They use `DateTimeOffset`, are normalized to UTC (offset zero), and are persisted in a round-trippable UTC representation.
+- The application obtains `UtcNow` and `Today` from an injected clock abstraction.
+- In production, `Today` is the calendar date obtained by converting the current UTC instant to the operating system's local time zone.
+- Audit timestamps are converted to the operating system's local time zone for display; their persisted value remains UTC.
+- Tests replace the clock and control both the instant and resulting business date deterministically.
+
+The overdue rule compares `DueDate` with `clock.Today`, not directly with `DateTime.Now` or the database server.

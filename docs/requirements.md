@@ -57,7 +57,8 @@ Requirement identifiers are stable references for issues, tests, and release ver
 ### Documents and Storage
 
 - **FR-DOC-001:** Generated PDFs contain company, customer, date, item, VAT, total, banking, and payment-term information appropriate to the document type.
-- **FR-DOC-002:** Existing documents retain their original customer and item snapshot data after source records change.
+- **FR-DOC-002:** Existing documents retain their original issuer, customer, and item snapshot data after source records change.
+- **FR-DOC-003:** Historical views and regenerated PDFs use persisted document snapshots rather than current company, customer, or catalog data.
 - **FR-STO-001:** Application data is stored locally in SQLite under `%LocalAppData%/InvoiceManager`.
 - **FR-STO-002:** PDFs are exported to a location selected by the user.
 

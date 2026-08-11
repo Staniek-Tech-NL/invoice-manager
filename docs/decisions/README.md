@@ -10,6 +10,7 @@ Architecture Decision Records (ADRs) preserve the context and consequences of si
 | [0004](0004-document-numbering.md) | Assign document numbers on first save | Accepted |
 | [0005](0005-preserve-document-snapshots.md) | Preserve document snapshots | Accepted |
 | [0006](0006-use-recorded-payments.md) | Use recorded payments instead of a Paid checkbox | Accepted |
+| [0007](0007-use-explicit-date-time-policy.md) | Use explicit business-date and UTC timestamp semantics | Accepted |
 
 ## Adding a Decision
 

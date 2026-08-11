@@ -25,7 +25,7 @@ The design separates WPF/MVVM presentation, application use cases, domain rules,
 
 ### Stable document history
 
-Documents store customer and line-item snapshots so later changes to addresses, descriptions, prices, or VAT rates affect only future documents.
+Documents store issuer, customer, and line-item snapshots so later changes to company settings, addresses, descriptions, prices, or VAT rates affect only future documents.
 
 ### Safe numbering
 
