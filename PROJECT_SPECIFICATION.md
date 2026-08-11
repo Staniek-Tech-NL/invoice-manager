@@ -52,7 +52,7 @@ All repository-facing content is written in English.
 | Screenshots | English |
 | Releases / changelog | English |
 
-Project discussions may be conducted in Polish, but repository artifacts remain English.
+Project discussions may be conducted in other languages when appropriate, but repository artifacts remain English.
 
 ---
 
@@ -1260,11 +1260,11 @@ Documentation skeleton
 ### M2 — Customers & Services — COMPLETE
 
 ```text
-Customer CRUD
+Customer create, view, and edit
 Customer archive
 Customer search
 
-Service CRUD
+Service create, view, and edit
 Service deactivate
 Service search
 ```

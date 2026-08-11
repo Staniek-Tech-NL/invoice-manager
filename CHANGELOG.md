@@ -18,6 +18,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Product and service creation, editing, searching, and safe deactivation across the domain, application, persistence, and WPF layers.
 - Milestone 2 validation, use-case, repository, filtering, and wildcard-search tests.
 
+### Changed
+
+- Refreshed the README, project specification, and case study to reflect the completed Milestone 2 implementation.
+
 ## Planned Releases
 
 - `0.1.0` — foundation

@@ -16,16 +16,20 @@ Configure company -> Create customer -> Create service -> Create quote
 
 Invoice Manager is not intended to replace accounting software or an ERP system.
 
-## Planned Features
+## Implemented Features
 
 - Customer create, view, edit, archive, and search workflows
 - Product and service create, edit, deactivate, and search workflows
+- Local SQLite persistence with automatic migrations
+
+## Planned Features
+
 - Quote creation, status tracking, and conversion to an invoice
 - Invoice creation, lifecycle management, and PDF export
 - Partial and full payment recording with overpayment protection
 - Automatic paid and overdue state calculation
 - Dashboard KPIs, recent invoices, and monthly revenue chart
-- Local SQLite persistence and company branding settings
+- Company profile and branding settings
 
 ## Technology
 

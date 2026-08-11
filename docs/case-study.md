@@ -45,11 +45,15 @@ Accepted decisions are recorded in [Architecture Decision Records](decisions/REA
 
 ## Implementation
 
-Implementation has not started. This section will record milestone outcomes, significant trade-offs, and links to representative code and pull requests.
+Milestone 1 established the .NET 10 solution, layered project structure, Generic Host, dependency injection, logging, SQLite persistence, initial EF Core migration, WPF navigation shell, CI workflow, and automated test foundation.
+
+Milestone 2 delivered customer and product/service maintenance across all application layers. Users can create, view, edit, and search reusable records. Customers are archived and catalog entries are deactivated instead of being physically deleted, preserving their future relationship with historical documents. Domain validation protects required fields, email format, non-negative prices, and VAT ranges. Repository queries hide inactive records by default while allowing them to be included explicitly.
+
+The desktop UI provides dedicated customer and product/service lists and editors, confirmation before archival or deactivation, validation feedback, search, and inactive-record filters. Application use cases remain independent of WPF, while EF Core repositories own SQLite access.
 
 ## Testing Strategy
 
-The project emphasizes domain tests for calculations and state, application tests for workflows, and SQLite integration tests for mappings, constraints, transactions, and migrations. Release verification adds an end-to-end manual workflow and visual PDF review.
+The project currently has 26 passing automated tests: 11 domain tests, 8 application tests, and 7 infrastructure tests. The M2 coverage includes validation, create and update workflows, archival and deactivation, SQLite persistence, inactive-record filtering, case-insensitive search, and escaped search wildcards. Clean-clone verification restores, builds, and tests the committed repository independently. Future milestones will add calculation, lifecycle, transaction, snapshot, and PDF coverage.
 
 ## Result
 
@@ -57,4 +61,7 @@ Target result: a downloadable `v1.0.0` Windows application with a complete custo
 
 ## Lessons Learned
 
-To be completed throughout development rather than reconstructed after release.
+- Archival and deactivation are domain actions rather than UI-only flags, which keeps lifecycle rules consistent across all callers.
+- Small application use cases and repository ports keep WPF and EF Core details outside the domain model.
+- Search behavior needs integration tests because SQLite wildcard semantics differ from ordinary string matching.
+- Updating the case study at each milestone keeps implementation evidence accurate instead of reconstructing it only for the final release.
