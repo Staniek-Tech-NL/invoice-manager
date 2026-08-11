@@ -1,125 +1,77 @@
-<UserControl x:Class="InvoiceManager.App.Views.QuotesView"
+<UserControl x:Class="InvoiceManager.App.Views.InvoicesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="36" />
-            <Setter Property="Padding" Value="16,0" />
-            <Setter Property="Background" Value="#2D6CDF" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Height" Value="36" /><Setter Property="Padding" Value="16,0" />
+            <Setter Property="Background" Value="#2D6CDF" /><Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" /><Setter Property="FontWeight" Value="SemiBold" />
         </Style>
         <Style x:Key="SecondaryButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="36" />
-            <Setter Property="Padding" Value="14,0" />
-            <Setter Property="Background" Value="White" />
-            <Setter Property="Foreground" Value="#27344A" />
+            <Setter Property="Height" Value="36" /><Setter Property="Padding" Value="14,0" />
+            <Setter Property="Background" Value="White" /><Setter Property="Foreground" Value="#27344A" />
             <Setter Property="BorderBrush" Value="#CFD6E2" />
         </Style>
     </UserControl.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="12" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="12" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="12" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="12" /><RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="300" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox Height="36" Padding="10,6" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
             <Button Grid.Column="1" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding SearchCommand}" Content="Search" />
             <Button Grid.Column="3" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditSelectedCommand}" Content="Edit" />
             <Button Grid.Column="4" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding MarkSentCommand}" Content="Mark sent" />
-            <Button Grid.Column="5" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding AcceptCommand}" Content="Accept" />
-            <Button Grid.Column="6" Margin="8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding RejectCommand}" Content="Reject" />
-            <Button Grid.Column="7" Margin="0,0,8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding ConvertToInvoiceCommand}" Content="Convert to invoice" />
-            <Button Grid.Column="8" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding OpenCreateEditorCommand}" Content="+ New quote" />
+            <Button Grid.Column="5" Margin="8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding CancelInvoiceCommand}" Content="Cancel invoice" />
+            <Button Grid.Column="6" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding OpenCreateEditorCommand}" Content="+ New invoice" />
         </Grid>
-
         <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
             <TextBlock Foreground="#2F7D4A" Text="{Binding StatusMessage}" />
             <TextBlock Grid.Column="1" Foreground="#C43D3D" Text="{Binding ErrorMessage}" />
         </Grid>
-
         <Grid Grid.Row="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
             <Border Background="White" BorderBrush="#E1E6EF" BorderThickness="1" CornerRadius="10">
-                <DataGrid ItemsSource="{Binding Quotes}" SelectedItem="{Binding SelectedQuote}"
+                <DataGrid ItemsSource="{Binding Invoices}" SelectedItem="{Binding SelectedInvoice}"
                           AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False"
                           GridLinesVisibility="Horizontal" BorderThickness="0" RowHeaderWidth="0">
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="*" Header="Number" Binding="{Binding Number}" />
                         <DataGridTextColumn Width="2*" Header="Customer" Binding="{Binding CustomerCompanyName}" />
                         <DataGridTextColumn Width="*" Header="Issue date" Binding="{Binding IssueDate}" />
-                        <DataGridTextColumn Width="*" Header="Valid until" Binding="{Binding ValidUntil}" />
+                        <DataGridTextColumn Width="*" Header="Due date" Binding="{Binding DueDate}" />
                         <DataGridTextColumn Width="*" Header="Status" Binding="{Binding Status}" />
                         <DataGridTextColumn Width="*" Header="Total" Binding="{Binding Total, StringFormat={}{0:N2} EUR}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
-
             <Border Grid.Column="1" Width="650" Margin="20,0,0,0" Padding="22"
                     Background="White" BorderBrush="#E1E6EF" BorderThickness="1" CornerRadius="10"
                     Visibility="{Binding IsEditorOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <TextBlock FontSize="18" FontWeight="SemiBold" Text="{Binding EditorTitle}" />
                     <Grid Grid.Row="1" Margin="0,16,0,12">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*" />
-                            <ColumnDefinition Width="12" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="12" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="2*" /><ColumnDefinition Width="12" /><ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" /><ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel>
-                            <TextBlock Text="Customer *" />
-                            <ComboBox Height="34" Margin="0,4,0,0" ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="CompanyName" />
-                        </StackPanel>
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="Issue date *" />
-                            <DatePicker Height="34" Margin="0,4,0,0" SelectedDate="{Binding IssueDate}" />
-                        </StackPanel>
-                        <StackPanel Grid.Column="4">
-                            <TextBlock Text="Valid until *" />
-                            <DatePicker Height="34" Margin="0,4,0,0" SelectedDate="{Binding ValidUntil}" />
-                        </StackPanel>
+                        <StackPanel><TextBlock Text="Customer *" /><ComboBox Height="34" Margin="0,4,0,0" ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="CompanyName" /></StackPanel>
+                        <StackPanel Grid.Column="2"><TextBlock Text="Issue date *" /><DatePicker Height="34" Margin="0,4,0,0" SelectedDate="{Binding IssueDate}" /></StackPanel>
+                        <StackPanel Grid.Column="4"><TextBlock Text="Due date *" /><DatePicker Height="34" Margin="0,4,0,0" SelectedDate="{Binding DueDate}" /></StackPanel>
                     </Grid>
                     <Grid Grid.Row="2" Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                         <ComboBox Height="34" ItemsSource="{Binding CatalogItems}" SelectedItem="{Binding SelectedCatalogItem}" DisplayMemberPath="Name" />
                         <Button Grid.Column="1" Margin="8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding AddCatalogItemCommand}" Content="Add service" />
                         <Button Grid.Column="2" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding RemoveSelectedLineCommand}" Content="Remove line" />
@@ -135,12 +87,11 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="4" Margin="0,12,0,12">
-                        <TextBlock Text="Notes" />
-                        <TextBox Height="64" Margin="0,4,0,0" Padding="8" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Text="Notes" /><TextBox Height="64" Margin="0,4,0,0" Padding="8" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Margin="0,0,8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding CancelEditCommand}" Content="Cancel" />
-                        <Button Style="{StaticResource PrimaryButtonStyle}" Command="{Binding SaveCommand}" Content="Save quote" />
+                        <Button Style="{StaticResource PrimaryButtonStyle}" Command="{Binding SaveCommand}" Content="Save invoice" />
                     </StackPanel>
                 </Grid>
             </Border>

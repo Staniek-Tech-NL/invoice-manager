@@ -53,9 +53,11 @@ The desktop UI provides dedicated customer and product/service lists and editors
 
 Milestone 3 introduced the company profile required for issuer snapshots and delivered the complete quotation workflow. The editor selects active customers and catalog entries, supports editable line snapshots, calculates totals through centralized domain rules, and allows only valid Draft → Sent → Accepted or Rejected transitions. Eligible draft and sent quotations expire automatically. Numbers such as `Q-2026-0001` are allocated during the first transactional save, with a concurrency test protecting uniqueness and ordering.
 
+Milestone 4 added independent invoice creation and one-time conversion from accepted quotations. Converted invoices retain a unique `SourceQuoteId`, clone all historical snapshots, receive their own `INV-YYYY-NNNN` number, and leave the source quotation unchanged. Conversion and sequence allocation share one transaction, so a failed or repeated attempt neither creates partial data nor consumes a number. The WPF invoice editor supports Draft, Sent, and Cancelled lifecycle actions; payment-derived states remain reserved for Milestone 5.
+
 ## Testing Strategy
 
-The project currently has 50 passing automated tests: 24 domain tests, 14 application tests, and 12 infrastructure tests. Coverage now includes reusable-record validation, quotation calculations and lifecycle rules, snapshot stability, first-save and concurrent numbering, SQLite persistence, filtering, search escaping, and automatic expiration. Clean-clone verification restores, builds, and tests the committed repository independently. Future milestones will add invoice, payment, conversion, and PDF coverage.
+The project currently has 68 passing automated tests: 32 domain tests, 19 application tests, and 17 infrastructure tests. Coverage now includes reusable-record validation, quotation and invoice calculations, lifecycle rules, snapshot stability, independent first-save and concurrent numbering, transactional quote conversion, rollback behavior, SQLite persistence, filtering, search escaping, and automatic expiration. Clean-clone verification restores, builds, and tests the committed repository independently. Future milestones will add payment, overdue-state, and PDF coverage.
 
 ## Result
 
@@ -68,4 +70,5 @@ Target result: a downloadable `v1.0.0` Windows application with a complete custo
 - Search behavior needs integration tests because SQLite wildcard semantics differ from ordinary string matching.
 - First-save numbering belongs in the same persistence transaction as the document; opening or abandoning an editor must never consume a number.
 - Persisted line and party snapshots make historical stability an explicit aggregate boundary rather than a rendering concern.
+- A unique source-quote link complements application validation and makes repeat conversion impossible even under competing callers.
 - Updating the case study at each milestone keeps implementation evidence accurate instead of reconstructing it only for the final release.

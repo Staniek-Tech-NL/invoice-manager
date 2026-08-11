@@ -112,7 +112,9 @@ Only an eligible quotation may be converted. The conversion:
 - preserves the source quotation;
 - performs persistence as one transaction.
 
-The exact policy for repeat conversion and the link between source quote and resulting invoice must be finalized before Milestone 4 and covered by tests.
+Each quotation can be converted at most once. The resulting invoice stores the source quotation identifier, protected by a unique database constraint. A repeat conversion is rejected without allocating a new invoice number. A failed conversion rolls back the invoice, line items, and sequence increment together.
+
+The converted invoice receives its own `INV-YYYY-NNNN` number and starts in Draft. Its issue date is the current business date and its due date applies the configured default payment term. The source quotation remains Accepted and unchanged.
 
 ## PDF Rules
 

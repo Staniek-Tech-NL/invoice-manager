@@ -1,5 +1,6 @@
 using InvoiceManager.Domain.Customers;
 using InvoiceManager.Domain.Invoices;
+using InvoiceManager.Domain.Quotes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,10 +24,16 @@ internal sealed class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
         builder.HasIndex(invoice => invoice.Status);
         builder.HasIndex(invoice => invoice.IssueDate);
         builder.HasIndex(invoice => invoice.DueDate);
+        builder.HasIndex(invoice => invoice.SourceQuoteId).IsUnique();
 
         builder.HasOne<Customer>()
             .WithMany()
             .HasForeignKey(invoice => invoice.CustomerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne<Quote>()
+            .WithOne()
+            .HasForeignKey<Invoice>(invoice => invoice.SourceQuoteId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.OwnsOne(invoice => invoice.Issuer, issuer =>

@@ -1,4 +1,5 @@
 using InvoiceManager.Application.Customers;
+using InvoiceManager.Application.Invoices;
 using InvoiceManager.Application.Products;
 using InvoiceManager.Application.Quotes;
 using InvoiceManager.Application.Settings;
@@ -27,6 +28,12 @@ public static class DependencyInjection
         services.AddTransient<UpdateQuote>();
         services.AddTransient<SearchQuotes>();
         services.AddTransient<ChangeQuoteStatus>();
+
+        services.AddTransient<CreateInvoice>();
+        services.AddTransient<UpdateInvoice>();
+        services.AddTransient<SearchInvoices>();
+        services.AddTransient<ChangeInvoiceStatus>();
+        services.AddTransient<ConvertQuoteToInvoice>();
 
         return services;
     }

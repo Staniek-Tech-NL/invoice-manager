@@ -48,6 +48,10 @@ Line net, VAT, and gross amounts use the centralized two-decimal, midpoint-away-
 
 An invoice contains a unique number, issuer snapshot, customer association and snapshot, issue and due dates, status, notes, totals, timestamps, and one or more item snapshots.
 
+An invoice is created as a draft with at least one valid item. Only drafts can be edited or marked as sent. Draft and sent invoices can be cancelled. Paid and Overdue remain derived payment states implemented in Milestone 5 rather than manual M4 actions. Invoice numbers use an independent yearly sequence and are assigned atomically on first persistence.
+
+An invoice converted from a quotation stores a unique optional source quotation identifier. Conversion requires an Accepted quotation, copies issuer, customer, line, and notes snapshots, preserves the source quotation, and can succeed only once.
+
 Invoice statuses are `Draft`, `Sent`, `Paid`, `Overdue`, and `Cancelled`. Paid and Overdue are derived from payment and due-date rules rather than arbitrary user toggles.
 
 ### Payment

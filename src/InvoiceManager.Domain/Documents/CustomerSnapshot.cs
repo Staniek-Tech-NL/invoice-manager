@@ -50,4 +50,18 @@ public sealed class CustomerSnapshot
             VatNumber = TextRules.Optional(vatNumber, nameof(vatNumber), 50),
         };
     }
+
+    public CustomerSnapshot Copy()
+    {
+        return Create(
+            CompanyName,
+            ContactPerson,
+            Street,
+            PostalCode,
+            City,
+            Country,
+            Email,
+            Phone,
+            VatNumber);
+    }
 }

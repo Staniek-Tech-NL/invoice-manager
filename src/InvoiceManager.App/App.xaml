@@ -18,7 +18,7 @@
             <views:QuotesView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:InvoicesViewModel}">
-            <views:FeaturePlaceholderView />
+            <views:InvoicesView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
             <views:SettingsView />

@@ -54,4 +54,19 @@ public sealed class IssuerSnapshot
             Phone = TextRules.Optional(phone, nameof(phone), 50),
         };
     }
+
+    public IssuerSnapshot Copy()
+    {
+        return Create(
+            CompanyName,
+            Street,
+            PostalCode,
+            City,
+            Country,
+            VatNumber,
+            ChamberOfCommerceNumber,
+            Iban,
+            Email,
+            Phone);
+    }
 }

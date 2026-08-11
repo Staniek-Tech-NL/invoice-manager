@@ -21,7 +21,7 @@ internal sealed class InvoiceItemConfiguration : IEntityTypeConfiguration<Invoic
         builder.Property(item => item.GrossAmount).HasPrecision(18, 2);
 
         builder.HasOne<Invoice>()
-            .WithMany()
+            .WithMany(invoice => invoice.Items)
             .HasForeignKey(item => item.InvoiceId)
             .OnDelete(DeleteBehavior.Cascade);
     }

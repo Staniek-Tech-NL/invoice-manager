@@ -51,6 +51,8 @@ The M2 suite verifies customer and catalog validation, create/update/archive or 
 
 The M3 suite verifies company settings, snapshot capture, per-line rounding and document totals, quote validation and lifecycle transitions, automatic expiration, first-save yearly numbering, concurrent number allocation, item replacement, search escaping, and SQLite round trips. At M3 completion the suite contains 50 tests: 24 domain, 14 application, and 12 infrastructure tests.
 
+The M4 suite verifies direct invoice creation and editing, shared financial calculations, Draft/Sent/Cancelled transitions, independent invoice numbering, concurrent allocation, persisted source links, quote snapshot conversion, repeat-conversion rejection, and transaction rollback without sequence gaps. At M4 completion the suite contains 68 tests: 32 domain, 19 application, and 17 infrastructure tests.
+
 ### UI Tests
 
 The MVP prioritizes testable view models and manual workflow verification. Automated WPF UI testing may be added when it provides clear value, especially for navigation or critical editor behavior.

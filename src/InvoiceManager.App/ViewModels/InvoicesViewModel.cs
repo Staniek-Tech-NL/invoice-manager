@@ -7,44 +7,38 @@ using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Customers;
 using InvoiceManager.Application.Invoices;
 using InvoiceManager.Application.Products;
-using InvoiceManager.Application.Quotes;
 using InvoiceManager.Application.Settings;
-using InvoiceManager.Domain.Quotes;
+using InvoiceManager.Domain.Invoices;
 
 namespace InvoiceManager.App.ViewModels;
 
-public sealed partial class QuotesViewModel(
-    CreateQuote createQuote,
-    UpdateQuote updateQuote,
-    SearchQuotes searchQuotes,
-    ChangeQuoteStatus changeQuoteStatus,
+public sealed partial class InvoicesViewModel(
+    CreateInvoice createInvoice,
+    UpdateInvoice updateInvoice,
+    SearchInvoices searchInvoices,
+    ChangeInvoiceStatus changeInvoiceStatus,
     SearchCustomers searchCustomers,
     SearchProductServices searchProductServices,
     GetCompanySettings getCompanySettings,
-    ConvertQuoteToInvoice convertQuoteToInvoice,
     IApplicationClock clock,
     IUserDialogService dialogService) : ObservableObject, IActivatableNavigationPage
 {
-    private Guid? _editingQuoteId;
+    private Guid? _editingInvoiceId;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SearchCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenCreateEditorCommand))]
     [NotifyCanExecuteChangedFor(nameof(EditSelectedCommand))]
     [NotifyCanExecuteChangedFor(nameof(MarkSentCommand))]
-    [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
-    [NotifyCanExecuteChangedFor(nameof(RejectCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertToInvoiceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CancelInvoiceCommand))]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
     private bool _isBusy;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditSelectedCommand))]
     [NotifyCanExecuteChangedFor(nameof(MarkSentCommand))]
-    [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
-    [NotifyCanExecuteChangedFor(nameof(RejectCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertToInvoiceCommand))]
-    private QuoteDetails? _selectedQuote;
+    [NotifyCanExecuteChangedFor(nameof(CancelInvoiceCommand))]
+    private InvoiceDetails? _selectedInvoice;
 
     [ObservableProperty]
     private string _searchText = string.Empty;
@@ -54,7 +48,7 @@ public sealed partial class QuotesViewModel(
     private bool _isEditorOpen;
 
     [ObservableProperty]
-    private string _editorTitle = "New quote";
+    private string _editorTitle = "New invoice";
 
     [ObservableProperty]
     private CustomerDetails? _selectedCustomer;
@@ -69,7 +63,7 @@ public sealed partial class QuotesViewModel(
     private DateTime? _issueDate;
 
     [ObservableProperty]
-    private DateTime? _validUntil;
+    private DateTime? _dueDate;
 
     [ObservableProperty]
     private string _notes = string.Empty;
@@ -80,11 +74,11 @@ public sealed partial class QuotesViewModel(
     [ObservableProperty]
     private string? _statusMessage;
 
-    public NavigationDestination Destination => NavigationDestination.Quotes;
+    public NavigationDestination Destination => NavigationDestination.Invoices;
 
-    public string Title => "Quotes";
+    public string Title => "Invoices";
 
-    public ObservableCollection<QuoteDetails> Quotes { get; } = [];
+    public ObservableCollection<InvoiceDetails> Invoices { get; } = [];
 
     public ObservableCollection<CustomerDetails> Customers { get; } = [];
 
@@ -105,23 +99,24 @@ public sealed partial class QuotesViewModel(
     private async Task OpenCreateEditorAsync()
     {
         ClearFeedback();
-        if (await getCompanySettings.ExecuteAsync() is null)
+        var settings = await getCompanySettings.ExecuteAsync();
+        if (settings is null)
         {
-            ErrorMessage = "Configure company settings before creating a quote.";
+            ErrorMessage = "Configure company settings before creating an invoice.";
             return;
         }
 
         if (Customers.Count == 0)
         {
-            ErrorMessage = "Create an active customer before creating a quote.";
+            ErrorMessage = "Create an active customer before creating an invoice.";
             return;
         }
 
-        _editingQuoteId = null;
-        EditorTitle = "New quote";
+        _editingInvoiceId = null;
+        EditorTitle = "New invoice";
         SelectedCustomer = Customers[0];
         IssueDate = clock.Today.ToDateTime(TimeOnly.MinValue);
-        ValidUntil = clock.Today.AddDays(30).ToDateTime(TimeOnly.MinValue);
+        DueDate = clock.Today.AddDays(settings.DefaultPaymentTermDays).ToDateTime(TimeOnly.MinValue);
         Notes = string.Empty;
         LineItems.Clear();
         IsEditorOpen = true;
@@ -130,15 +125,15 @@ public sealed partial class QuotesViewModel(
     [RelayCommand(CanExecute = nameof(CanEditSelected))]
     private void EditSelected()
     {
-        var quote = SelectedQuote!;
-        _editingQuoteId = quote.Id;
-        EditorTitle = $"Edit {quote.Number}";
-        SelectedCustomer = Customers.FirstOrDefault(customer => customer.Id == quote.CustomerId);
-        IssueDate = quote.IssueDate.ToDateTime(TimeOnly.MinValue);
-        ValidUntil = quote.ValidUntil.ToDateTime(TimeOnly.MinValue);
-        Notes = quote.Notes ?? string.Empty;
+        var invoice = SelectedInvoice!;
+        _editingInvoiceId = invoice.Id;
+        EditorTitle = $"Edit {invoice.Number}";
+        SelectedCustomer = Customers.FirstOrDefault(customer => customer.Id == invoice.CustomerId);
+        IssueDate = invoice.IssueDate.ToDateTime(TimeOnly.MinValue);
+        DueDate = invoice.DueDate.ToDateTime(TimeOnly.MinValue);
+        Notes = invoice.Notes ?? string.Empty;
         LineItems.Clear();
-        foreach (var item in quote.Items)
+        foreach (var item in invoice.Items)
         {
             LineItems.Add(new QuoteLineEditorViewModel
             {
@@ -187,31 +182,30 @@ public sealed partial class QuotesViewModel(
     private async Task SaveAsync()
     {
         ClearFeedback();
-        if (SelectedCustomer is null || IssueDate is null || ValidUntil is null)
+        if (SelectedCustomer is null || IssueDate is null || DueDate is null)
         {
-            ErrorMessage = "Customer, issue date, and valid until date are required.";
+            ErrorMessage = "Customer, issue date, and due date are required.";
             return;
         }
 
-        var input = new QuoteInput(
+        var input = new InvoiceInput(
             SelectedCustomer.Id,
             DateOnly.FromDateTime(IssueDate.Value),
-            DateOnly.FromDateTime(ValidUntil.Value),
+            DateOnly.FromDateTime(DueDate.Value),
             Notes,
-            LineItems.Select(item => new QuoteItemInput(
+            LineItems.Select(item => new InvoiceItemInput(
                 item.Description,
                 item.Quantity,
                 item.Unit,
                 item.UnitPrice,
                 item.VatRatePercent / 100m)).ToArray());
-
         await RunBusyAsync(async () =>
         {
-            var saved = _editingQuoteId is Guid quoteId
-                ? await updateQuote.ExecuteAsync(quoteId, input)
-                : await createQuote.ExecuteAsync(input);
+            var saved = _editingInvoiceId is Guid invoiceId
+                ? await updateInvoice.ExecuteAsync(invoiceId, input)
+                : await createInvoice.ExecuteAsync(input);
             IsEditorOpen = false;
-            StatusMessage = $"Quote {saved.Number} was saved.";
+            StatusMessage = $"Invoice {saved.Number} was saved.";
             await RefreshCoreAsync(saved.Id);
         });
     }
@@ -224,45 +218,24 @@ public sealed partial class QuotesViewModel(
     }
 
     [RelayCommand(CanExecute = nameof(CanMarkSent))]
-    private Task MarkSentAsync() => ChangeStatusAsync(QuoteStatus.Sent, "Mark selected quote as sent?");
+    private Task MarkSentAsync() => ChangeStatusAsync(InvoiceStatus.Sent, "Mark selected invoice as sent?");
 
-    [RelayCommand(CanExecute = nameof(CanAcceptOrReject))]
-    private Task AcceptAsync() => ChangeStatusAsync(QuoteStatus.Accepted, "Accept selected quote?");
+    [RelayCommand(CanExecute = nameof(CanCancelInvoice))]
+    private Task CancelInvoiceAsync() => ChangeStatusAsync(InvoiceStatus.Cancelled, "Cancel selected invoice?");
 
-    [RelayCommand(CanExecute = nameof(CanAcceptOrReject))]
-    private Task RejectAsync() => ChangeStatusAsync(QuoteStatus.Rejected, "Reject selected quote?");
-
-    [RelayCommand(CanExecute = nameof(CanConvertToInvoice))]
-    private async Task ConvertToInvoiceAsync()
+    private async Task ChangeStatusAsync(InvoiceStatus status, string confirmation)
     {
-        var quote = SelectedQuote!;
-        if (!dialogService.Confirm(
-                "Convert quote",
-                $"Convert {quote.Number} to an invoice? This action can only be performed once."))
+        var invoice = SelectedInvoice!;
+        if (!dialogService.Confirm("Change invoice status", confirmation))
         {
             return;
         }
 
         await RunBusyAsync(async () =>
         {
-            var invoice = await convertQuoteToInvoice.ExecuteAsync(quote.Id);
-            StatusMessage = $"Invoice {invoice.Number} was created from {quote.Number}.";
-        });
-    }
-
-    private async Task ChangeStatusAsync(QuoteStatus status, string confirmation)
-    {
-        var quote = SelectedQuote!;
-        if (!dialogService.Confirm("Change quote status", confirmation))
-        {
-            return;
-        }
-
-        await RunBusyAsync(async () =>
-        {
-            await changeQuoteStatus.ExecuteAsync(quote.Id, status);
-            StatusMessage = $"Quote {quote.Number} is now {status}.";
-            await RefreshCoreAsync(quote.Id);
+            await changeInvoiceStatus.ExecuteAsync(invoice.Id, status);
+            StatusMessage = $"Invoice {invoice.Number} is now {status}.";
+            await RefreshCoreAsync(invoice.Id);
         });
     }
 
@@ -290,15 +263,17 @@ public sealed partial class QuotesViewModel(
 
     private async Task RefreshCoreAsync(Guid? selectedId = null, CancellationToken cancellationToken = default)
     {
-        selectedId ??= SelectedQuote?.Id;
-        var results = await searchQuotes.ExecuteAsync(SearchText, cancellationToken);
-        Quotes.Clear();
-        foreach (var quote in results)
+        selectedId ??= SelectedInvoice?.Id;
+        var results = await searchInvoices.ExecuteAsync(SearchText, cancellationToken);
+        Invoices.Clear();
+        foreach (var invoice in results)
         {
-            Quotes.Add(quote);
+            Invoices.Add(invoice);
         }
 
-        SelectedQuote = selectedId is Guid id ? Quotes.FirstOrDefault(quote => quote.Id == id) : null;
+        SelectedInvoice = selectedId is Guid id
+            ? Invoices.FirstOrDefault(invoice => invoice.Id == id)
+            : null;
     }
 
     private async Task RunBusyAsync(Func<Task> operation)
@@ -332,13 +307,11 @@ public sealed partial class QuotesViewModel(
 
     private bool CanRun() => !IsBusy;
 
-    private bool CanEditSelected() => !IsBusy && SelectedQuote?.Status == QuoteStatus.Draft;
+    private bool CanEditSelected() => !IsBusy && SelectedInvoice?.Status == InvoiceStatus.Draft;
 
-    private bool CanMarkSent() => !IsBusy && SelectedQuote?.Status == QuoteStatus.Draft;
+    private bool CanMarkSent() => !IsBusy && SelectedInvoice?.Status == InvoiceStatus.Draft;
 
-    private bool CanAcceptOrReject() => !IsBusy && SelectedQuote?.Status == QuoteStatus.Sent;
-
-    private bool CanConvertToInvoice() => !IsBusy && SelectedQuote?.Status == QuoteStatus.Accepted;
+    private bool CanCancelInvoice() => !IsBusy && SelectedInvoice?.Status is InvoiceStatus.Draft or InvoiceStatus.Sent;
 
     private bool CanSave() => !IsBusy && IsEditorOpen;
 }

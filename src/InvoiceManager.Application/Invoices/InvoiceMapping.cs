@@ -1,0 +1,35 @@
+using InvoiceManager.Domain.Invoices;
+
+namespace InvoiceManager.Application.Invoices;
+
+internal static class InvoiceMapping
+{
+    public static InvoiceDetails ToDetails(this Invoice invoice)
+    {
+        return new InvoiceDetails(
+            invoice.Id,
+            invoice.Number,
+            invoice.CustomerId,
+            invoice.SourceQuoteId,
+            invoice.Customer.CompanyName,
+            invoice.IssueDate,
+            invoice.DueDate,
+            invoice.Status,
+            invoice.Notes,
+            invoice.Subtotal,
+            invoice.VatTotal,
+            invoice.Total,
+            invoice.CreatedAt,
+            invoice.UpdatedAt,
+            invoice.Items.Select(item => new InvoiceItemDetails(
+                item.Id,
+                item.Description,
+                item.Quantity,
+                item.Unit,
+                item.UnitPrice,
+                item.VatRate,
+                item.NetAmount,
+                item.VatAmount,
+                item.GrossAmount)).ToArray());
+    }
+}

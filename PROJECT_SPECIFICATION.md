@@ -6,7 +6,7 @@
 **Default project language:** English  
 **Primary audience:** Freelancers and small businesses  
 **MVP currency:** EUR  
-**Project status:** Milestone 3 complete / Invoices next
+**Project status:** Milestone 4 complete / Payments next
 
 ---
 
@@ -351,6 +351,7 @@ GrossAmount
 Id
 Number
 CustomerId
+SourceQuoteId (optional, unique)
 IssuerSnapshot
 CustomerSnapshot
 IssueDate
@@ -602,6 +603,8 @@ The conversion copies:
 - applicable notes.
 
 The source quote remains stored after conversion.
+
+An accepted quote can be converted only once. The resulting invoice stores a unique `SourceQuoteId`, receives an independent invoice number, and starts in Draft. Conversion, line persistence, and number allocation are one transaction; a failed or repeated conversion does not consume a number.
 
 ---
 
@@ -1279,7 +1282,7 @@ Quote statuses
 Quote numbering
 ```
 
-### M4 — Invoices
+### M4 — Invoices — COMPLETE
 
 ```text
 Invoice editor
@@ -1775,11 +1778,12 @@ Any AI working on the repository must follow these rules:
 | Milestone 1 foundation | DONE |
 | Milestone 2 customers and services | DONE |
 | Milestone 3 quotations | DONE |
-| Source code | M3 COMPLETE |
+| Milestone 4 invoices and quote conversion | DONE |
+| Source code | M4 COMPLETE |
 | Local Git repository | DONE |
 | GitHub remote repository | NOT STARTED |
 | CI | CONFIGURED |
-| UI | SHELL, CUSTOMER, SERVICE, SETTINGS, AND QUOTE WORKFLOWS DONE |
+| UI | SHELL, REUSABLE RECORDS, SETTINGS, QUOTE, AND INVOICE WORKFLOWS DONE |
 
 ---
 

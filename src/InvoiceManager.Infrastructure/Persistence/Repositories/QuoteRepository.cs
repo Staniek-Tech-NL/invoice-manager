@@ -9,11 +9,9 @@ namespace InvoiceManager.Infrastructure.Persistence.Repositories;
 internal sealed class QuoteRepository(
     IDbContextFactory<InvoiceManagerDbContext> contextFactory) : IQuoteRepository
 {
-    private static readonly SemaphoreSlim NumberAllocationLock = new(1, 1);
-
     public async Task AddAsync(Quote quote, CancellationToken cancellationToken)
     {
-        await NumberAllocationLock.WaitAsync(cancellationToken);
+        await DocumentNumberAllocationLock.Instance.WaitAsync(cancellationToken);
         try
         {
             await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
@@ -39,7 +37,7 @@ internal sealed class QuoteRepository(
         }
         finally
         {
-            NumberAllocationLock.Release();
+            DocumentNumberAllocationLock.Instance.Release();
         }
     }
 

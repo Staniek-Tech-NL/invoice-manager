@@ -33,13 +33,13 @@ Exit criterion: achieved. Reusable business records can be safely maintained, va
 
 Exit criterion: achieved. A quotation can be created, numbered on first save, updated while in draft, searched, expired automatically, and moved through its supported lifecycle without calculation or snapshot drift.
 
-## M4 — Invoices (`0.4.0`)
+## M4 — Invoices (`0.4.0`) — Complete
 
 - Invoice editor, calculations, statuses, and numbering
 - Accepted quote-to-invoice conversion
 - Transaction and snapshot tests
 
-Exit criterion: invoices work independently and can be created reliably from accepted quotations.
+Exit criterion: achieved. Invoices work independently, use safe yearly numbering and snapshots, and can be created exactly once from an accepted quotation in one transaction.
 
 ## M5 — Payments (`0.5.0`)
 

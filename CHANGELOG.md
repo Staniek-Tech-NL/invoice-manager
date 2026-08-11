@@ -21,11 +21,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Quotation creation, editing, line-item management, search, lifecycle transitions, and automatic expiration.
 - Centralized line rounding, persisted customer/issuer/item snapshots, transactional yearly numbering, and concurrent allocation coverage.
 - Milestone 3 domain, application, and SQLite integration tests, bringing the suite to 50 tests.
+- Direct invoice creation, editing, search, item management, status controls, and independent yearly numbering.
+- Atomic one-time accepted quote-to-invoice conversion with copied snapshots and a unique persisted source link.
+- A schema migration adding the nullable, unique invoice-to-source-quote relationship.
+- Milestone 4 transaction, rollback, snapshot, numbering, domain, application, and SQLite tests, bringing the suite to 68 tests.
 
 ### Changed
 
 - Refreshed the README, project specification, and case study to reflect the completed Milestone 2 implementation.
 - Updated product and engineering documentation with the completed Milestone 3 behavior and rounding policy.
+- Updated documentation with the completed Milestone 4 invoice and conversion behavior.
 
 ## Planned Releases
 
