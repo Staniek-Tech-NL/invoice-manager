@@ -22,11 +22,11 @@ Stores the single issuing business profile: company name, address, country, VAT 
 
 ### Customer
 
-Stores company and contact information, VAT number, notes, archive state, and audit timestamps. Customers are archived, not physically deleted.
+Stores company and contact information, VAT number, notes, archive state, and audit timestamps. Creation and updates enforce required address fields and valid optional email data. Customers are archived, not physically deleted; archiving is idempotent.
 
 ### ProductService
 
-Stores name, description, unit, unit price, VAT rate, active state, and audit timestamps. Typical units are `hour`, `day`, `item`, and `service`. Entries are deactivated, not physically deleted.
+Stores name, description, unit, unit price, VAT rate, active state, and audit timestamps. Creation and updates require a name and unit, reject negative prices, and constrain VAT to a decimal fraction from zero to one. Typical units are `hour`, `day`, `item`, and `service`. Entries are deactivated, not physically deleted; deactivation is idempotent.
 
 ### Quote and QuoteItem
 

@@ -9,10 +9,10 @@
             <views:DashboardView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:CustomersViewModel}">
-            <views:FeaturePlaceholderView />
+            <views:CustomersView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:ServicesViewModel}">
-            <views:FeaturePlaceholderView />
+            <views:ServicesView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:QuotesViewModel}">
             <views:FeaturePlaceholderView />

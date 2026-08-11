@@ -47,6 +47,8 @@ Integration tests against temporary SQLite databases:
 
 The M1 infrastructure suite also verifies application-directory creation, controlled local-date calculation, ISO business-date conversion, UTC audit timestamp normalization, and application of the complete initial migration to SQLite in memory.
 
+The M2 suite verifies customer and catalog validation, create/update/archive or deactivate use cases, SQLite persistence, case-insensitive search, escaped wildcard handling, and default filtering of inactive records.
+
 ### UI Tests
 
 The MVP prioritizes testable view models and manual workflow verification. Automated WPF UI testing may be added when it provides clear value, especially for navigation or critical editor behavior.

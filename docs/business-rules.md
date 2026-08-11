@@ -76,6 +76,9 @@ Later edits to `CompanySettings`, customer records, or catalog entries do not al
 
 ## Customer Archiving
 
+- Company name, street, postal code, city, and country are required.
+- Optional text is trimmed and stored as `null` when blank.
+- When provided, the email address must have a valid format.
 - Customers are archived instead of physically deleted.
 - Archived customers remain linked to historical documents.
 - Archived customers are excluded by default from new-document selection.
@@ -83,6 +86,9 @@ Later edits to `CompanySettings`, customer records, or catalog entries do not al
 
 ## Product and Service Deactivation
 
+- Name and unit are required.
+- Unit price cannot be negative.
+- VAT rate is stored as a decimal fraction from `0` to `1`; the UI accepts a percentage from `0` to `100`.
 - Catalog entries are deactivated instead of physically deleted.
 - Deactivated entries are excluded by default from new-document selection.
 - Existing document items remain unchanged and valid.

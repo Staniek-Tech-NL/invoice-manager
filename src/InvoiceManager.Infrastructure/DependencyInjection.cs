@@ -1,6 +1,9 @@
 using InvoiceManager.Application.Common.Storage;
 using InvoiceManager.Application.Common.Time;
+using InvoiceManager.Application.Customers;
+using InvoiceManager.Application.Products;
 using InvoiceManager.Infrastructure.Persistence;
+using InvoiceManager.Infrastructure.Persistence.Repositories;
 using InvoiceManager.Infrastructure.Storage;
 using InvoiceManager.Infrastructure.Time;
 using Microsoft.Data.Sqlite;
@@ -33,6 +36,8 @@ public static class DependencyInjection
 
         services.AddDbContextFactory<InvoiceManagerDbContext>(options =>
             options.UseSqlite(connectionString));
+        services.AddSingleton<ICustomerRepository, CustomerRepository>();
+        services.AddSingleton<IProductServiceRepository, ProductServiceRepository>();
         services.AddHostedService<DatabaseInitializationService>();
 
         return services;

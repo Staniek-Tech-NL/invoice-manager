@@ -6,7 +6,7 @@
 **Default project language:** English  
 **Primary audience:** Freelancers and small businesses  
 **MVP currency:** EUR  
-**Project status:** Milestone 1 complete / Customers and Services next
+**Project status:** Milestone 2 complete / Quotations next
 
 ---
 
@@ -1257,7 +1257,7 @@ Base navigation
 Documentation skeleton
 ```
 
-### M2 — Customers & Services
+### M2 — Customers & Services — COMPLETE
 
 ```text
 Customer CRUD
@@ -1773,11 +1773,12 @@ Any AI working on the repository must follow these rules:
 | ADR foundation | DONE |
 | PDF implementation | TO DECIDE — M6 |
 | Milestone 1 foundation | DONE |
-| Source code | FOUNDATION COMPLETE |
+| Milestone 2 customers and services | DONE |
+| Source code | M2 COMPLETE |
 | Local Git repository | DONE |
 | GitHub remote repository | NOT STARTED |
 | CI | CONFIGURED |
-| UI | BASE SHELL AND NAVIGATION DONE |
+| UI | SHELL, CUSTOMER, AND SERVICE WORKFLOWS DONE |
 
 ---
 

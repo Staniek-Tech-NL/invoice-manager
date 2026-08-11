@@ -19,9 +19,14 @@ public sealed partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void Navigate(NavigationDestination destination)
+    private async Task NavigateAsync(NavigationDestination destination)
     {
         _navigationService.NavigateTo(destination);
+
+        if (_navigationService.CurrentPage is IActivatableNavigationPage activatablePage)
+        {
+            await activatablePage.ActivateAsync();
+        }
     }
 
     private void OnCurrentPageChanged(object? sender, EventArgs e)

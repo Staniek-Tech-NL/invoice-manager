@@ -2,7 +2,7 @@
 
 Invoice Manager is a Windows desktop application for freelancers and small businesses that need a focused way to manage customers, services, quotations, invoices, payments, and basic financial reporting.
 
-> Project status: Milestone 1 complete. The host, dependency injection, logging, SQLite persistence, initial migration, WPF shell, navigation, tests, and CI foundation are in place. Business features begin in Milestone 2.
+> Project status: Milestone 2 complete. Customers and catalog entries can be created, viewed, edited, searched, and safely archived or deactivated. Quotations are next in Milestone 3.
 
 ## Product Scope
 
@@ -18,8 +18,8 @@ Invoice Manager is not intended to replace accounting software or an ERP system.
 
 ## Planned Features
 
-- Customer management with archiving and search
-- Product and service catalog with deactivation
+- Customer create, view, edit, archive, and search workflows
+- Product and service create, edit, deactivate, and search workflows
 - Quote creation, status tracking, and conversion to an invoice
 - Invoice creation, lifecycle management, and PDF export
 - Partial and full payment recording with overpayment protection
@@ -89,7 +89,7 @@ dotnet test InvoiceManager.sln --no-build --configuration Release
 dotnet run --project src/InvoiceManager.App/InvoiceManager.App.csproj
 ```
 
-On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI provides the navigable product shell; customer and service workflows are the next implementation milestone.
+On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI includes the navigable product shell and complete customer and product/service maintenance workflows.
 
 ## Local Data
 

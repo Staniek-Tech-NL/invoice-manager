@@ -21,18 +21,6 @@ public abstract class FeaturePlaceholderViewModel(
     public string Description { get; } = description;
 }
 
-public sealed class CustomersViewModel()
-    : FeaturePlaceholderViewModel(
-        NavigationDestination.Customers,
-        "Customers",
-        "Customer management will be implemented in Milestone 2.");
-
-public sealed class ServicesViewModel()
-    : FeaturePlaceholderViewModel(
-        NavigationDestination.Services,
-        "Services",
-        "Products and services will be implemented in Milestone 2.");
-
 public sealed class QuotesViewModel()
     : FeaturePlaceholderViewModel(
         NavigationDestination.Quotes,

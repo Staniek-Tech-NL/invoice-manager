@@ -1,4 +1,5 @@
 using InvoiceManager.App.Navigation;
+using InvoiceManager.App.Services;
 using InvoiceManager.App.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +24,7 @@ public static class DependencyInjection
         services.AddSingleton<INavigationPage>(provider => provider.GetRequiredService<SettingsViewModel>());
 
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IUserDialogService, UserDialogService>();
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();
 

@@ -16,13 +16,13 @@ The target is a polished, tested, documented Windows desktop release: `v1.0.0`.
 
 Exit criterion: achieved. The application launches, navigation works, persistence is initialized through the first migration, build and tests pass, CI is configured, and setup is documented.
 
-## M2 — Customers and Services (`0.2.0`)
+## M2 — Customers and Services (`0.2.0`) — Complete
 
 - Customer create, view, edit, archive, and search
 - Product/service create, edit, deactivate, and search
 - Validation and persistence tests
 
-Exit criterion: reusable business records can be safely maintained and inactive records are filtered correctly.
+Exit criterion: achieved. Reusable business records can be safely maintained, validation is enforced, and inactive records are filtered correctly unless explicitly requested.
 
 ## M3 — Quotations (`0.3.0`)
 

@@ -14,6 +14,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Milestone 1 host, dependency injection, local logging, SQLite persistence, initial migration, WPF navigation shell, CI workflow, and repository templates.
 - Integration tests for application paths, date/time persistence, the application clock, and the initial SQLite schema.
 - A direct safe native SQLite dependency replacing the vulnerable transitive version reported by NuGet audit.
+- Customer creation, editing, searching, and safe archiving across the domain, application, persistence, and WPF layers.
+- Product and service creation, editing, searching, and safe deactivation across the domain, application, persistence, and WPF layers.
+- Milestone 2 validation, use-case, repository, filtering, and wildcard-search tests.
 
 ## Planned Releases
 
