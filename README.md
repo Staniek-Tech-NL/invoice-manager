@@ -2,7 +2,7 @@
 
 Invoice Manager is a Windows desktop application for freelancers and small businesses that need a focused way to manage customers, services, quotations, invoices, payments, and basic financial reporting.
 
-> Project status: Milestone 1 in progress. Documentation and solution foundations are complete; application services, persistence, and the product UI are not implemented yet.
+> Project status: Milestone 1 complete. The host, dependency injection, logging, SQLite persistence, initial migration, WPF shell, navigation, tests, and CI foundation are in place. Business features begin in Milestone 2.
 
 ## Product Scope
 
@@ -77,6 +77,7 @@ The planned detailed layout is documented in [Architecture](docs/architecture.md
 ### Restore, Build, and Test
 
 ```powershell
+dotnet tool restore
 dotnet restore InvoiceManager.sln
 dotnet build InvoiceManager.sln --no-restore --configuration Release
 dotnet test InvoiceManager.sln --no-build --configuration Release
@@ -88,7 +89,19 @@ dotnet test InvoiceManager.sln --no-build --configuration Release
 dotnet run --project src/InvoiceManager.App/InvoiceManager.App.csproj
 ```
 
-The current application is the generated WPF foundation only. Dependency injection, persistence, navigation, and business features will be added in the remaining M1 and later milestones.
+On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI provides the navigable product shell; customer and service workflows are the next implementation milestone.
+
+## Local Data
+
+Runtime data is stored under `%LocalAppData%/InvoiceManager`:
+
+```text
+invoice-manager.db
+logs/invoice-manager.log
+assets/
+```
+
+Generated PDFs will be exported separately to a location selected by the user.
 
 ## Testing
 

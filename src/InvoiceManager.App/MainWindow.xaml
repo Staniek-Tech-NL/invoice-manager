@@ -1,12 +1,103 @@
-﻿<Window x:Class="InvoiceManager.App.MainWindow"
+<Window x:Class="InvoiceManager.App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InvoiceManager.App"
+        xmlns:navigation="clr-namespace:InvoiceManager.App.Navigation"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Invoice Manager"
+        Width="1280"
+        Height="800"
+        MinWidth="960"
+        MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F7FB">
+    <Window.Resources>
+        <Style x:Key="NavigationButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Margin" Value="12,3" />
+            <Setter Property="Padding" Value="18,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#DCE5F5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#243552" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#2D6CDF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#14213D">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="112" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="72" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="24,24,16,16">
+                    <TextBlock Foreground="White" FontSize="23" FontWeight="SemiBold" Text="Invoice Manager" />
+                    <TextBlock Margin="0,7,0,0" Foreground="#93A4C0" FontSize="12" Text="Business documents, simplified" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1">
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Dashboard}" Content="Dashboard" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Customers}" Content="Customers" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Services}" Content="Services" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Quotes}" Content="Quotes" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Invoices}" Content="Invoices" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Settings}" Content="Settings" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Margin="24,0,16,18" VerticalAlignment="Bottom">
+                    <TextBlock Foreground="#93A4C0" FontSize="11" Text="Local-first desktop app" />
+                    <TextBlock Margin="0,4,0,0" Foreground="#687B9A" FontSize="11" Text="Foundation build" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="84" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Padding="32,0" Background="White" BorderBrush="#E6EAF1" BorderThickness="0,0,0,1">
+                <TextBlock VerticalAlignment="Center"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#172033"
+                           Text="{Binding CurrentPage.Title}" />
+            </Border>
+
+            <ContentControl Grid.Row="1" Margin="32" Content="{Binding CurrentPage}" />
+        </Grid>
     </Grid>
 </Window>

@@ -1,0 +1,71 @@
+name: Bug report
+description: Report reproducible behavior that differs from the documented requirements.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve Invoice Manager. Do not include customer data, invoices, logs, or other sensitive information.
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What were you trying to accomplish?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Provide the smallest reliable sequence that reproduces the problem.
+      placeholder: |
+        1. Open...
+        2. Select...
+        3. Observe...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Application version
+      placeholder: 0.1.0
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: Windows 11 24H2
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Technical notes
+      description: Add sanitized logs or screenshots only when they do not expose business data.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I removed private customer and company data from this report.
+          required: true
+        - label: I checked that the issue has not already been reported.
+          required: true

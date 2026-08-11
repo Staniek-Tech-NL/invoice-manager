@@ -1,0 +1,63 @@
+<UserControl x:Class="InvoiceManager.App.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="MetricCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#E5EAF2" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="Margin" Value="0,0,16,0" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="24" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource MetricCardStyle}">
+                <StackPanel>
+                    <TextBlock Foreground="#6E7B91" Text="Revenue this month" />
+                    <TextBlock Margin="0,10,0,0" FontSize="24" FontWeight="SemiBold" Foreground="#172033" Text="€0.00" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Style="{StaticResource MetricCardStyle}">
+                <StackPanel>
+                    <TextBlock Foreground="#6E7B91" Text="Revenue this year" />
+                    <TextBlock Margin="0,10,0,0" FontSize="24" FontWeight="SemiBold" Foreground="#172033" Text="€0.00" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="2" Style="{StaticResource MetricCardStyle}">
+                <StackPanel>
+                    <TextBlock Foreground="#6E7B91" Text="Outstanding" />
+                    <TextBlock Margin="0,10,0,0" FontSize="24" FontWeight="SemiBold" Foreground="#2D6CDF" Text="€0.00" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="3" Style="{StaticResource MetricCardStyle}" Margin="0">
+                <StackPanel>
+                    <TextBlock Foreground="#6E7B91" Text="Overdue" />
+                    <TextBlock Margin="0,10,0,0" FontSize="24" FontWeight="SemiBold" Foreground="#D55252" Text="€0.00" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="2" Padding="32" Background="White" BorderBrush="#E5EAF2" BorderThickness="1" CornerRadius="10">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="SemiBold" Foreground="#172033" Text="Your business overview will appear here" />
+                <TextBlock Margin="0,10,0,0" HorizontalAlignment="Center" Foreground="#6E7B91" Text="Create customers, quotes, and invoices to populate the dashboard." />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

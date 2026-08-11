@@ -6,7 +6,7 @@
 **Default project language:** English  
 **Primary audience:** Freelancers and small businesses  
 **MVP currency:** EUR  
-**Project status:** Milestone 1 in progress / Solution foundation complete
+**Project status:** Milestone 1 complete / Customers and Services next
 
 ---
 
@@ -1772,12 +1772,12 @@ Any AI working on the repository must follow these rules:
 | Documentation foundation | DONE |
 | ADR foundation | DONE |
 | PDF implementation | TO DECIDE — M6 |
-| Solution and project foundation | DONE |
-| Source code | FOUNDATION STARTED |
+| Milestone 1 foundation | DONE |
+| Source code | FOUNDATION COMPLETE |
 | Local Git repository | DONE |
 | GitHub remote repository | NOT STARTED |
-| CI | NOT STARTED |
-| UI | WPF PROJECT GENERATED / SHELL NOT STARTED |
+| CI | CONFIGURED |
+| UI | BASE SHELL AND NAVIGATION DONE |
 
 ---
 
@@ -1793,19 +1793,19 @@ Any AI working on the repository must follow these rules:
 #5  Add WPF App project — DONE
 #6  Add test projects — DONE
 #7  Configure project dependencies — DONE
-#8  Configure Generic Host and DI
-#9  Configure application logging
-#10 Add EF Core and SQLite
-#11 Create initial DbContext
-#12 Configure application data directory
-#13 Create first database migration
-#14 Add basic WPF shell
-#15 Implement application navigation
-#16 Configure GitHub Actions CI
-#17 Add repository templates
+#8  Configure Generic Host and DI — DONE
+#9  Configure application logging — DONE
+#10 Add EF Core and SQLite — DONE
+#11 Create initial DbContext — DONE
+#12 Configure application data directory — DONE
+#13 Create first database migration — DONE
+#14 Add basic WPF shell — DONE
+#15 Implement application navigation — DONE
+#16 Configure GitHub Actions CI — DONE
+#17 Add repository templates — DONE
 #18 Verify documentation consistency before implementation — DONE
 #19 Verify README and documentation navigation — DONE
-#20 Verify clean clone build
+#20 Verify clean clone build — DONE
 ```
 
 ---

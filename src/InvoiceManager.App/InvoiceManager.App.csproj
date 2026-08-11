@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\InvoiceManager.Application\InvoiceManager.Application.csproj" />
     <ProjectReference Include="..\InvoiceManager.Infrastructure\InvoiceManager.Infrastructure.csproj" />
   </ItemGroup>

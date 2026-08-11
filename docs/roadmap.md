@@ -4,7 +4,7 @@
 
 The target is a polished, tested, documented Windows desktop release: `v1.0.0`.
 
-## M1 — Foundation (`0.1.0`)
+## M1 — Foundation (`0.1.0`) — Complete
 
 - Create solution and production/test projects
 - Configure project dependencies and centralized build settings
@@ -14,7 +14,7 @@ The target is a polished, tested, documented Windows desktop release: `v1.0.0`.
 - Add GitHub Actions, issue/PR templates, and documentation foundation
 - Verify restore, build, and test from a clean clone
 
-Exit criterion: the empty application launches, navigation works, persistence is initialized, tests and CI pass, and setup is documented.
+Exit criterion: achieved. The application launches, navigation works, persistence is initialized through the first migration, build and tests pass, CI is configured, and setup is documented.
 
 ## M2 — Customers and Services (`0.2.0`)
 

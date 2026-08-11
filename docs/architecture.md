@@ -96,6 +96,8 @@ The same directory contains `logs/` and application-managed `assets/`. Generated
 
 EF Core entity configurations define relationships, decimal storage strategy, indexes, constraints, and snapshot columns. Quote and invoice persistence includes issuer, customer, and line-item snapshots. Migrations are committed and verified through infrastructure tests.
 
+The application uses `IDbContextFactory<InvoiceManagerDbContext>` for desktop-safe context creation. A hosted initialization service applies pending migrations before the main window is shown.
+
 Business dates (`IssueDate`, `DueDate`, `ValidUntil`, and `PaymentDate`) use date-only values and are stored as ISO `yyyy-MM-dd` values without time-zone conversion. Audit timestamps (`CreatedAt`, `UpdatedAt`, and `Payment.CreatedAt`) are UTC instants and are persisted in a round-trippable UTC representation. The concrete EF Core conversions are centralized and covered by persistence tests.
 
 ## Consistency and Transactions
@@ -110,6 +112,8 @@ SQLite concurrency behavior and the precise number-allocation transaction will b
 
 No static service locator is permitted.
 
+Logging uses the `Microsoft.Extensions.Logging` abstraction with debug output and a local file provider. The file provider writes UTC timestamps to `%LocalAppData%/InvoiceManager/logs/invoice-manager.log` and must not be used to record sensitive document contents.
+
 ## Date and Time Boundary
 
 Application and Domain code obtain `UtcNow` and the application-local `Today` through an injected clock abstraction. The production implementation derives `Today` from the operating system's local time zone; tests use a controlled clock. Audit timestamps are converted from UTC to local time only for display. Business dates are never shifted through a time-zone conversion. See [ADR-0007](decisions/0007-use-explicit-date-time-policy.md).
@@ -118,7 +122,7 @@ Application and Domain code obtain `UtcNow` and the application-local `Today` th
 
 Application code depends on an interface such as `IDocumentPdfGenerator`; Infrastructure owns the PDF library. The concrete library will be selected before Milestone 6 and recorded in a new ADR.
 
-## Proposed Repository Structure
+## Repository Structure
 
 ```text
 src/

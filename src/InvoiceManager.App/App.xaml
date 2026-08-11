@@ -1,9 +1,27 @@
-﻿<Application x:Class="InvoiceManager.App.App"
+<Application x:Class="InvoiceManager.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:InvoiceManager.App"
-             StartupUri="MainWindow.xaml">
+             xmlns:viewModels="clr-namespace:InvoiceManager.App.ViewModels"
+             xmlns:views="clr-namespace:InvoiceManager.App.Views"
+             ShutdownMode="OnMainWindowClose">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type viewModels:DashboardViewModel}">
+            <views:DashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:CustomersViewModel}">
+            <views:FeaturePlaceholderView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ServicesViewModel}">
+            <views:FeaturePlaceholderView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:QuotesViewModel}">
+            <views:FeaturePlaceholderView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:InvoicesViewModel}">
+            <views:FeaturePlaceholderView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+            <views:FeaturePlaceholderView />
+        </DataTemplate>
     </Application.Resources>
 </Application>
