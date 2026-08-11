@@ -1,0 +1,140 @@
+# Architecture
+
+## Overview
+
+Invoice Manager uses layered clean architecture with MVVM at the WPF boundary. Dependencies point toward the domain, while infrastructure implements interfaces defined by inner layers.
+
+```text
+InvoiceManager.App
+  WPF Views, ViewModels, navigation, desktop services
+                 |
+                 v
+InvoiceManager.Application
+  Use cases, DTOs, validation orchestration, service/repository ports
+                 |
+                 v
+InvoiceManager.Domain
+  Entities, value objects, calculations, lifecycle rules
+
+InvoiceManager.Infrastructure
+  EF Core, SQLite, repositories, PDF, files, logging adapters
+  implements Application and Domain ports
+```
+
+## Dependency Rules
+
+| Project | May depend on |
+|---|---|
+| Domain | No other project |
+| Application | Domain |
+| Infrastructure | Application, Domain |
+| App | Application, Infrastructure |
+
+References in the opposite direction are prohibited. The App project is the composition root.
+
+## Responsibilities
+
+### Domain
+
+- Entities and value objects
+- Financial calculations and rounding policy
+- Invoice and quotation lifecycle invariants
+- Payment and outstanding balance rules
+- Domain-specific exceptions or result types
+
+Domain code must not reference WPF, EF Core, SQLite, file paths, PDF libraries, or dependency injection.
+
+### Application
+
+- Feature-oriented use cases
+- Repository and external-service interfaces
+- Transaction boundaries and orchestration
+- Input/output models and application validation
+- Cancellation-aware asynchronous I/O contracts
+
+Use cases should be small and cohesive. A generic service containing unrelated workflows is not acceptable.
+
+### Infrastructure
+
+- EF Core `DbContext`, configurations, migrations, and repositories
+- SQLite connection and local data directory management
+- PDF generator implementation
+- File storage and logging adapters
+- Registration extension methods for infrastructure services
+
+Repositories model domain needs. A generic repository abstraction is not the default.
+
+### App
+
+- WPF views and reusable controls
+- MVVM view models and commands
+- Navigation and dialogs
+- UI-specific formatting and converters
+- Generic Host startup and dependency composition
+
+Views and view models must not contain financial rules, SQL, or direct `DbContext` access.
+
+## Typical Request Flow
+
+```text
+View -> ViewModel -> Application use case -> Port
+     -> Infrastructure implementation -> EF Core/SQLite
+     -> Result -> ViewModel -> View
+```
+
+View models translate user intent into use-case calls and expose presentation state. Application and Domain determine business outcomes.
+
+## Persistence
+
+SQLite stores application data locally at:
+
+```text
+%LocalAppData%/InvoiceManager/invoice-manager.db
+```
+
+The same directory contains `logs/` and application-managed `assets/`. Generated documents are exported separately to a location selected by the user.
+
+EF Core entity configurations define relationships, decimal storage strategy, indexes, constraints, and snapshot columns. Migrations are committed and verified through infrastructure tests.
+
+## Consistency and Transactions
+
+Operations that allocate a document number and persist a document must be atomic. `DocumentType + Year` is unique for number sequences, and final document numbers must also be protected by database constraints. Quote conversion creates the invoice and copies its snapshots within one transaction.
+
+SQLite concurrency behavior and the precise number-allocation transaction will be validated during implementation before the feature is considered complete.
+
+## Dependency Injection and Hosting
+
+`Microsoft.Extensions.Hosting` provides application startup, configuration, logging, and dependency injection. Registration is grouped by layer. The WPF App is responsible for starting and stopping the host and resolving the main shell.
+
+No static service locator is permitted.
+
+## PDF Boundary
+
+Application code depends on an interface such as `IDocumentPdfGenerator`; Infrastructure owns the PDF library. The concrete library will be selected before Milestone 6 and recorded in a new ADR.
+
+## Proposed Repository Structure
+
+```text
+src/
+  InvoiceManager.App/
+  InvoiceManager.Application/
+  InvoiceManager.Domain/
+  InvoiceManager.Infrastructure/
+tests/
+  InvoiceManager.Domain.Tests/
+  InvoiceManager.Application.Tests/
+  InvoiceManager.Infrastructure.Tests/
+docs/
+  decisions/
+.github/
+  workflows/
+```
+
+## Cross-Cutting Rules
+
+- Nullable reference types and implicit usings are enabled.
+- Package versions and common build settings are centralized.
+- I/O APIs are asynchronous and accept `CancellationToken` where useful.
+- Financial calculations are centralized and never duplicated in UI or PDF code.
+- Statuses use domain types, not magic strings.
+- Accepted architectural changes require an ADR update or a superseding ADR.
