@@ -11,4 +11,6 @@ public interface IInvoiceRepository
     Task UpdateAsync(Invoice invoice, CancellationToken cancellationToken);
 
     Task<IReadOnlyList<Invoice>> SearchAsync(string? searchTerm, CancellationToken cancellationToken);
+
+    Task RefreshStatusesAsync(DateOnly today, DateTimeOffset utcNow, CancellationToken cancellationToken);
 }

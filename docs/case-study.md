@@ -55,9 +55,11 @@ Milestone 3 introduced the company profile required for issuer snapshots and del
 
 Milestone 4 added independent invoice creation and one-time conversion from accepted quotations. Converted invoices retain a unique `SourceQuoteId`, clone all historical snapshots, receive their own `INV-YYYY-NNNN` number, and leave the source quotation unchanged. Conversion and sequence allocation share one transaction, so a failed or repeated attempt neither creates partial data nor consumes a number. The WPF invoice editor supports Draft, Sent, and Cancelled lifecycle actions; payment-derived states remain reserved for Milestone 5.
 
+Milestone 5 delivered transactional partial and full payments, outstanding balances, overpayment protection, and deterministic Paid and Overdue derivation. Concurrent registration is serialized within the desktop application so competing payments cannot exceed the balance. Incorrect entries are never edited or deleted: ADR-0008 defines one-time voiding with a reason and UTC timestamp, preserving the original record while immediately recalculating balance and status.
+
 ## Testing Strategy
 
-The project currently has 68 passing automated tests: 32 domain tests, 19 application tests, and 17 infrastructure tests. Coverage now includes reusable-record validation, quotation and invoice calculations, lifecycle rules, snapshot stability, independent first-save and concurrent numbering, transactional quote conversion, rollback behavior, SQLite persistence, filtering, search escaping, and automatic expiration. Clean-clone verification restores, builds, and tests the committed repository independently. Future milestones will add payment, overdue-state, and PDF coverage.
+The project currently has 86 passing automated tests: 42 domain tests, 22 application tests, and 22 infrastructure tests. Coverage now includes reusable records, document calculations and lifecycles, snapshots, numbering, quote conversion, partial and full payments, overpayment rollback, concurrent registration, Paid and Overdue status, auditable voiding, SQLite persistence, filtering, and expiration. Clean-clone verification restores, builds, and tests the committed repository independently. Future milestones will add PDF and dashboard coverage.
 
 ## Result
 
@@ -71,4 +73,5 @@ Target result: a downloadable `v1.0.0` Windows application with a complete custo
 - First-save numbering belongs in the same persistence transaction as the document; opening or abandoning an editor must never consume a number.
 - Persisted line and party snapshots make historical stability an explicit aggregate boundary rather than a rendering concern.
 - A unique source-quote link complements application validation and makes repeat conversion impossible even under competing callers.
+- Immutable payment records with explicit void metadata offer practical auditability without introducing a full accounting reversal ledger into the MVP.
 - Updating the case study at each milestone keeps implementation evidence accurate instead of reconstructing it only for the final release.

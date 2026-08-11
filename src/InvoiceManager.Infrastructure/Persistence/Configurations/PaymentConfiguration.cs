@@ -15,12 +15,13 @@ internal sealed class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.Property(payment => payment.Amount).HasPrecision(18, 2);
         builder.Property(payment => payment.Reference).HasMaxLength(200);
         builder.Property(payment => payment.Method).HasMaxLength(100);
+        builder.Property(payment => payment.VoidReason).HasMaxLength(500);
 
         builder.HasIndex(payment => payment.InvoiceId);
         builder.HasIndex(payment => payment.PaymentDate);
 
         builder.HasOne<Invoice>()
-            .WithMany()
+            .WithMany(invoice => invoice.Payments)
             .HasForeignKey(payment => payment.InvoiceId)
             .OnDelete(DeleteBehavior.Cascade);
     }

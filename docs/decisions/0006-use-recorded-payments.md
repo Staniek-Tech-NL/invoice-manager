@@ -16,4 +16,4 @@ Model each payment as a separate transaction linked to an invoice. Calculate out
 - Payment history is visible and auditable.
 - Paid state remains consistent with recorded amounts.
 - Overdue logic can account for partial payments.
-- Payment corrections and reversals require an explicit traceable policy, to be designed with the payment milestone.
+- Payment corrections follow the traceable voiding policy defined in [ADR-0008](0008-void-incorrect-payments.md).

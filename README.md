@@ -2,7 +2,7 @@
 
 Invoice Manager is a Windows desktop application for freelancers and small businesses that need a focused way to manage customers, services, quotations, invoices, payments, and basic financial reporting.
 
-> Project status: Milestone 4 complete. Invoices can be created directly or atomically from an accepted quotation, with independent yearly numbering, stable snapshots, calculations, editing, search, and lifecycle controls. Payments are next in Milestone 5.
+> Project status: Milestone 5 complete. Invoices now support recorded partial and full payments, outstanding balances, Paid and Overdue status derivation, overpayment protection, concurrency-safe registration, and auditable payment voiding. PDF export and dashboard reporting are next in Milestone 6.
 
 ## Product Scope
 
@@ -25,12 +25,12 @@ Invoice Manager is not intended to replace accounting software or an ERP system.
 - Quotation creation, editing, item management, search, status tracking, automatic expiration, and yearly numbering
 - Invoice creation, editing, item management, search, Draft/Sent/Cancelled lifecycle controls, and independent yearly numbering
 - One-time atomic conversion from an accepted quotation to a linked invoice
+- Recorded partial and full payments with outstanding balances, Paid and Overdue status, and overpayment protection
+- Immutable payment history with reasoned voiding instead of editing or deletion
 
 ## Planned Features
 
-- Invoice payment lifecycle, outstanding balances, and PDF export
-- Partial and full payment recording with overpayment protection
-- Automatic paid and overdue state calculation
+- Quote and invoice PDF export
 - Dashboard KPIs, recent invoices, and monthly revenue chart
 - Company logo and document branding
 
@@ -96,7 +96,7 @@ dotnet test InvoiceManager.sln --no-build --configuration Release
 dotnet run --project src/InvoiceManager.App/InvoiceManager.App.csproj
 ```
 
-On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI includes reusable records, company settings, complete quotation workflows, direct invoice maintenance, and accepted quote-to-invoice conversion.
+On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI includes reusable records, company settings, quotations, invoices, accepted quote conversion, payment history, balances, and financial status workflows.
 
 ## Local Data
 
@@ -124,6 +124,7 @@ The project targets 50–100 meaningful tests covering financial calculations, d
 - [Testing strategy](docs/testing-strategy.md)
 - [Roadmap](docs/roadmap.md)
 - [Portfolio case study](docs/case-study.md)
+- [Milestone reports](docs/milestone-reports/README.md)
 - [Architecture decisions](docs/decisions/README.md)
 - [Contributing](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)

@@ -22,14 +22,15 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox Height="36" Padding="10,6" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
             <Button Grid.Column="1" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding SearchCommand}" Content="Search" />
             <Button Grid.Column="3" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditSelectedCommand}" Content="Edit" />
             <Button Grid.Column="4" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding MarkSentCommand}" Content="Mark sent" />
             <Button Grid.Column="5" Margin="8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding CancelInvoiceCommand}" Content="Cancel invoice" />
-            <Button Grid.Column="6" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding OpenCreateEditorCommand}" Content="+ New invoice" />
+            <Button Grid.Column="6" Margin="0,0,8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding OpenPaymentPanelCommand}" Content="Payments" />
+            <Button Grid.Column="7" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding OpenCreateEditorCommand}" Content="+ New invoice" />
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
@@ -39,18 +40,36 @@
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
             <Border Background="White" BorderBrush="#E1E6EF" BorderThickness="1" CornerRadius="10">
-                <DataGrid ItemsSource="{Binding Invoices}" SelectedItem="{Binding SelectedInvoice}"
-                          AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False"
-                          GridLinesVisibility="Horizontal" BorderThickness="0" RowHeaderWidth="0">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="*" Header="Number" Binding="{Binding Number}" />
-                        <DataGridTextColumn Width="2*" Header="Customer" Binding="{Binding CustomerCompanyName}" />
-                        <DataGridTextColumn Width="*" Header="Issue date" Binding="{Binding IssueDate}" />
-                        <DataGridTextColumn Width="*" Header="Due date" Binding="{Binding DueDate}" />
-                        <DataGridTextColumn Width="*" Header="Status" Binding="{Binding Status}" />
-                        <DataGridTextColumn Width="*" Header="Total" Binding="{Binding Total, StringFormat={}{0:N2} EUR}" />
-                    </DataGrid.Columns>
-                </DataGrid>
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="2*" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                    <DataGrid ItemsSource="{Binding Invoices}" SelectedItem="{Binding SelectedInvoice}"
+                              AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False"
+                              GridLinesVisibility="Horizontal" BorderThickness="0" RowHeaderWidth="0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="*" Header="Number" Binding="{Binding Number}" />
+                            <DataGridTextColumn Width="2*" Header="Customer" Binding="{Binding CustomerCompanyName}" />
+                            <DataGridTextColumn Width="*" Header="Due date" Binding="{Binding DueDate}" />
+                            <DataGridTextColumn Width="*" Header="Status" Binding="{Binding Status}" />
+                            <DataGridTextColumn Width="*" Header="Total" Binding="{Binding Total, StringFormat={}{0:N2}}" />
+                            <DataGridTextColumn Width="*" Header="Paid" Binding="{Binding PaidAmount, StringFormat={}{0:N2}}" />
+                            <DataGridTextColumn Width="*" Header="Outstanding" Binding="{Binding OutstandingAmount, StringFormat={}{0:N2}}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Border Grid.Row="1" Padding="12,8" Background="#F5F7FA" BorderBrush="#E1E6EF" BorderThickness="0,1">
+                        <TextBlock FontWeight="SemiBold" Text="Payment history for the selected invoice" />
+                    </Border>
+                    <DataGrid Grid.Row="2" ItemsSource="{Binding SelectedInvoice.Payments}" SelectedItem="{Binding SelectedPayment}"
+                              AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False"
+                              GridLinesVisibility="Horizontal" BorderThickness="0" RowHeaderWidth="0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="*" Header="Date" Binding="{Binding PaymentDate}" />
+                            <DataGridTextColumn Width="*" Header="Amount" Binding="{Binding Amount, StringFormat={}{0:N2} EUR}" />
+                            <DataGridTextColumn Width="*" Header="Method" Binding="{Binding Method}" />
+                            <DataGridTextColumn Width="2*" Header="Reference" Binding="{Binding Reference}" />
+                            <DataGridCheckBoxColumn Width="Auto" Header="Voided" Binding="{Binding IsVoided}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </Border>
             <Border Grid.Column="1" Width="650" Margin="20,0,0,0" Padding="22"
                     Background="White" BorderBrush="#E1E6EF" BorderThickness="1" CornerRadius="10"
@@ -94,6 +113,34 @@
                         <Button Style="{StaticResource PrimaryButtonStyle}" Command="{Binding SaveCommand}" Content="Save invoice" />
                     </StackPanel>
                 </Grid>
+            </Border>
+            <Border Grid.Column="1" Width="430" Margin="20,0,0,0" Padding="22"
+                    Background="White" BorderBrush="#E1E6EF" BorderThickness="1" CornerRadius="10"
+                    Visibility="{Binding IsPaymentPanelOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="Manage payments" />
+                        <TextBlock Margin="0,5,0,18" Foreground="#657089" Text="Payments are immutable. Incorrect entries can only be voided with a reason." TextWrapping="Wrap" />
+                        <TextBlock Text="Payment date *" />
+                        <DatePicker Height="34" Margin="0,4,0,10" SelectedDate="{Binding PaymentDate}" />
+                        <TextBlock Text="Amount (EUR) *" />
+                        <TextBox Height="34" Margin="0,4,0,10" Padding="8,5" Text="{Binding PaymentAmountText, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Text="Method" />
+                        <ComboBox Height="34" Margin="0,4,0,10" IsEditable="True" Text="{Binding PaymentMethod, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBoxItem Content="Bank transfer" /><ComboBoxItem Content="Cash" /><ComboBoxItem Content="Card" /><ComboBoxItem Content="Other" />
+                        </ComboBox>
+                        <TextBlock Text="Reference" />
+                        <TextBox Height="34" Margin="0,4,0,14" Padding="8,5" Text="{Binding PaymentReference, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Height="36" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding SavePaymentCommand}" Content="Record payment" />
+                        <Separator Margin="0,22,0,18" />
+                        <TextBlock FontWeight="SemiBold" Text="Void selected payment" />
+                        <TextBlock Margin="0,5,0,10" Foreground="#657089" Text="Select a payment in the history and provide a required audit reason." TextWrapping="Wrap" />
+                        <TextBlock Text="Void reason *" />
+                        <TextBox Height="72" Margin="0,4,0,12" Padding="8" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding VoidReason, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Height="36" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding VoidSelectedPaymentCommand}" Content="Void selected payment" />
+                        <Button Height="36" Margin="0,18,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding ClosePaymentPanelCommand}" Content="Close" />
+                    </StackPanel>
+                </ScrollViewer>
             </Border>
         </Grid>
     </Grid>

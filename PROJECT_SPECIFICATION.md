@@ -6,7 +6,7 @@
 **Default project language:** English  
 **Primary audience:** Freelancers and small businesses  
 **MVP currency:** EUR  
-**Project status:** Milestone 4 complete / Payments next
+**Project status:** Milestone 5 complete / PDF and Dashboard next
 
 ---
 
@@ -404,6 +404,8 @@ Amount
 Reference
 Method
 CreatedAt
+VoidedAt
+VoidReason
 ```
 
 ---
@@ -745,6 +747,8 @@ OutstandingAmount = 0
 Payment > OutstandingAmount
 → reject payment
 ```
+
+Payment records are immutable. An incorrect payment is voided once with a required reason and UTC timestamp. Voided payments remain visible but are excluded from balances and status calculation.
 
 ---
 
@@ -1292,7 +1296,7 @@ Invoice statuses
 Quote → Invoice
 ```
 
-### M5 — Payments
+### M5 — Payments — COMPLETE
 
 ```text
 Register payments
@@ -1779,11 +1783,12 @@ Any AI working on the repository must follow these rules:
 | Milestone 2 customers and services | DONE |
 | Milestone 3 quotations | DONE |
 | Milestone 4 invoices and quote conversion | DONE |
-| Source code | M4 COMPLETE |
+| Milestone 5 payments and financial status | DONE |
+| Source code | M5 COMPLETE |
 | Local Git repository | DONE |
 | GitHub remote repository | NOT STARTED |
 | CI | CONFIGURED |
-| UI | SHELL, REUSABLE RECORDS, SETTINGS, QUOTE, AND INVOICE WORKFLOWS DONE |
+| UI | SHELL, REUSABLE RECORDS, SETTINGS, QUOTE, INVOICE, AND PAYMENT WORKFLOWS DONE |
 
 ---
 

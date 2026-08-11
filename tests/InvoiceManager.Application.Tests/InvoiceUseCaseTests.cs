@@ -170,6 +170,19 @@ public sealed class InvoiceUseCaseTests
 
         public Task<IReadOnlyList<Invoice>> SearchAsync(string? searchTerm, CancellationToken cancellationToken) =>
             Task.FromResult<IReadOnlyList<Invoice>>(Invoices);
+
+        public Task RefreshStatusesAsync(
+            DateOnly today,
+            DateTimeOffset utcNow,
+            CancellationToken cancellationToken)
+        {
+            foreach (var invoice in Invoices)
+            {
+                invoice.RefreshStatus(today, utcNow);
+            }
+
+            return Task.CompletedTask;
+        }
     }
 
     private sealed class CustomerRepositoryStub(params Customer[] customers) : ICustomerRepository

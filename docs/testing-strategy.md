@@ -53,6 +53,8 @@ The M3 suite verifies company settings, snapshot capture, per-line rounding and 
 
 The M4 suite verifies direct invoice creation and editing, shared financial calculations, Draft/Sent/Cancelled transitions, independent invoice numbering, concurrent allocation, persisted source links, quote snapshot conversion, repeat-conversion rejection, and transaction rollback without sequence gaps. At M4 completion the suite contains 68 tests: 32 domain, 19 application, and 17 infrastructure tests.
 
+The M5 suite verifies payment validation and rounding, partial and full balances, overpayment rollback, Paid and Overdue derivation, Draft and Cancelled priority, concurrent payment protection, cancellation restrictions, immutable payment history, and auditable voiding with status restoration. At M5 completion the suite contains 86 tests: 42 domain, 22 application, and 22 infrastructure tests.
+
 ### UI Tests
 
 The MVP prioritizes testable view models and manual workflow verification. Automated WPF UI testing may be added when it provides clear value, especially for navigation or critical editor behavior.

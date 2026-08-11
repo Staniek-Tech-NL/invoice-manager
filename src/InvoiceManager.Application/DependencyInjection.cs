@@ -1,5 +1,6 @@
 using InvoiceManager.Application.Customers;
 using InvoiceManager.Application.Invoices;
+using InvoiceManager.Application.Payments;
 using InvoiceManager.Application.Products;
 using InvoiceManager.Application.Quotes;
 using InvoiceManager.Application.Settings;
@@ -34,6 +35,8 @@ public static class DependencyInjection
         services.AddTransient<SearchInvoices>();
         services.AddTransient<ChangeInvoiceStatus>();
         services.AddTransient<ConvertQuoteToInvoice>();
+        services.AddTransient<RegisterPayment>();
+        services.AddTransient<VoidPayment>();
 
         return services;
     }

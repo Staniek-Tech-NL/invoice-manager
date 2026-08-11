@@ -25,7 +25,7 @@ Calculations must not be distributed across view models, repositories, and PDF t
 ## Outstanding Balance
 
 ```text
-OutstandingAmount = Invoice.Total - Sum(RecordedPayments)
+OutstandingAmount = Invoice.Total - Sum(ActiveRecordedPayments)
 ```
 
 - Payments must be positive.
@@ -33,6 +33,17 @@ OutstandingAmount = Invoice.Total - Sum(RecordedPayments)
 - Partial payments reduce the outstanding amount but do not set Paid.
 - When outstanding reaches exactly zero, the invoice becomes Paid.
 - The MVP does not support credit balances or overpayment.
+- Voided payments remain in history but are excluded from paid and outstanding amount calculations.
+
+## Payment Corrections
+
+- Payment amount, date, reference, and method are immutable after registration.
+- An incorrect payment is voided instead of edited or deleted.
+- Voiding requires a non-empty reason and records a UTC timestamp.
+- A payment can be voided only once.
+- Voiding recalculates the invoice balance and status immediately.
+- A Paid invoice may return to Sent or Overdue after a payment is voided.
+- An invoice with an active payment cannot be cancelled.
 
 ## Invoice Status
 

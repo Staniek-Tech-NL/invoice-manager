@@ -35,6 +35,7 @@ internal sealed class InvoiceRepository(
         return await context.Invoices
             .AsNoTracking()
             .Include(invoice => invoice.Items)
+            .Include(invoice => invoice.Payments)
             .SingleOrDefaultAsync(invoice => invoice.Id == invoiceId, cancellationToken);
     }
 
@@ -60,7 +61,11 @@ internal sealed class InvoiceRepository(
         CancellationToken cancellationToken)
     {
         await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
-        var query = context.Invoices.AsNoTracking().Include(invoice => invoice.Items).AsQueryable();
+        var query = context.Invoices
+            .AsNoTracking()
+            .Include(invoice => invoice.Items)
+            .Include(invoice => invoice.Payments)
+            .AsQueryable();
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             var pattern = $"%{EscapeLikePattern(searchTerm.Trim())}%";
@@ -73,6 +78,28 @@ internal sealed class InvoiceRepository(
             .OrderByDescending(invoice => invoice.IssueDate)
             .ThenByDescending(invoice => invoice.Number)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task RefreshStatusesAsync(
+        DateOnly today,
+        DateTimeOffset utcNow,
+        CancellationToken cancellationToken)
+    {
+        await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
+        var invoices = await context.Invoices
+            .Include(invoice => invoice.Payments)
+            .Where(invoice => invoice.Status != InvoiceStatus.Draft && invoice.Status != InvoiceStatus.Cancelled)
+            .ToListAsync(cancellationToken);
+        var changed = false;
+        foreach (var invoice in invoices)
+        {
+            changed |= invoice.RefreshStatus(today, utcNow);
+        }
+
+        if (changed)
+        {
+            await context.SaveChangesAsync(cancellationToken);
+        }
     }
 
     internal static async Task AssignNextNumberAsync(

@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using InvoiceManager.App.Navigation;
@@ -6,6 +7,7 @@ using InvoiceManager.App.Services;
 using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Customers;
 using InvoiceManager.Application.Invoices;
+using InvoiceManager.Application.Payments;
 using InvoiceManager.Application.Products;
 using InvoiceManager.Application.Settings;
 using InvoiceManager.Domain.Invoices;
@@ -20,6 +22,8 @@ public sealed partial class InvoicesViewModel(
     SearchCustomers searchCustomers,
     SearchProductServices searchProductServices,
     GetCompanySettings getCompanySettings,
+    RegisterPayment registerPayment,
+    VoidPayment voidPayment,
     IApplicationClock clock,
     IUserDialogService dialogService) : ObservableObject, IActivatableNavigationPage
 {
@@ -31,6 +35,8 @@ public sealed partial class InvoicesViewModel(
     [NotifyCanExecuteChangedFor(nameof(EditSelectedCommand))]
     [NotifyCanExecuteChangedFor(nameof(MarkSentCommand))]
     [NotifyCanExecuteChangedFor(nameof(CancelInvoiceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(OpenPaymentPanelCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SavePaymentCommand))]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
     private bool _isBusy;
 
@@ -38,6 +44,8 @@ public sealed partial class InvoicesViewModel(
     [NotifyCanExecuteChangedFor(nameof(EditSelectedCommand))]
     [NotifyCanExecuteChangedFor(nameof(MarkSentCommand))]
     [NotifyCanExecuteChangedFor(nameof(CancelInvoiceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(OpenPaymentPanelCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SavePaymentCommand))]
     private InvoiceDetails? _selectedInvoice;
 
     [ObservableProperty]
@@ -46,6 +54,10 @@ public sealed partial class InvoicesViewModel(
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
     private bool _isEditorOpen;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SavePaymentCommand))]
+    private bool _isPaymentPanelOpen;
 
     [ObservableProperty]
     private string _editorTitle = "New invoice";
@@ -60,6 +72,10 @@ public sealed partial class InvoicesViewModel(
     private QuoteLineEditorViewModel? _selectedLineItem;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(VoidSelectedPaymentCommand))]
+    private PaymentDetails? _selectedPayment;
+
+    [ObservableProperty]
     private DateTime? _issueDate;
 
     [ObservableProperty]
@@ -67,6 +83,21 @@ public sealed partial class InvoicesViewModel(
 
     [ObservableProperty]
     private string _notes = string.Empty;
+
+    [ObservableProperty]
+    private DateTime? _paymentDate;
+
+    [ObservableProperty]
+    private string _paymentAmountText = string.Empty;
+
+    [ObservableProperty]
+    private string _paymentReference = string.Empty;
+
+    [ObservableProperty]
+    private string _paymentMethod = "Bank transfer";
+
+    [ObservableProperty]
+    private string _voidReason = string.Empty;
 
     [ObservableProperty]
     private string? _errorMessage;
@@ -113,6 +144,7 @@ public sealed partial class InvoicesViewModel(
         }
 
         _editingInvoiceId = null;
+        IsPaymentPanelOpen = false;
         EditorTitle = "New invoice";
         SelectedCustomer = Customers[0];
         IssueDate = clock.Today.ToDateTime(TimeOnly.MinValue);
@@ -126,6 +158,7 @@ public sealed partial class InvoicesViewModel(
     private void EditSelected()
     {
         var invoice = SelectedInvoice!;
+        IsPaymentPanelOpen = false;
         _editingInvoiceId = invoice.Id;
         EditorTitle = $"Edit {invoice.Number}";
         SelectedCustomer = Customers.FirstOrDefault(customer => customer.Id == invoice.CustomerId);
@@ -217,6 +250,75 @@ public sealed partial class InvoicesViewModel(
         ErrorMessage = null;
     }
 
+    [RelayCommand(CanExecute = nameof(CanOpenPaymentPanel))]
+    private void OpenPaymentPanel()
+    {
+        IsEditorOpen = false;
+        PaymentDate = clock.Today.ToDateTime(TimeOnly.MinValue);
+        PaymentAmountText = SelectedInvoice!.OutstandingAmount.ToString("0.00", CultureInfo.CurrentCulture);
+        PaymentReference = string.Empty;
+        PaymentMethod = "Bank transfer";
+        VoidReason = string.Empty;
+        SelectedPayment = null;
+        ClearFeedback();
+        IsPaymentPanelOpen = true;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanSavePayment))]
+    private async Task SavePaymentAsync()
+    {
+        ClearFeedback();
+        if (PaymentDate is null || !TryParseDecimal(PaymentAmountText, out var amount))
+        {
+            ErrorMessage = "Enter a valid payment date and amount.";
+            return;
+        }
+
+        var invoice = SelectedInvoice!;
+        var input = new PaymentInput(
+            DateOnly.FromDateTime(PaymentDate.Value),
+            amount,
+            PaymentReference,
+            PaymentMethod);
+        await RunBusyAsync(async () =>
+        {
+            await registerPayment.ExecuteAsync(invoice.Id, input);
+            StatusMessage = $"Payment was recorded for {invoice.Number}.";
+            await RefreshCoreAsync(invoice.Id);
+            PaymentAmountText = SelectedInvoice?.OutstandingAmount.ToString("0.00", CultureInfo.CurrentCulture) ?? string.Empty;
+        });
+    }
+
+    [RelayCommand(CanExecute = nameof(CanVoidSelectedPayment))]
+    private async Task VoidSelectedPaymentAsync()
+    {
+        var invoice = SelectedInvoice!;
+        var payment = SelectedPayment!;
+        if (!dialogService.Confirm(
+                "Void payment",
+                $"Void the payment of {payment.Amount:N2} EUR? The original record will remain in history."))
+        {
+            return;
+        }
+
+        await RunBusyAsync(async () =>
+        {
+            await voidPayment.ExecuteAsync(invoice.Id, payment.Id, VoidReason);
+            StatusMessage = $"Payment on {invoice.Number} was voided.";
+            await RefreshCoreAsync(invoice.Id);
+            SelectedPayment = SelectedInvoice?.Payments.FirstOrDefault(value => value.Id == payment.Id);
+            PaymentAmountText = SelectedInvoice?.OutstandingAmount.ToString("0.00", CultureInfo.CurrentCulture) ?? string.Empty;
+            VoidReason = string.Empty;
+        });
+    }
+
+    [RelayCommand]
+    private void ClosePaymentPanel()
+    {
+        IsPaymentPanelOpen = false;
+        ErrorMessage = null;
+    }
+
     [RelayCommand(CanExecute = nameof(CanMarkSent))]
     private Task MarkSentAsync() => ChangeStatusAsync(InvoiceStatus.Sent, "Mark selected invoice as sent?");
 
@@ -274,6 +376,7 @@ public sealed partial class InvoicesViewModel(
         SelectedInvoice = selectedId is Guid id
             ? Invoices.FirstOrDefault(invoice => invoice.Id == id)
             : null;
+        SelectedPayment = null;
     }
 
     private async Task RunBusyAsync(Func<Task> operation)
@@ -305,13 +408,33 @@ public sealed partial class InvoicesViewModel(
         StatusMessage = null;
     }
 
+    private static bool TryParseDecimal(string value, out decimal result)
+    {
+        const NumberStyles Styles = NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign;
+        return decimal.TryParse(value, Styles, CultureInfo.CurrentCulture, out result) ||
+            decimal.TryParse(value, Styles, CultureInfo.InvariantCulture, out result);
+    }
+
     private bool CanRun() => !IsBusy;
 
     private bool CanEditSelected() => !IsBusy && SelectedInvoice?.Status == InvoiceStatus.Draft;
 
     private bool CanMarkSent() => !IsBusy && SelectedInvoice?.Status == InvoiceStatus.Draft;
 
-    private bool CanCancelInvoice() => !IsBusy && SelectedInvoice?.Status is InvoiceStatus.Draft or InvoiceStatus.Sent;
+    private bool CanCancelInvoice() =>
+        !IsBusy &&
+        SelectedInvoice is { PaidAmount: 0m, Status: InvoiceStatus.Draft or InvoiceStatus.Sent };
+
+    private bool CanOpenPaymentPanel() => !IsBusy && SelectedInvoice is not null;
+
+    private bool CanSavePayment() =>
+        !IsBusy &&
+        IsPaymentPanelOpen &&
+        SelectedInvoice is { OutstandingAmount: > 0m, Status: InvoiceStatus.Sent or InvoiceStatus.Overdue };
+
+    private bool CanVoidSelectedPayment() =>
+        !IsBusy &&
+        SelectedPayment is { IsVoided: false };
 
     private bool CanSave() => !IsBusy && IsEditorOpen;
 }

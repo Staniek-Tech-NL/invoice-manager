@@ -2,6 +2,7 @@ using InvoiceManager.Application.Common.Storage;
 using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Customers;
 using InvoiceManager.Application.Invoices;
+using InvoiceManager.Application.Payments;
 using InvoiceManager.Application.Products;
 using InvoiceManager.Application.Quotes;
 using InvoiceManager.Application.Settings;
@@ -45,6 +46,7 @@ public static class DependencyInjection
         services.AddSingleton<IQuoteRepository, QuoteRepository>();
         services.AddSingleton<IInvoiceRepository, InvoiceRepository>();
         services.AddSingleton<IQuoteToInvoiceConverter, QuoteToInvoiceConverter>();
+        services.AddSingleton<IInvoicePaymentService, InvoicePaymentService>();
         services.AddHostedService<DatabaseInitializationService>();
 
         return services;

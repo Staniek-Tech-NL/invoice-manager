@@ -1,3 +1,4 @@
+using InvoiceManager.Application.Payments;
 using InvoiceManager.Domain.Invoices;
 
 namespace InvoiceManager.Application.Invoices;
@@ -15,6 +16,9 @@ public sealed record InvoiceDetails(
     decimal Subtotal,
     decimal VatTotal,
     decimal Total,
+    decimal PaidAmount,
+    decimal OutstandingAmount,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt,
-    IReadOnlyList<InvoiceItemDetails> Items);
+    IReadOnlyList<InvoiceItemDetails> Items,
+    IReadOnlyList<PaymentDetails> Payments);

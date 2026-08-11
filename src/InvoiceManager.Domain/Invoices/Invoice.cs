@@ -1,5 +1,6 @@
 using InvoiceManager.Domain.Common;
 using InvoiceManager.Domain.Documents;
+using InvoiceManager.Domain.Payments;
 using InvoiceManager.Domain.Quotes;
 
 namespace InvoiceManager.Domain.Invoices;
@@ -7,6 +8,7 @@ namespace InvoiceManager.Domain.Invoices;
 public sealed class Invoice
 {
     private readonly List<InvoiceItem> _items = [];
+    private readonly List<Payment> _payments = [];
 
     public Guid Id { get; private set; }
 
@@ -39,6 +41,13 @@ public sealed class Invoice
     public DateTimeOffset UpdatedAt { get; private set; }
 
     public IReadOnlyCollection<InvoiceItem> Items => _items.AsReadOnly();
+
+    public IReadOnlyCollection<Payment> Payments => _payments.AsReadOnly();
+
+    public decimal PaidAmount => FinancialRules.RoundMoney(
+        _payments.Where(payment => !payment.IsVoided).Sum(payment => payment.Amount));
+
+    public decimal OutstandingAmount => FinancialRules.RoundMoney(Total - PaidAmount);
 
     private Invoice()
     {
@@ -164,8 +173,73 @@ public sealed class Invoice
             throw new InvalidOperationException("Only a draft or sent invoice can be cancelled.");
         }
 
+        if (PaidAmount > 0)
+        {
+            throw new InvalidOperationException("An invoice with recorded payments cannot be cancelled.");
+        }
+
         Status = InvoiceStatus.Cancelled;
         UpdatedAt = utcNow.ToUniversalTime();
+    }
+
+    public Payment RegisterPayment(
+        DateOnly paymentDate,
+        decimal amount,
+        string? reference,
+        string? method,
+        DateOnly today,
+        DateTimeOffset utcNow)
+    {
+        RefreshStatus(today, utcNow);
+        if (Status is not (InvoiceStatus.Sent or InvoiceStatus.Overdue))
+        {
+            throw new InvalidOperationException("Payments can only be recorded for sent or overdue invoices.");
+        }
+
+        var payment = Payment.Create(Id, paymentDate, amount, reference, method, utcNow);
+        if (payment.Amount > OutstandingAmount)
+        {
+            throw new InvalidOperationException("Payment amount cannot exceed the outstanding balance.");
+        }
+
+        _payments.Add(payment);
+        RefreshStatus(today, utcNow);
+        UpdatedAt = utcNow.ToUniversalTime();
+        return payment;
+    }
+
+    public void VoidPayment(
+        Guid paymentId,
+        string reason,
+        DateOnly today,
+        DateTimeOffset utcNow)
+    {
+        var payment = _payments.SingleOrDefault(value => value.Id == paymentId)
+            ?? throw new KeyNotFoundException($"Payment {paymentId} was not found for this invoice.");
+        payment.Void(reason, utcNow);
+        RefreshStatus(today, utcNow);
+        UpdatedAt = utcNow.ToUniversalTime();
+    }
+
+    public bool RefreshStatus(DateOnly today, DateTimeOffset utcNow)
+    {
+        var previousStatus = Status;
+        Status = Status switch
+        {
+            InvoiceStatus.Cancelled => InvoiceStatus.Cancelled,
+            InvoiceStatus.Draft => InvoiceStatus.Draft,
+            _ when OutstandingAmount == 0m => InvoiceStatus.Paid,
+            _ when DueDate < today => InvoiceStatus.Overdue,
+            _ => InvoiceStatus.Sent,
+        };
+
+        if (Status != previousStatus)
+        {
+            UpdatedAt = utcNow.ToUniversalTime();
+            return true;
+        }
+
+        return false;
     }
 
     private static Invoice CreateCore(

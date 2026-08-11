@@ -41,15 +41,16 @@ Exit criterion: achieved. A quotation can be created, numbered on first save, up
 
 Exit criterion: achieved. Invoices work independently, use safe yearly numbering and snapshots, and can be created exactly once from an accepted quotation in one transaction.
 
-## M5 — Payments (`0.5.0`)
+## M5 — Payments (`0.5.0`) — Complete
 
 - Recorded payments
 - Partial and full payment handling
 - Outstanding balance and Paid state
 - Overpayment protection
 - Automatic Overdue logic
+- Auditable payment voiding without deleting history
 
-Exit criterion: payment and status behavior passes all critical scenarios.
+Exit criterion: achieved. Partial, full, excessive, concurrent, overdue, and voided-payment scenarios preserve correct balances, statuses, transactions, and audit history.
 
 ## M6 — PDF and Dashboard (`0.6.0`)
 

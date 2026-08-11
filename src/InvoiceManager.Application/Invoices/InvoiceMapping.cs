@@ -1,3 +1,4 @@
+using InvoiceManager.Application.Payments;
 using InvoiceManager.Domain.Invoices;
 
 namespace InvoiceManager.Application.Invoices;
@@ -19,6 +20,8 @@ internal static class InvoiceMapping
             invoice.Subtotal,
             invoice.VatTotal,
             invoice.Total,
+            invoice.PaidAmount,
+            invoice.OutstandingAmount,
             invoice.CreatedAt,
             invoice.UpdatedAt,
             invoice.Items.Select(item => new InvoiceItemDetails(
@@ -30,6 +33,20 @@ internal static class InvoiceMapping
                 item.VatRate,
                 item.NetAmount,
                 item.VatAmount,
-                item.GrossAmount)).ToArray());
+                item.GrossAmount)).ToArray(),
+            invoice.Payments
+                .OrderByDescending(payment => payment.PaymentDate)
+                .ThenByDescending(payment => payment.CreatedAt)
+                .Select(payment => new PaymentDetails(
+                    payment.Id,
+                    payment.PaymentDate,
+                    payment.Amount,
+                    payment.Reference,
+                    payment.Method,
+                    payment.CreatedAt,
+                    payment.IsVoided,
+                    payment.VoidedAt,
+                    payment.VoidReason))
+                .ToArray());
     }
 }

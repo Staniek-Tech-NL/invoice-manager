@@ -8,6 +8,7 @@ This directory is the source of truth for Invoice Manager product and engineerin
 - [Requirements](requirements.md) — functional and non-functional requirements
 - [Roadmap](roadmap.md) — milestones, releases, and completion criteria
 - [Case study](case-study.md) — evolving portfolio narrative
+- [Milestone reports](milestone-reports/README.md) — point-in-time delivery and quality summaries
 
 ## Engineering
 

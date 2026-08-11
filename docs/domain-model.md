@@ -56,7 +56,9 @@ Invoice statuses are `Draft`, `Sent`, `Paid`, `Overdue`, and `Cancelled`. Paid a
 
 ### Payment
 
-A payment is an immutable recorded transaction associated with one invoice. It stores payment date, amount, reference, method, and creation timestamp. Corrections must preserve a traceable history; the exact correction workflow will be designed with the payment feature.
+A payment is an immutable recorded transaction associated with one invoice. It stores payment date, amount, reference, method, and creation timestamp. An incorrect payment is voided exactly once with a required reason and UTC timestamp; it remains visible in history but no longer contributes to paid or outstanding amounts.
+
+The invoice aggregate owns its payments and derives `PaidAmount`, `OutstandingAmount`, and payment-dependent status. Draft and Cancelled have priority, zero outstanding produces Paid, an active past-due balance produces Overdue, and other active invoices remain Sent. See [ADR-0008](decisions/0008-void-incorrect-payments.md).
 
 ### DocumentNumberSequence
 

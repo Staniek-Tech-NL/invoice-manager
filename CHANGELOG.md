@@ -25,12 +25,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Atomic one-time accepted quote-to-invoice conversion with copied snapshots and a unique persisted source link.
 - A schema migration adding the nullable, unique invoice-to-source-quote relationship.
 - Milestone 4 transaction, rollback, snapshot, numbering, domain, application, and SQLite tests, bringing the suite to 68 tests.
+- Partial and full payment registration with paid and outstanding amounts on invoices.
+- Derived Paid and Overdue status, overpayment rollback, and concurrency-safe payment registration.
+- Auditable one-time payment voiding with a required reason and retained history.
+- A payment-voiding migration, ADR-0008, and Milestone 5 coverage bringing the suite to 86 tests.
 
 ### Changed
 
 - Refreshed the README, project specification, and case study to reflect the completed Milestone 2 implementation.
 - Updated product and engineering documentation with the completed Milestone 3 behavior and rounding policy.
 - Updated documentation with the completed Milestone 4 invoice and conversion behavior.
+- Updated documentation and milestone reporting with the completed Milestone 5 payment behavior.
 
 ## Planned Releases
 
