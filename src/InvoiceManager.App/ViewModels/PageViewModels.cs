@@ -21,20 +21,8 @@ public abstract class FeaturePlaceholderViewModel(
     public string Description { get; } = description;
 }
 
-public sealed class QuotesViewModel()
-    : FeaturePlaceholderViewModel(
-        NavigationDestination.Quotes,
-        "Quotes",
-        "Quotation workflows will be implemented in Milestone 3.");
-
 public sealed class InvoicesViewModel()
     : FeaturePlaceholderViewModel(
         NavigationDestination.Invoices,
         "Invoices",
         "Invoice workflows will be implemented in Milestone 4.");
-
-public sealed class SettingsViewModel()
-    : FeaturePlaceholderViewModel(
-        NavigationDestination.Settings,
-        "Settings",
-        "Company and invoice defaults will be added in upcoming milestones.");

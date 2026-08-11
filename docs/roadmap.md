@@ -24,14 +24,14 @@ Exit criterion: achieved. The application launches, navigation works, persistenc
 
 Exit criterion: achieved. Reusable business records can be safely maintained, validation is enforced, and inactive records are filtered correctly unless explicitly requested.
 
-## M3 — Quotations (`0.3.0`)
+## M3 — Quotations (`0.3.0`) — Complete
 
 - Quote editor and item management
 - VAT and total calculations with documented rounding
 - Quote statuses and yearly numbering
 - Snapshot persistence
 
-Exit criterion: a quotation can be created, saved, updated, and moved through its supported lifecycle without calculation or history drift.
+Exit criterion: achieved. A quotation can be created, numbered on first save, updated while in draft, searched, expired automatically, and moved through its supported lifecycle without calculation or snapshot drift.
 
 ## M4 — Invoices (`0.4.0`)
 

@@ -1,5 +1,7 @@
 using InvoiceManager.Application.Customers;
 using InvoiceManager.Application.Products;
+using InvoiceManager.Application.Quotes;
+using InvoiceManager.Application.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceManager.Application;
@@ -17,6 +19,14 @@ public static class DependencyInjection
         services.AddTransient<UpdateProductService>();
         services.AddTransient<DeactivateProductService>();
         services.AddTransient<SearchProductServices>();
+
+        services.AddTransient<GetCompanySettings>();
+        services.AddTransient<SaveCompanySettings>();
+
+        services.AddTransient<CreateQuote>();
+        services.AddTransient<UpdateQuote>();
+        services.AddTransient<SearchQuotes>();
+        services.AddTransient<ChangeQuoteStatus>();
 
         return services;
     }

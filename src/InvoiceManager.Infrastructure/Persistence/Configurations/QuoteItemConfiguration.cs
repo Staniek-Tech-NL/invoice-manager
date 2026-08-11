@@ -21,7 +21,7 @@ internal sealed class QuoteItemConfiguration : IEntityTypeConfiguration<QuoteIte
         builder.Property(item => item.GrossAmount).HasPrecision(18, 2);
 
         builder.HasOne<Quote>()
-            .WithMany()
+            .WithMany(quote => quote.Items)
             .HasForeignKey(item => item.QuoteId)
             .OnDelete(DeleteBehavior.Cascade);
     }

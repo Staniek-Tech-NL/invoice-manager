@@ -12,7 +12,15 @@ VAT   = Net * VatRate
 Gross = Net + VAT
 ```
 
-Document totals are derived from line amounts. A single rounding policy must define precision, midpoint behavior, and whether rounding occurs per line or at aggregate level. That policy must be selected, documented, and tested before quote calculations are implemented; calculations must not be distributed across view models, repositories, and PDF templates.
+Quotation calculations use this centralized rounding policy:
+
+- `Net` is rounded to two decimal places after multiplying quantity by unit price.
+- `VAT` is calculated from the rounded net amount and rounded to two decimal places.
+- `Gross` is the rounded sum of the line net and VAT amounts.
+- Document subtotal, VAT total, and total are sums of their rounded line amounts, rounded to two decimal places.
+- Midpoints are rounded away from zero.
+
+Calculations must not be distributed across view models, repositories, and PDF templates. Invoice calculations must reuse the same policy unless a later documented legal requirement supersedes it.
 
 ## Outstanding Balance
 

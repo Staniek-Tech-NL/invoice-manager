@@ -1,3 +1,5 @@
+using InvoiceManager.Domain.Common;
+
 namespace InvoiceManager.Domain.Documents;
 
 public sealed class IssuerSnapshot
@@ -24,5 +26,32 @@ public sealed class IssuerSnapshot
 
     private IssuerSnapshot()
     {
+    }
+
+    public static IssuerSnapshot Create(
+        string companyName,
+        string street,
+        string postalCode,
+        string city,
+        string country,
+        string? vatNumber,
+        string? chamberOfCommerceNumber,
+        string? iban,
+        string? email,
+        string? phone)
+    {
+        return new IssuerSnapshot
+        {
+            CompanyName = TextRules.Required(companyName, nameof(companyName), 200),
+            Street = TextRules.Required(street, nameof(street), 200),
+            PostalCode = TextRules.Required(postalCode, nameof(postalCode), 20),
+            City = TextRules.Required(city, nameof(city), 100),
+            Country = TextRules.Required(country, nameof(country), 100),
+            VatNumber = TextRules.Optional(vatNumber, nameof(vatNumber), 50),
+            ChamberOfCommerceNumber = TextRules.Optional(chamberOfCommerceNumber, nameof(chamberOfCommerceNumber), 50),
+            Iban = TextRules.Optional(iban, nameof(iban), 50),
+            Email = TextRules.Email(email, nameof(email)),
+            Phone = TextRules.Optional(phone, nameof(phone), 50),
+        };
     }
 }

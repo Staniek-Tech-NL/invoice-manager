@@ -6,7 +6,7 @@
 **Default project language:** English  
 **Primary audience:** Freelancers and small businesses  
 **MVP currency:** EUR  
-**Project status:** Milestone 2 complete / Quotations next
+**Project status:** Milestone 3 complete / Invoices next
 
 ---
 
@@ -792,7 +792,7 @@ VAT = Net × VatRate
 Gross = Net + VAT
 ```
 
-Rounding strategy must be explicit, centralized, tested and documented.
+Quotation line net amounts are rounded to two decimal places after multiplication. VAT is calculated from the rounded net amount and rounded to two decimal places. Gross is the rounded sum of line net and VAT. Document totals sum the rounded line values. All midpoint rounding uses `MidpointRounding.AwayFromZero`. Invoice calculations reuse this centralized policy unless a later documented legal requirement supersedes it.
 
 ---
 
@@ -1269,7 +1269,7 @@ Service deactivate
 Service search
 ```
 
-### M3 — Quotes
+### M3 — Quotes — COMPLETE
 
 ```text
 Quote editor
@@ -1774,11 +1774,12 @@ Any AI working on the repository must follow these rules:
 | PDF implementation | TO DECIDE — M6 |
 | Milestone 1 foundation | DONE |
 | Milestone 2 customers and services | DONE |
-| Source code | M2 COMPLETE |
+| Milestone 3 quotations | DONE |
+| Source code | M3 COMPLETE |
 | Local Git repository | DONE |
 | GitHub remote repository | NOT STARTED |
 | CI | CONFIGURED |
-| UI | SHELL, CUSTOMER, AND SERVICE WORKFLOWS DONE |
+| UI | SHELL, CUSTOMER, SERVICE, SETTINGS, AND QUOTE WORKFLOWS DONE |
 
 ---
 

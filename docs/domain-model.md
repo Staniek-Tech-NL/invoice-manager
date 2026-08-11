@@ -32,6 +32,8 @@ Stores name, description, unit, unit price, VAT rate, active state, and audit ti
 
 A quote contains a unique number, issuer snapshot, customer association and snapshot, issue and validity dates, status, notes, totals, timestamps, and one or more item snapshots.
 
+A quotation is created as a draft with at least one valid item. Its number is allocated atomically on first persistence using the independent yearly quote sequence. Only drafts can be edited. Eligible draft and sent quotations expire after their validity date; accepted and rejected quotations remain terminal. Customer and issuer snapshots are captured on creation and do not drift when source records are edited later.
+
 Quote statuses:
 
 ```text
@@ -39,6 +41,8 @@ Draft -> Sent -> Accepted
               -> Rejected
 Draft/Sent -> Expired when validity rules apply
 ```
+
+Line net, VAT, and gross amounts use the centralized two-decimal, midpoint-away-from-zero rounding policy. Quote totals are derived from the persisted rounded line amounts.
 
 ### Invoice and InvoiceItem
 

@@ -17,10 +17,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Customer creation, editing, searching, and safe archiving across the domain, application, persistence, and WPF layers.
 - Product and service creation, editing, searching, and safe deactivation across the domain, application, persistence, and WPF layers.
 - Milestone 2 validation, use-case, repository, filtering, and wildcard-search tests.
+- Company profile settings used to create stable issuer snapshots.
+- Quotation creation, editing, line-item management, search, lifecycle transitions, and automatic expiration.
+- Centralized line rounding, persisted customer/issuer/item snapshots, transactional yearly numbering, and concurrent allocation coverage.
+- Milestone 3 domain, application, and SQLite integration tests, bringing the suite to 50 tests.
 
 ### Changed
 
 - Refreshed the README, project specification, and case study to reflect the completed Milestone 2 implementation.
+- Updated product and engineering documentation with the completed Milestone 3 behavior and rounding policy.
 
 ## Planned Releases
 

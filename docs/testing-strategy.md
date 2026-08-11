@@ -49,6 +49,8 @@ The M1 infrastructure suite also verifies application-directory creation, contro
 
 The M2 suite verifies customer and catalog validation, create/update/archive or deactivate use cases, SQLite persistence, case-insensitive search, escaped wildcard handling, and default filtering of inactive records.
 
+The M3 suite verifies company settings, snapshot capture, per-line rounding and document totals, quote validation and lifecycle transitions, automatic expiration, first-save yearly numbering, concurrent number allocation, item replacement, search escaping, and SQLite round trips. At M3 completion the suite contains 50 tests: 24 domain, 14 application, and 12 infrastructure tests.
+
 ### UI Tests
 
 The MVP prioritizes testable view models and manual workflow verification. Automated WPF UI testing may be added when it provides clear value, especially for navigation or critical editor behavior.

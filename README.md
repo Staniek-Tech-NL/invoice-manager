@@ -2,7 +2,7 @@
 
 Invoice Manager is a Windows desktop application for freelancers and small businesses that need a focused way to manage customers, services, quotations, invoices, payments, and basic financial reporting.
 
-> Project status: Milestone 2 complete. Customers and catalog entries can be created, viewed, edited, searched, and safely archived or deactivated. Quotations are next in Milestone 3.
+> Project status: Milestone 3 complete. Company settings and quotations now support historical snapshots, item calculations, yearly numbering, search, editing, lifecycle transitions, and automatic expiration. Invoices are next in Milestone 4.
 
 ## Product Scope
 
@@ -21,15 +21,16 @@ Invoice Manager is not intended to replace accounting software or an ERP system.
 - Customer create, view, edit, archive, and search workflows
 - Product and service create, edit, deactivate, and search workflows
 - Local SQLite persistence with automatic migrations
+- Single-company profile and document defaults
+- Quotation creation, editing, item management, search, status tracking, automatic expiration, and yearly numbering
 
 ## Planned Features
 
-- Quote creation, status tracking, and conversion to an invoice
-- Invoice creation, lifecycle management, and PDF export
+- Invoice creation, quote conversion, lifecycle management, and PDF export
 - Partial and full payment recording with overpayment protection
 - Automatic paid and overdue state calculation
 - Dashboard KPIs, recent invoices, and monthly revenue chart
-- Company profile and branding settings
+- Company logo and document branding
 
 ## Technology
 
@@ -93,7 +94,7 @@ dotnet test InvoiceManager.sln --no-build --configuration Release
 dotnet run --project src/InvoiceManager.App/InvoiceManager.App.csproj
 ```
 
-On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI includes the navigable product shell and complete customer and product/service maintenance workflows.
+On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI includes customer and service maintenance, company settings, and complete quotation workflows through acceptance or rejection.
 
 ## Local Data
 

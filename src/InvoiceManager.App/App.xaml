@@ -15,13 +15,13 @@
             <views:ServicesView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:QuotesViewModel}">
-            <views:FeaturePlaceholderView />
+            <views:QuotesView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:InvoicesViewModel}">
             <views:FeaturePlaceholderView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
-            <views:FeaturePlaceholderView />
+            <views:SettingsView />
         </DataTemplate>
     </Application.Resources>
 </Application>

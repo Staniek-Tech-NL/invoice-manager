@@ -51,9 +51,11 @@ Milestone 2 delivered customer and product/service maintenance across all applic
 
 The desktop UI provides dedicated customer and product/service lists and editors, confirmation before archival or deactivation, validation feedback, search, and inactive-record filters. Application use cases remain independent of WPF, while EF Core repositories own SQLite access.
 
+Milestone 3 introduced the company profile required for issuer snapshots and delivered the complete quotation workflow. The editor selects active customers and catalog entries, supports editable line snapshots, calculates totals through centralized domain rules, and allows only valid Draft → Sent → Accepted or Rejected transitions. Eligible draft and sent quotations expire automatically. Numbers such as `Q-2026-0001` are allocated during the first transactional save, with a concurrency test protecting uniqueness and ordering.
+
 ## Testing Strategy
 
-The project currently has 26 passing automated tests: 11 domain tests, 8 application tests, and 7 infrastructure tests. The M2 coverage includes validation, create and update workflows, archival and deactivation, SQLite persistence, inactive-record filtering, case-insensitive search, and escaped search wildcards. Clean-clone verification restores, builds, and tests the committed repository independently. Future milestones will add calculation, lifecycle, transaction, snapshot, and PDF coverage.
+The project currently has 50 passing automated tests: 24 domain tests, 14 application tests, and 12 infrastructure tests. Coverage now includes reusable-record validation, quotation calculations and lifecycle rules, snapshot stability, first-save and concurrent numbering, SQLite persistence, filtering, search escaping, and automatic expiration. Clean-clone verification restores, builds, and tests the committed repository independently. Future milestones will add invoice, payment, conversion, and PDF coverage.
 
 ## Result
 
@@ -64,4 +66,6 @@ Target result: a downloadable `v1.0.0` Windows application with a complete custo
 - Archival and deactivation are domain actions rather than UI-only flags, which keeps lifecycle rules consistent across all callers.
 - Small application use cases and repository ports keep WPF and EF Core details outside the domain model.
 - Search behavior needs integration tests because SQLite wildcard semantics differ from ordinary string matching.
+- First-save numbering belongs in the same persistence transaction as the document; opening or abandoning an editor must never consume a number.
+- Persisted line and party snapshots make historical stability an explicit aggregate boundary rather than a rendering concern.
 - Updating the case study at each milestone keeps implementation evidence accurate instead of reconstructing it only for the final release.

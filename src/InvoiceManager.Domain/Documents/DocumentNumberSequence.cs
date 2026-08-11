@@ -13,4 +13,22 @@ public sealed class DocumentNumberSequence
     private DocumentNumberSequence()
     {
     }
+
+    public static DocumentNumberSequence Create(DocumentType documentType, int year)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(year, 1);
+
+        return new DocumentNumberSequence
+        {
+            Id = Guid.NewGuid(),
+            DocumentType = documentType,
+            Year = year,
+        };
+    }
+
+    public int AllocateNext()
+    {
+        LastNumber = checked(LastNumber + 1);
+        return LastNumber;
+    }
 }

@@ -2,6 +2,8 @@ using InvoiceManager.Application.Common.Storage;
 using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Customers;
 using InvoiceManager.Application.Products;
+using InvoiceManager.Application.Quotes;
+using InvoiceManager.Application.Settings;
 using InvoiceManager.Infrastructure.Persistence;
 using InvoiceManager.Infrastructure.Persistence.Repositories;
 using InvoiceManager.Infrastructure.Storage;
@@ -38,6 +40,8 @@ public static class DependencyInjection
             options.UseSqlite(connectionString));
         services.AddSingleton<ICustomerRepository, CustomerRepository>();
         services.AddSingleton<IProductServiceRepository, ProductServiceRepository>();
+        services.AddSingleton<ICompanySettingsRepository, CompanySettingsRepository>();
+        services.AddSingleton<IQuoteRepository, QuoteRepository>();
         services.AddHostedService<DatabaseInitializationService>();
 
         return services;
