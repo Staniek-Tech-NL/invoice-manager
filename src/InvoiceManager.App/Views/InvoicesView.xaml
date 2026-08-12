@@ -24,7 +24,7 @@
                 <ColumnDefinition Width="300" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox Height="36" Padding="10,6" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Height="36" Padding="10,6" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Search invoices" />
             <Button Grid.Column="1" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding SearchCommand}" Content="Search" />
             <Button Grid.Column="3" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding GeneratePdfCommand}" Content="Export PDF" />
             <Button Grid.Column="4" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditSelectedCommand}" Content="Edit" />
@@ -43,7 +43,7 @@
             <Border Background="White" BorderBrush="#E1E6EF" BorderThickness="1" CornerRadius="10">
                 <Grid>
                     <Grid.RowDefinitions><RowDefinition Height="2*" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
-                    <DataGrid ItemsSource="{Binding Invoices}" SelectedItem="{Binding SelectedInvoice}"
+                    <DataGrid x:Name="InvoicesGrid" ItemsSource="{Binding Invoices}" SelectedItem="{Binding SelectedInvoice}"
                               AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False"
                               GridLinesVisibility="Horizontal" BorderThickness="0" RowHeaderWidth="0">
                         <DataGrid.Columns>
@@ -56,6 +56,9 @@
                             <DataGridTextColumn Width="*" Header="Outstanding" Binding="{Binding OutstandingAmount, StringFormat={}{0:N2}}" />
                         </DataGrid.Columns>
                     </DataGrid>
+                    <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#6E7B91" Text="No invoices match this view." IsHitTestVisible="False">
+                        <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding HasItems, ElementName=InvoicesGrid}" Value="False"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                    </TextBlock>
                     <Border Grid.Row="1" Padding="12,8" Background="#F5F7FA" BorderBrush="#E1E6EF" BorderThickness="0,1">
                         <TextBlock FontWeight="SemiBold" Text="Payment history for the selected invoice" />
                     </Border>

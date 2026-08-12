@@ -49,7 +49,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" Height="36" Padding="10,6" VerticalContentAlignment="Center" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Column="0" Height="36" Padding="10,6" VerticalContentAlignment="Center" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Search services" />
             <Button Grid.Column="1" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding SearchCommand}" Content="Search" />
             <CheckBox Grid.Column="2" Margin="16,0" VerticalAlignment="Center" IsChecked="{Binding IncludeInactive}" Content="Include inactive" />
             <Button Grid.Column="4" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditSelectedCommand}" Content="Edit" />
@@ -73,7 +73,8 @@
             </Grid.ColumnDefinitions>
 
             <Border Background="White" BorderBrush="#E1E6EF" BorderThickness="1" CornerRadius="10">
-                <DataGrid ItemsSource="{Binding ProductServices}"
+                <Grid>
+                <DataGrid x:Name="ServicesGrid" ItemsSource="{Binding ProductServices}"
                           SelectedItem="{Binding SelectedProductService}"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
@@ -91,6 +92,10 @@
                         <DataGridCheckBoxColumn Width="Auto" Header="Active" Binding="{Binding IsActive}" />
                     </DataGrid.Columns>
                 </DataGrid>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#6E7B91" Text="No services yet. Add a reusable service to build documents faster." IsHitTestVisible="False">
+                        <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding HasItems, ElementName=ServicesGrid}" Value="False"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                    </TextBlock>
+                </Grid>
             </Border>
 
             <Border Grid.Column="1"

@@ -1,5 +1,8 @@
 using System.Windows;
+using InvoiceManager.App.Navigation;
+using InvoiceManager.App.Services;
 using InvoiceManager.Application;
+using InvoiceManager.Application.Demo;
 using InvoiceManager.Infrastructure;
 using InvoiceManager.Infrastructure.Logging;
 using InvoiceManager.Infrastructure.Storage;
@@ -22,8 +25,26 @@ public partial class App : System.Windows.Application
             _host = CreateHost();
             await _host.StartAsync();
 
+            if (e.Args.Contains("--demo", StringComparer.OrdinalIgnoreCase))
+            {
+                await _host.Services.GetRequiredService<IDemoDataSeeder>().SeedAsync();
+            }
+
+            var navigation = _host.Services.GetRequiredService<INavigationService>();
+            if (navigation.CurrentPage is IActivatableNavigationPage activatablePage)
+            {
+                await activatablePage.ActivateAsync();
+            }
+
             MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
+
+            var portfolioOutput = GetOptionValue(e.Args, "--capture-portfolio");
+            if (portfolioOutput is not null)
+            {
+                await _host.Services.GetRequiredService<PortfolioCaptureService>().CaptureAsync(portfolioOutput);
+                MainWindow.Close();
+            }
         }
         catch (Exception exception)
         {
@@ -66,5 +87,18 @@ public partial class App : System.Windows.Application
         builder.Services.AddPresentation();
 
         return builder.Build();
+    }
+
+    private static string? GetOptionValue(string[] arguments, string option)
+    {
+        for (var index = 0; index < arguments.Length - 1; index++)
+        {
+            if (string.Equals(arguments[index], option, StringComparison.OrdinalIgnoreCase))
+            {
+                return arguments[index + 1];
+            }
+        }
+
+        return null;
     }
 }

@@ -1,10 +1,13 @@
+using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Dashboard;
+using InvoiceManager.Application.Demo;
 using InvoiceManager.Application.Payments;
 using InvoiceManager.Domain.Customers;
 using InvoiceManager.Domain.Documents;
 using InvoiceManager.Domain.Invoices;
 using InvoiceManager.Domain.Quotes;
 using InvoiceManager.Infrastructure.Dashboard;
+using InvoiceManager.Infrastructure.Demo;
 using InvoiceManager.Infrastructure.Pdf;
 using InvoiceManager.Infrastructure.Persistence;
 using InvoiceManager.Infrastructure.Persistence.Repositories;
@@ -19,6 +22,24 @@ public sealed class Milestone6InfrastructureTests
 {
     private static readonly DateOnly Today = new(2026, 8, 12);
     private static readonly DateTimeOffset UtcNow = new(2026, 8, 12, 10, 0, 0, TimeSpan.Zero);
+
+    [Fact]
+    public async Task DemoSeederCreatesCompleteDatasetAndRefusesNonEmptyDatabase()
+    {
+        await using var database = await TestDatabase.CreateAsync();
+        var seeder = new DemoDataSeeder(database.Factory, new FixedClock(UtcNow));
+
+        var result = await seeder.SeedAsync();
+
+        Assert.Equal(new DemoSeedResult(3, 4, 3, 5, 2), result);
+        await using var context = await database.Factory.CreateDbContextAsync();
+        Assert.Equal(3, await context.Customers.CountAsync());
+        Assert.Equal(5, await context.Invoices.CountAsync());
+        Assert.Equal(2, await context.Payments.CountAsync());
+        Assert.Contains(await context.Invoices.ToListAsync(), invoice => invoice.Status == InvoiceStatus.Paid);
+        Assert.Contains(await context.Invoices.ToListAsync(), invoice => invoice.Status == InvoiceStatus.Overdue);
+        await Assert.ThrowsAsync<InvalidOperationException>(() => seeder.SeedAsync());
+    }
 
     [Fact]
     public async Task DashboardCalculatesPaymentRevenueBalancesCountsAndRecentInvoices()
@@ -184,5 +205,11 @@ public sealed class Milestone6InfrastructureTests
     private sealed class TestFactory(DbContextOptions<InvoiceManagerDbContext> options) : IDbContextFactory<InvoiceManagerDbContext>
     {
         public InvoiceManagerDbContext CreateDbContext() => new(options);
+    }
+
+    private sealed class FixedClock(DateTimeOffset now) : IApplicationClock
+    {
+        public DateTimeOffset UtcNow => now;
+        public DateOnly Today => DateOnly.FromDateTime(now.UtcDateTime);
     }
 }

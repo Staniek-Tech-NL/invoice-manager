@@ -4,6 +4,8 @@ namespace InvoiceManager.Infrastructure.Storage;
 
 public sealed class ApplicationPaths : IApplicationPaths
 {
+    public const string DataDirectoryEnvironmentVariable = "INVOICE_MANAGER_DATA_DIRECTORY";
+
     public ApplicationPaths(string rootDirectory)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(rootDirectory);
@@ -24,6 +26,12 @@ public sealed class ApplicationPaths : IApplicationPaths
 
     public static ApplicationPaths CreateDefault()
     {
+        var overrideDirectory = Environment.GetEnvironmentVariable(DataDirectoryEnvironmentVariable);
+        if (!string.IsNullOrWhiteSpace(overrideDirectory))
+        {
+            return new ApplicationPaths(overrideDirectory);
+        }
+
         var localApplicationData = Environment.GetFolderPath(
             Environment.SpecialFolder.LocalApplicationData,
             Environment.SpecialFolderOption.Create);

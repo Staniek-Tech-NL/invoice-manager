@@ -12,6 +12,12 @@
         MinHeight="640"
         WindowStartupLocation="CenterScreen"
         Background="#F5F7FB">
+    <Window.InputBindings>
+        <KeyBinding Key="D" Modifiers="Alt" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Dashboard}" />
+        <KeyBinding Key="C" Modifiers="Alt" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Customers}" />
+        <KeyBinding Key="Q" Modifiers="Alt" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Quotes}" />
+        <KeyBinding Key="I" Modifiers="Alt" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Invoices}" />
+    </Window.InputBindings>
     <Window.Resources>
         <Style x:Key="NavigationButtonStyle" TargetType="Button">
             <Setter Property="Height" Value="48" />
@@ -48,7 +54,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="#F5F7FB">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="240" />
             <ColumnDefinition Width="*" />
@@ -68,17 +74,17 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1">
-                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Dashboard}" Content="Dashboard" />
-                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Customers}" Content="Customers" />
-                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Services}" Content="Services" />
-                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Quotes}" Content="Quotes" />
-                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Invoices}" Content="Invoices" />
-                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Settings}" Content="Settings" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Dashboard}" Content="Dashboard" AutomationProperties.Name="Dashboard navigation, Alt+D" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Customers}" Content="Customers" AutomationProperties.Name="Customers navigation, Alt+C" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Services}" Content="Services" AutomationProperties.Name="Services navigation" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Quotes}" Content="Quotes" AutomationProperties.Name="Quotes navigation, Alt+Q" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Invoices}" Content="Invoices" AutomationProperties.Name="Invoices navigation, Alt+I" />
+                    <Button Style="{StaticResource NavigationButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="{x:Static navigation:NavigationDestination.Settings}" Content="Settings" AutomationProperties.Name="Settings navigation" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Margin="24,0,16,18" VerticalAlignment="Bottom">
                     <TextBlock Foreground="#93A4C0" FontSize="11" Text="Local-first desktop app" />
-                    <TextBlock Margin="0,4,0,0" Foreground="#687B9A" FontSize="11" Text="Foundation build" />
+                    <TextBlock Margin="0,4,0,0" Foreground="#687B9A" FontSize="11" Text="Version 1.0.0" />
                 </StackPanel>
             </Grid>
         </Border>

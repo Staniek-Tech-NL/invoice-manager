@@ -1,6 +1,6 @@
 # Invoice Manager Case Study
 
-> Status: living draft. This document will be updated with implementation evidence, screenshots, metrics, and lessons as milestones are completed.
+> Status: complete for the local `v1.0.0` portfolio release. GitHub publication remains pending until a remote repository is configured.
 
 ## Problem
 
@@ -59,13 +59,15 @@ Milestone 5 delivered transactional partial and full payments, outstanding balan
 
 Milestone 6 completed the operational workflow with local quotation and invoice PDF export plus live reporting. PDFsharp renders persisted document snapshots, including a logo copied into SQLite at document creation, so historical exports are reproducible after company or customer edits. The dashboard derives month and year revenue from active recorded payments and combines it with current outstanding and overdue balances, active record counts, recent invoices, and a zero-filled 12-month chart.
 
+Milestone 7 turned the completed workflow into a release-ready portfolio project. A transactional demo-data seeder creates a coherent fictional dataset only when the business database is empty. The desktop experience adds keyboard shortcuts, automation labels, empty states, explicit logo controls, and visible version information. An isolated capture mode produces reviewed product screenshots and a representative PDF without touching user data. A guarded release script builds a self-contained Windows x64 package, while a dedicated visual kit supplies a generated hero and editable workflow and architecture diagrams for presentations.
+
 ## Testing Strategy
 
-The project currently has 95 passing automated tests: 43 domain tests, 26 application tests, and 26 infrastructure tests. Coverage includes reusable records, calculations and lifecycles, snapshots and historical logos, numbering, quote conversion, payments and voiding, concurrency, PDF generation, dashboard summaries, SQLite persistence, filtering, and expiration. Representative PDFs are additionally rendered and reviewed visually. Clean-clone verification restores, builds, and tests the committed repository independently.
+The project has 97 passing automated tests: 43 domain tests, 26 application tests, and 28 infrastructure tests. Coverage includes reusable records, calculations and lifecycles, snapshots and historical logos, numbering, quote conversion, payments and voiding, concurrency, safe demo seeding, PDF generation, dashboard summaries, SQLite persistence, filtering, paths, and expiration. Representative PDFs and product screens are rendered and reviewed visually. Release verification restores, builds, tests, audits dependencies, checks the EF model, packages the app, and launches the self-contained executable against isolated data.
 
 ## Result
 
-Target result: a downloadable `v1.0.0` Windows application with a complete customer-to-payment workflow, stable persistence, professional PDFs, dashboard reporting, CI, and portfolio-quality documentation.
+The result is a self-contained `v1.0.0` Windows application with a complete customer-to-payment workflow, stable local persistence, professional snapshot-safe PDFs, dashboard reporting, CI configuration, 97 automated tests, safe demo data, and a portfolio-quality visual and documentation kit. The local release artifact and GitHub-ready notes are complete; only external publication awaits a configured remote.
 
 ## Lessons Learned
 
@@ -77,3 +79,5 @@ Target result: a downloadable `v1.0.0` Windows application with a complete custo
 - A unique source-quote link complements application validation and makes repeat conversion impossible even under competing callers.
 - Immutable payment records with explicit void metadata offer practical auditability without introducing a full accounting reversal ledger into the MVP.
 - Updating the case study at each milestone keeps implementation evidence accurate instead of reconstructing it only for the final release.
+- Demo data must be treated as a guarded product capability: refusing non-empty databases makes evaluation convenient without risking real records.
+- Portfolio assets are more credible when generated from the real application and fictional data, then visually inspected like any other release output.

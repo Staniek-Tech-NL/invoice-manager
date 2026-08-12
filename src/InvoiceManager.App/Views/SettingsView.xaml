@@ -58,12 +58,23 @@
                             <TextBlock Text="Default VAT (%) *" /><TextBox Style="{StaticResource FieldStyle}" Text="{Binding DefaultVatRatePercentText}" />
                             <TextBlock Text="Default payment term (days) *" /><TextBox Style="{StaticResource FieldStyle}" Text="{Binding DefaultPaymentTermDaysText}" />
                             <TextBlock Text="Currency *" /><TextBox Style="{StaticResource FieldStyle}" Text="{Binding Currency}" />
+                            <TextBlock Text="Company logo" />
+                            <Grid Margin="0,4,0,10">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBox Height="34" Padding="8,5" IsReadOnly="True" Text="{Binding LogoPath}" AutomationProperties.Name="Selected company logo path" />
+                                <Button Grid.Column="1" Width="72" Margin="6,0" Command="{Binding BrowseLogoCommand}" Content="Browse" AutomationProperties.Name="Choose company logo" />
+                                <Button Grid.Column="2" Width="62" Command="{Binding ClearLogoCommand}" Content="Clear" AutomationProperties.Name="Clear company logo" />
+                            </Grid>
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>
-                <Button Grid.Row="2" Width="140" Height="38" Margin="0,18,0,0" HorizontalAlignment="Right"
-                        Background="#2D6CDF" Foreground="White" BorderThickness="0" FontWeight="SemiBold"
-                        Command="{Binding SaveCommand}" Content="Save settings" />
+                <Grid Grid.Row="2" Margin="0,18,0,0">
+                    <Button Width="150" Height="38" HorizontalAlignment="Left" Background="White" BorderBrush="#CFD6E2"
+                            Command="{Binding LoadDemoDataCommand}" Content="Load demo data" AutomationProperties.HelpText="Available only for an empty database" />
+                    <Button Width="140" Height="38" HorizontalAlignment="Right"
+                            Background="#2D6CDF" Foreground="White" BorderThickness="0" FontWeight="SemiBold"
+                            Command="{Binding SaveCommand}" Content="Save settings" />
+                </Grid>
             </Grid>
         </Border>
     </Grid>

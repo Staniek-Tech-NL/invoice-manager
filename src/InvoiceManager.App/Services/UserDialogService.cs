@@ -29,4 +29,17 @@ public sealed class UserDialogService : IUserDialogService
 
         return dialog.ShowDialog() == true ? dialog.FileName : null;
     }
+
+    public string? ChooseLogoPath()
+    {
+        var dialog = new OpenFileDialog
+        {
+            Title = "Choose company logo",
+            Filter = "Supported images (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp|All files (*.*)|*.*",
+            CheckFileExists = true,
+            Multiselect = false,
+        };
+
+        return dialog.ShowDialog() == true ? dialog.FileName : null;
+    }
 }

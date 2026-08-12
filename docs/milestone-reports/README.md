@@ -4,3 +4,4 @@ Technical completion reports provide a point-in-time summary of implemented scop
 
 - [M5 completion report](m5-completion.md)
 - [M6 completion report](m6-completion.md)
+- [M7 completion report](m7-completion.md)

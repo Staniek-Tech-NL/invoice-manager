@@ -2,6 +2,7 @@ using InvoiceManager.Application.Common.Storage;
 using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Customers;
 using InvoiceManager.Application.Dashboard;
+using InvoiceManager.Application.Demo;
 using InvoiceManager.Application.Documents;
 using InvoiceManager.Application.Invoices;
 using InvoiceManager.Application.Payments;
@@ -9,6 +10,7 @@ using InvoiceManager.Application.Products;
 using InvoiceManager.Application.Quotes;
 using InvoiceManager.Application.Settings;
 using InvoiceManager.Infrastructure.Dashboard;
+using InvoiceManager.Infrastructure.Demo;
 using InvoiceManager.Infrastructure.Pdf;
 using InvoiceManager.Infrastructure.Persistence;
 using InvoiceManager.Infrastructure.Persistence.Repositories;
@@ -53,6 +55,7 @@ public static class DependencyInjection
         services.AddSingleton<IQuoteToInvoiceConverter, QuoteToInvoiceConverter>();
         services.AddSingleton<IInvoicePaymentService, InvoicePaymentService>();
         services.AddSingleton<IDashboardQuery, DashboardQuery>();
+        services.AddSingleton<IDemoDataSeeder, DemoDataSeeder>();
         services.AddSingleton<IDocumentPdfGenerator, PdfSharpDocumentGenerator>();
         services.AddHostedService<DatabaseInitializationService>();
 

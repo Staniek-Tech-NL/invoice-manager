@@ -5,6 +5,22 @@ namespace InvoiceManager.Infrastructure.Tests;
 public sealed class ApplicationPathsTests
 {
     [Fact]
+    public void CreateDefaultUsesExplicitDataDirectoryOverride()
+    {
+        var expected = Path.Combine(Path.GetTempPath(), "InvoiceManager.Override", Guid.NewGuid().ToString("N"));
+        var previous = Environment.GetEnvironmentVariable(ApplicationPaths.DataDirectoryEnvironmentVariable);
+        try
+        {
+            Environment.SetEnvironmentVariable(ApplicationPaths.DataDirectoryEnvironmentVariable, expected);
+            Assert.Equal(Path.GetFullPath(expected), ApplicationPaths.CreateDefault().RootDirectory);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable(ApplicationPaths.DataDirectoryEnvironmentVariable, previous);
+        }
+    }
+
+    [Fact]
     public void EnsureDirectoriesExistCreatesTheExpectedStructure()
     {
         var testRoot = Path.Combine(Path.GetTempPath(), "InvoiceManager.Tests", Guid.NewGuid().ToString("N"));

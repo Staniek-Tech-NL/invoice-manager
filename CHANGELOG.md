@@ -6,7 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-08-12
+
 ### Added
+
+- Transactional fictional demo data with refusal on non-empty business databases.
+- `--demo` startup support, isolated data-directory override, and portfolio capture workflow.
+- Keyboard navigation, automation labels, empty states, company-logo browse/clear controls, and visible version information.
+- Final dashboard, quotation editor, and invoice PDF screenshots.
+- Presentation-ready hero, architecture, and business-workflow graphics in PNG and SVG formats.
+- Guarded self-contained `win-x64` release packaging script and release notes.
+- Milestone 7 test coverage, bringing the suite to 97 tests.
 
 - Initial product, requirements, architecture, domain, business rule, testing, roadmap, and decision documentation.
 - Historical issuer snapshot requirements and an explicit date/time policy for persistence.
@@ -36,14 +46,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Updated README, roadmap, testing strategy, case study, milestone reporting, and documentation index for the portfolio release.
+- Set assembly and file versions to 1.0.0.
 - Refreshed the README, project specification, and case study to reflect the completed Milestone 2 implementation.
 - Updated product and engineering documentation with the completed Milestone 3 behavior and rounding policy.
 - Updated documentation with the completed Milestone 4 invoice and conversion behavior.
 - Updated documentation and milestone reporting with the completed Milestone 5 payment behavior.
 - Updated architecture and product documentation with the completed Milestone 6 PDF and dashboard behavior.
 
-## Planned Releases
+## Release History
 
 - `0.1.0` — foundation
 - `0.5.0` — core workflow through payments
-- `1.0.0` — portfolio release
+- `1.0.0` — portfolio release prepared locally on 2026-08-12

@@ -62,18 +62,16 @@ Exit criterion: achieved. Partial, full, excessive, concurrent, overdue, and voi
 
 Exit criterion: achieved. Users can export professional snapshot-safe documents and see accurate payment-based business summaries.
 
-Exit criterion: users can export professional documents and see accurate business summaries.
-
-## M7 — Portfolio Release (`1.0.0`)
+## M7 — Portfolio Release (`1.0.0`) — Complete Locally
 
 - Complete testing and manual release verification
 - Polish UI, accessibility, validation, and empty/error states
 - Add demo data and final screenshots
 - Complete README, diagrams, case study, and changelog
 - Produce and verify the release build
-- Publish GitHub release
+- Prepare the GitHub release package and notes for publication
 
-Exit criterion: the Definition of Done for the MVP is satisfied.
+Exit criterion: achieved locally. The Definition of Done for the MVP is satisfied, the self-contained Windows package is verified, and the release is ready for external GitHub publication once a remote repository is configured.
 
 ## Suggested Public Releases
 

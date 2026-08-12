@@ -42,7 +42,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox Height="36" Padding="10,6" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Height="36" Padding="10,6" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Search quotes" />
             <Button Grid.Column="1" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding SearchCommand}" Content="Search" />
             <Button Grid.Column="3" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding GeneratePdfCommand}" Content="Export PDF" />
             <Button Grid.Column="4" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditSelectedCommand}" Content="Edit" />
@@ -68,7 +68,8 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Border Background="White" BorderBrush="#E1E6EF" BorderThickness="1" CornerRadius="10">
-                <DataGrid ItemsSource="{Binding Quotes}" SelectedItem="{Binding SelectedQuote}"
+                <Grid>
+                <DataGrid x:Name="QuotesGrid" ItemsSource="{Binding Quotes}" SelectedItem="{Binding SelectedQuote}"
                           AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False"
                           GridLinesVisibility="Horizontal" BorderThickness="0" RowHeaderWidth="0">
                     <DataGrid.Columns>
@@ -80,6 +81,10 @@
                         <DataGridTextColumn Width="*" Header="Total" Binding="{Binding Total, StringFormat={}{0:N2} EUR}" />
                     </DataGrid.Columns>
                 </DataGrid>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#6E7B91" Text="No quotations match this view." IsHitTestVisible="False">
+                        <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding HasItems, ElementName=QuotesGrid}" Value="False"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                    </TextBlock>
+                </Grid>
             </Border>
 
             <Border Grid.Column="1" Width="650" Margin="20,0,0,0" Padding="22"

@@ -2,16 +2,21 @@ using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using InvoiceManager.App.Navigation;
+using InvoiceManager.App.Services;
+using InvoiceManager.Application.Demo;
 using InvoiceManager.Application.Settings;
 
 namespace InvoiceManager.App.ViewModels;
 
 public sealed partial class SettingsViewModel(
     GetCompanySettings getCompanySettings,
-    SaveCompanySettings saveCompanySettings) : ObservableObject, IActivatableNavigationPage
+    SaveCompanySettings saveCompanySettings,
+    IDemoDataSeeder demoDataSeeder,
+    IUserDialogService dialogService) : ObservableObject, IActivatableNavigationPage
 {
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyCanExecuteChangedFor(nameof(LoadDemoDataCommand))]
     private bool _isBusy;
 
     [ObservableProperty]
@@ -54,6 +59,9 @@ public sealed partial class SettingsViewModel(
     private string _currency = "EUR";
 
     [ObservableProperty]
+    private string _logoPath = string.Empty;
+
+    [ObservableProperty]
     private string? _errorMessage;
 
     [ObservableProperty]
@@ -86,6 +94,7 @@ public sealed partial class SettingsViewModel(
             DefaultVatRatePercentText = (settings.DefaultVatRate * 100m).ToString("0.##", CultureInfo.CurrentCulture);
             DefaultPaymentTermDaysText = settings.DefaultPaymentTermDays.ToString(CultureInfo.CurrentCulture);
             Currency = settings.Currency;
+            LogoPath = settings.LogoPath ?? string.Empty;
         });
     }
 
@@ -121,13 +130,42 @@ public sealed partial class SettingsViewModel(
             vatRatePercent / 100m,
             paymentTermDays,
             Currency,
-            null);
+            LogoPath);
 
         await RunBusyAsync(async () =>
         {
             await saveCompanySettings.ExecuteAsync(input);
             StatusMessage = "Company settings were saved.";
         });
+    }
+
+    [RelayCommand]
+    private void BrowseLogo()
+    {
+        var path = dialogService.ChooseLogoPath();
+        if (path is not null) LogoPath = path;
+    }
+
+    [RelayCommand]
+    private void ClearLogo() => LogoPath = string.Empty;
+
+    [RelayCommand(CanExecute = nameof(CanLoadDemoData))]
+    private async Task LoadDemoDataAsync()
+    {
+        if (!dialogService.Confirm(
+                "Load demo data",
+                "Load a complete fictional portfolio dataset? This is available only when the database is empty."))
+        {
+            return;
+        }
+
+        DemoSeedResult? seeded = null;
+        await RunBusyAsync(async () =>
+        {
+            seeded = await demoDataSeeder.SeedAsync();
+            StatusMessage = $"Demo data loaded: {seeded.Customers} customers, {seeded.Quotes} quotes, and {seeded.Invoices} invoices.";
+        });
+        if (seeded is not null) await ActivateAsync();
     }
 
     private async Task RunBusyAsync(Func<Task> operation)
@@ -143,7 +181,7 @@ public sealed partial class SettingsViewModel(
         {
             await operation();
         }
-        catch (ArgumentException exception)
+        catch (Exception exception) when (exception is ArgumentException or InvalidOperationException)
         {
             ErrorMessage = exception.Message;
         }
@@ -161,4 +199,6 @@ public sealed partial class SettingsViewModel(
     }
 
     private bool CanSave() => !IsBusy;
+
+    private bool CanLoadDemoData() => !IsBusy;
 }

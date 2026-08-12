@@ -2,7 +2,9 @@
 
 Invoice Manager is a Windows desktop application for freelancers and small businesses that need a focused way to manage customers, services, quotations, invoices, payments, and basic financial reporting.
 
-> Project status: Milestone 6 complete. Quotations and invoices can be exported as snapshot-safe PDFs, and the dashboard reports payment revenue, balances, overdue amounts, record counts, recent invoices, and a 12-month revenue chart. Portfolio polish is next in Milestone 7.
+![Invoice Manager portfolio cover](docs/images/presentation/portfolio-hero.png)
+
+> Project status: `v1.0.0` portfolio release complete locally. The self-contained Windows package, release notes, screenshots, presentation assets, and publication workflow are ready; GitHub publication awaits a configured remote repository.
 
 ## Product Scope
 
@@ -30,10 +32,16 @@ Invoice Manager is not intended to replace accounting software or an ERP system.
 - Quote and invoice PDF export to a user-selected location
 - Persisted historical company logos for reproducible document output
 - Dashboard KPIs, recent invoices, and a 12-month payment-revenue chart
+- Transactional fictional demo data that can only be loaded into an empty database
+- Keyboard navigation, accessibility labels, empty states, validation feedback, and versioned release packaging
 
-## Planned Features
+## Product Preview
 
-- Demo data, final screenshots, accessibility review, and release packaging
+| Dashboard | Quotation editor |
+|---|---|
+| ![Dashboard with demo metrics](docs/images/screenshots/01-dashboard.png) | ![Quotation editor with demo data](docs/images/screenshots/02-quote-editor.png) |
+
+![Generated invoice PDF](docs/images/screenshots/03-invoice-pdf.png)
 
 ## Technology
 
@@ -100,6 +108,24 @@ dotnet run --project src/InvoiceManager.App/InvoiceManager.App.csproj
 
 On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI includes the complete company-to-payment workflow, PDF export, and live financial dashboard reporting.
 
+### Explore with Fictional Demo Data
+
+Use a fresh or explicitly isolated database:
+
+```powershell
+dotnet run --project src/InvoiceManager.App/InvoiceManager.App.csproj -- --demo
+```
+
+The demo seeder refuses to run when any business data already exists. Its fictional companies, contacts, identifiers, and `.example` email addresses are safe for screenshots and evaluation.
+
+### Build the Windows Release Package
+
+```powershell
+./scripts/publish-release.ps1
+```
+
+The script creates a self-contained `win-x64` folder and ZIP under `artifacts/release`.
+
 ## Local Data
 
 Runtime data is stored under `%LocalAppData%/InvoiceManager`:
@@ -114,7 +140,7 @@ Generated PDFs are exported separately to a location selected by the user.
 
 ## Testing
 
-The project has 95 automated tests covering financial calculations, document numbering, snapshots, payments, PDF generation, dashboard reporting, status transitions, use cases, database constraints, and migrations. See the [Testing Strategy](docs/testing-strategy.md).
+The project has 97 automated tests covering financial calculations, document numbering, snapshots, payments, demo-data safety, PDF generation, dashboard reporting, status transitions, use cases, database constraints, paths, and migrations. See the [Testing Strategy](docs/testing-strategy.md).
 
 ## Documentation
 
@@ -126,6 +152,8 @@ The project has 95 automated tests covering financial calculations, document num
 - [Testing strategy](docs/testing-strategy.md)
 - [Roadmap](docs/roadmap.md)
 - [Portfolio case study](docs/case-study.md)
+- [Presentation assets](docs/presentation-assets.md)
+- [Version 1.0.0 release notes](docs/releases/v1.0.0.md)
 - [Milestone reports](docs/milestone-reports/README.md)
 - [Architecture decisions](docs/decisions/README.md)
 - [Contributing](CONTRIBUTING.md)
@@ -133,7 +161,7 @@ The project has 95 automated tests covering financial calculations, document num
 
 ## Roadmap
 
-Development is split into seven milestones, from foundation through customers, quotes, invoices, payments, PDF generation, dashboard reporting, and portfolio polish. The target release is `v1.0.0`. See the complete [Roadmap](docs/roadmap.md).
+Development is split into seven completed milestones, from foundation through customers, quotes, invoices, payments, PDF generation, dashboard reporting, and portfolio polish. See the complete [Roadmap](docs/roadmap.md).
 
 ## License
 

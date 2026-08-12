@@ -25,6 +25,7 @@ public static class DependencyInjection
 
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IUserDialogService, UserDialogService>();
+        services.AddSingleton<PortfolioCaptureService>();
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();
 

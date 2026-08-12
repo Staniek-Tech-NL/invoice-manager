@@ -57,6 +57,8 @@ The M5 suite verifies payment validation and rounding, partial and full balances
 
 The M6 suite verifies PDF use-case delegation and validation, historical logo copying and persistence, logo file limits, readable quote and invoice PDF output, status refresh before dashboard queries, payment-based monthly and yearly revenue, balances, overdue totals, record counts, recent invoices, and the complete 12-month series. At M6 completion the suite contains 95 tests: 43 domain, 26 application, and 26 infrastructure tests. Representative invoice and quotation PDFs are also rendered to PNG and inspected for alignment, spacing, clipping, tables, totals, and footers.
 
+The M7 suite adds safe demo-data seeding and explicit application-directory override coverage. At M7 completion the suite contains 97 tests: 43 domain, 26 application, and 28 infrastructure tests. Portfolio screenshots and the representative invoice PDF are generated from an isolated fictional dataset and visually reviewed.
+
 ### UI Tests
 
 The MVP prioritizes testable view models and manual workflow verification. Automated WPF UI testing may be added when it provides clear value, especially for navigation or critical editor behavior.
@@ -95,7 +97,7 @@ On every pull request and push to the protected branch, CI restores packages, bu
 
 ## Manual Release Verification
 
-Before `v1.0.0`, verify on a clean Windows environment:
+For `v1.0.0`, verify on a clean Windows environment:
 
 1. Install or unpack and launch the release build.
 2. Complete the full company-to-payment workflow.
