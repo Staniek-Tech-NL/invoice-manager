@@ -6,7 +6,7 @@ Invoice Manager is a release-ready, local-first Windows business application imp
 
 ![Invoice Manager dashboard](docs/images/screenshots/01-dashboard.png)
 
-> Project status: `v1.0.0` portfolio release complete locally. The self-contained Windows package, release notes, screenshots, presentation assets, and publication workflow are ready; GitHub publication awaits a configured remote repository.
+> Project status: `v1.0.0` is published in the [public GitHub repository](https://github.com/Staniek-Tech-NL/invoice-manager). The self-contained Windows package, release notes, screenshots, and presentation assets are available with the release.
 
 ## What It Solves
 
@@ -202,7 +202,7 @@ Nine accepted ADRs document the major choices: Clean Architecture, WPF/MVVM, SQL
 
 ## Project Status and Release
 
-All seven milestones are complete. The verified `v1.0.0` Windows x64 package and [release notes](docs/releases/v1.0.0.md) are ready for GitHub publication when a remote repository is configured. See the completed [Roadmap](docs/roadmap.md).
+All seven milestones are complete. The verified `v1.0.0` Windows x64 package and [release notes](docs/releases/v1.0.0.md) are published on [GitHub](https://github.com/Staniek-Tech-NL/invoice-manager/releases/tag/v1.0.0). See the completed [Roadmap](docs/roadmap.md).
 
 ## License
 

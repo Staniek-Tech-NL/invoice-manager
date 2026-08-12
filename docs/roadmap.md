@@ -71,7 +71,7 @@ Exit criterion: achieved. Users can export professional snapshot-safe documents 
 - Produce and verify the release build
 - Prepare the GitHub release package and notes for publication
 
-Exit criterion: achieved locally. The Definition of Done for the MVP is satisfied, the self-contained Windows package is verified, and the release is ready for external GitHub publication once a remote repository is configured.
+Exit criterion: achieved. The Definition of Done for the MVP is satisfied, the self-contained Windows package is verified, and version `v1.0.0` is published in the public GitHub repository.
 
 ## Suggested Public Releases
 

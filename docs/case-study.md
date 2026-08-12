@@ -12,7 +12,7 @@ The engineering challenge was not basic CRUD. The product protects historical do
 |---|---|---|---|
 | **97 passing** | **0 warnings / 0 errors** | **0 known vulnerable packages** | **No pending migrations** |
 
-> The local release, source documentation, screenshots, and verified Windows package are complete. Public GitHub publication awaits configuration of the target remote repository.
+> The source, documentation, screenshots, and verified Windows package are published in the [public GitHub repository](https://github.com/Staniek-Tech-NL/invoice-manager).
 
 ## Problem
 
@@ -79,7 +79,7 @@ The project has 97 passing automated tests: 43 domain tests, 26 application test
 
 ## Result
 
-The result is a self-contained `v1.0.0` Windows application with a complete customer-to-payment workflow, stable local persistence, professional snapshot-safe PDFs, dashboard reporting, CI configuration, 97 automated tests, safe demo data, and a portfolio-quality visual and documentation kit. The local release artifact and GitHub-ready notes are complete; only external publication awaits a configured remote.
+The result is a self-contained `v1.0.0` Windows application with a complete customer-to-payment workflow, stable local persistence, professional snapshot-safe PDFs, dashboard reporting, CI configuration, 97 automated tests, safe demo data, and a portfolio-quality visual and documentation kit. The source and verified release artifact are publicly available on GitHub.
 
 ## Lessons Learned
 

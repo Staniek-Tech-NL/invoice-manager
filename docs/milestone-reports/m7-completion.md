@@ -6,7 +6,7 @@
 
 **Version:** 1.0.0
 
-**Status:** Complete locally; GitHub publication ready
+**Status:** Complete and published on GitHub
 
 ## Outcome
 
@@ -41,4 +41,4 @@ The local build produces `artifacts/release/InvoiceManager-1.0.0-win-x64.zip`. T
 
 ## External Publication
 
-No Git remote is configured. The release is ready to publish, but creating a GitHub release requires selecting or configuring the target repository and is therefore not performed automatically.
+The source repository is public at [Staniek-Tech-NL/invoice-manager](https://github.com/Staniek-Tech-NL/invoice-manager). The verified Windows package is attached to the [`v1.0.0` GitHub release](https://github.com/Staniek-Tech-NL/invoice-manager/releases/tag/v1.0.0).
