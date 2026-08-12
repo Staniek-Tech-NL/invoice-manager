@@ -40,3 +40,22 @@ jobs:
 
       - name: Test
         run: dotnet test InvoiceManager.sln --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
+
+      - name: Audit direct and transitive dependencies
+        run: dotnet package list --project InvoiceManager.sln --vulnerable --include-transitive --no-restore
+
+      - name: Verify EF Core model matches migrations
+        run: >-
+          dotnet ef migrations has-pending-model-changes
+          --project src/InvoiceManager.Infrastructure/InvoiceManager.Infrastructure.csproj
+          --startup-project src/InvoiceManager.Infrastructure/InvoiceManager.Infrastructure.csproj
+          --configuration Release
+          --no-build
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: "**/TestResults/*.trx"
+          if-no-files-found: error

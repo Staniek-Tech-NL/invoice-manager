@@ -62,7 +62,7 @@ Exit criterion: achieved. Partial, full, excessive, concurrent, overdue, and voi
 
 Exit criterion: achieved. Users can export professional snapshot-safe documents and see accurate payment-based business summaries.
 
-## M7 — Portfolio Release (`1.0.0`) — Complete Locally
+## M7 — Portfolio Release (`1.0.0`) — Complete
 
 - Complete testing and manual release verification
 - Polish UI, accessibility, validation, and empty/error states
