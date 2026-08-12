@@ -20,7 +20,7 @@ Quotation calculations use this centralized rounding policy:
 - Document subtotal, VAT total, and total are sums of their rounded line amounts, rounded to two decimal places.
 - Midpoints are rounded away from zero.
 
-Calculations must not be distributed across view models, repositories, and PDF templates. Invoice calculations must reuse the same policy unless a later documented legal requirement supersedes it.
+Calculations are centralized in Domain and are not duplicated across view models, repositories, or PDF templates. Quotes and invoices use the same implemented policy.
 
 ## Outstanding Balance
 
@@ -56,7 +56,7 @@ Status is not Draft
 Status is not Cancelled
 ```
 
-A partially paid invoice can therefore be overdue. A fully paid invoice is Paid. Date evaluation should use a single injected clock or date provider so tests are deterministic.
+A partially paid invoice can therefore be overdue. A fully paid invoice is Paid. Date evaluation uses the injected application clock, making status behavior deterministic in tests.
 
 The transition priority is:
 

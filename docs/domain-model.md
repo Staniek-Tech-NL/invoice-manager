@@ -48,15 +48,17 @@ Line net, VAT, and gross amounts use the centralized two-decimal, midpoint-away-
 
 An invoice contains a unique number, issuer snapshot, customer association and snapshot, issue and due dates, status, notes, totals, timestamps, and one or more item snapshots.
 
-An invoice is created as a draft with at least one valid item. Only drafts can be edited or marked as sent. Draft and sent invoices can be cancelled. Paid and Overdue remain derived payment states implemented in Milestone 5 rather than manual M4 actions. Invoice numbers use an independent yearly sequence and are assigned atomically on first persistence.
+An invoice is created as a draft with at least one valid item. Only drafts can be edited or marked as sent. Draft and sent invoices can be cancelled when they have no active payments. Paid and Overdue are derived states, never manual actions. Invoice numbers use an independent yearly sequence and are assigned atomically on first persistence.
 
-An invoice converted from a quotation stores a unique optional source quotation identifier. Conversion requires an Accepted quotation, copies issuer, customer, line, and notes snapshots, preserves the source quotation, and can succeed only once.
+An invoice converted from a quotation stores a unique optional `SourceQuoteId`. Conversion requires an Accepted quotation, copies issuer, customer, line, and notes snapshots, and preserves the source quotation. The database unique constraint allows each quote to be converted at most once. Conversion, invoice-number allocation, item persistence, and sequence advancement share one transaction; a failed or repeated conversion does not consume a number.
 
 Invoice statuses are `Draft`, `Sent`, `Paid`, `Overdue`, and `Cancelled`. Paid and Overdue are derived from payment and due-date rules rather than arbitrary user toggles.
 
 ### Payment
 
-A payment is an immutable recorded transaction associated with one invoice. It stores payment date, amount, reference, method, and creation timestamp. An incorrect payment is voided exactly once with a required reason and UTC timestamp; it remains visible in history but no longer contributes to paid or outstanding amounts.
+A payment is an immutable recorded transaction associated with one invoice. It stores payment date, amount, reference, method, and creation timestamp. Its amount, date, reference, and method cannot be edited after registration.
+
+Incorrect payments are voided rather than changed or deleted. Voiding requires a non-empty reason, records a UTC timestamp, and can occur only once. Voided payments remain visible in history but no longer contribute to `PaidAmount` or `OutstandingAmount`; the owning invoice immediately recalculates its derived status.
 
 The invoice aggregate owns its payments and derives `PaidAmount`, `OutstandingAmount`, and payment-dependent status. Draft and Cancelled have priority, zero outstanding produces Paid, an active past-due balance produces Overdue, and other active invoices remain Sent. See [ADR-0008](decisions/0008-void-incorrect-payments.md).
 
@@ -64,17 +66,17 @@ The invoice aggregate owns its payments and derives `PaidAmount`, `OutstandingAm
 
 Tracks the last number for one `DocumentType + Year` pair. Invoice and quotation sequences are independent.
 
-## Value Concepts
+## Domain Concepts and Value Objects
 
-Implementation should introduce value objects where they protect invariants without unnecessary complexity. Likely candidates include:
+- `IssuerSnapshot` owns the issuing company data and optional logo bytes copied into a document. It prevents historical output from reading mutable company settings.
+- `CustomerSnapshot` owns the customer identity and address copied into a document. It prevents later customer edits from changing issued content.
+- `QuoteItem` and `InvoiceItem` are owned line snapshots. They retain description, quantity, unit, unit price, VAT rate, and rounded monetary results.
+- `QuoteItemDraft` and `InvoiceItemDraft` carry validated editor inputs into aggregate creation and replacement operations.
+- `DocumentNumberSequence` protects monotonic allocation for one document type and year. An allocated aggregate number is immutable.
+- `FinancialRules` centralizes decimal line and document calculations, two-decimal rounding, and `MidpointRounding.AwayFromZero`.
+- `DateOnly` represents issue, validity, due, and payment dates; UTC `DateTimeOffset` represents audit instants.
 
-- Money or monetary amount with currency context
-- VAT rate
-- Document number
-- Address
-- Date range or payment term
-
-The MVP has one currency, EUR, but money calculations must still be explicit and centralized.
+The MVP uses EUR as its single currency. Monetary values remain explicit `decimal` amounts and never use binary floating-point types.
 
 ## Relationships and Ownership
 
@@ -87,13 +89,13 @@ The MVP has one currency, EUR, but money calculations must still be explicit and
 
 ## Document Snapshots
 
-Documents must preserve what was issued. Each quote and invoice stores:
+Documents preserve what was issued. Each quote and invoice stores:
 
 - an issuer snapshot containing company name, address, country, VAT number, chamber of commerce number, IBAN, email, and phone;
 - the customer details needed to render the original document;
 - item snapshots containing description, quantity, unit, unit price, VAT rate, net amount, VAT amount, and gross amount.
 
-The implementation may model the issuer fields as an owned type or value object such as `IssuerSnapshot`. The exact persistence shape may be refined before the document migration, but the snapshot boundary is mandatory. Historical rendering never reads current `CompanySettings` in place of the persisted issuer snapshot.
+EF Core maps `IssuerSnapshot` and `CustomerSnapshot` as owned document data, while line snapshots are owned aggregate collections. Historical rendering reads these persisted snapshots and never substitutes current `CompanySettings`, customer, or catalog records.
 
 Changing company settings, a customer address, catalog price, description, VAT rate, or logo affects new documents only. Existing documents retain their stored snapshots. Since M6, `IssuerSnapshot` also stores optional logo bytes; pre-M6 documents keep a null logo and remain exportable.
 
@@ -112,8 +114,17 @@ Changing company settings, a customer address, catalog price, description, VAT r
 - Cancelled invoices cannot become overdue.
 - A fully paid invoice has zero outstanding balance and Paid status.
 - Document numbers are assigned once and never reused.
-- Conversion does not mutate or remove the source quotation.
+- Accepted quotes can be converted at most once; conversion does not mutate or remove the source quotation.
+- A failed or repeated conversion does not consume an invoice number.
+- Active payment totals cannot exceed the invoice total.
+- Payment corrections preserve the original record and complete void metadata.
 
-## Lifecycle Notes
+## Lifecycle Enforcement
 
-Detailed transition permissions, edit restrictions after sending, cancellation effects, payment correction behavior, and automatic quote expiration timing must be finalized during their respective milestones. Any new behavior must remain consistent with [Business Rules](business-rules.md) and be recorded in an ADR if it changes an accepted architectural decision.
+- Quotes are editable only in Draft. Draft moves to Sent; Sent moves to Accepted or Rejected. Draft and Sent expire when `ValidUntil < clock.Today`; Accepted and Rejected are terminal.
+- Invoices are editable only in Draft. Draft moves to Sent. Draft or Sent may be cancelled only without active payments.
+- Paid and Overdue are recalculated from active payments, due date, and `clock.Today`; Cancelled and Draft take priority.
+- Payment registration rejects non-positive and excessive amounts. Voiding is the only supported correction.
+- Repository transactions enforce atomic numbering, one-time conversion, and competing-payment protection at persistence boundaries.
+
+These rules match [Business Rules](business-rules.md); architectural changes require an updated or superseding ADR.

@@ -1,26 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-  <title id="title">Invoice Manager business workflow</title>
-  <desc id="desc">The journey from company setup through payment and dashboard reporting.</desc>
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F7F9FD"/><stop offset="1" stop-color="#E9F0FC"/></linearGradient>
-    <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#14213D" flood-opacity=".14"/></filter>
-    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0l12 6-12 6z" fill="#2D6CDF"/></marker>
-  </defs>
-  <rect width="1600" height="900" rx="36" fill="url(#bg)"/>
-  <text x="104" y="116" fill="#14213D" font-family="Segoe UI, Arial" font-size="54" font-weight="700">From quote to insight</text>
-  <text x="106" y="166" fill="#52627A" font-family="Segoe UI, Arial" font-size="25">One auditable workflow, backed by immutable document snapshots.</text>
-  <path d="M190 450H1410" fill="none" stroke="#B9CBEA" stroke-width="8" stroke-linecap="round"/>
-  <g fill="none" stroke="#2D6CDF" stroke-width="4" marker-end="url(#arrow)">
-    <path d="M300 450h95"/><path d="M535 450h95"/><path d="M770 450h95"/><path d="M1005 450h95"/><path d="M1240 450h95"/>
+  <title id="title">Invoice Manager quotation-to-payment workflow</title>
+  <desc id="desc">Five numbered stages from company profile to reporting.</desc>
+  <rect width="1600" height="900" fill="#F4F1EA"/>
+  <text x="110" y="112" fill="#202428" font-family="Segoe UI, Arial" font-size="54" font-weight="700">From quote to payment</text>
+  <text x="112" y="162" fill="#656B70" font-family="Segoe UI, Arial" font-size="24">A focused local workflow for freelancers and small businesses</text>
+  <line x1="110" y1="302" x2="1490" y2="302" stroke="#345995" stroke-width="4"/>
+  <g font-family="Segoe UI, Arial">
+    <g transform="translate(110 0)"><text y="274" fill="#345995" font-size="22" font-weight="700">01</text><text y="365" fill="#202428" font-size="30" font-weight="700">Company</text><text y="406" fill="#656B70" font-size="21">Single issuer profile</text><text y="438" fill="#656B70" font-size="21">and defaults</text></g>
+    <g transform="translate(390 0)"><text y="274" fill="#345995" font-size="22" font-weight="700">02</text><text y="365" fill="#202428" font-size="30" font-weight="700">Quote</text><text y="406" fill="#656B70" font-size="21">Snapshots + VAT</text><text y="438" fill="#656B70" font-size="21">controlled lifecycle</text></g>
+    <g transform="translate(670 0)"><text y="274" fill="#345995" font-size="22" font-weight="700">03</text><text y="365" fill="#202428" font-size="30" font-weight="700">Invoice</text><text y="406" fill="#656B70" font-size="21">Atomic numbering</text><text y="438" fill="#656B70" font-size="21">one-time conversion</text></g>
+    <g transform="translate(950 0)"><text y="274" fill="#345995" font-size="22" font-weight="700">04</text><text y="365" fill="#202428" font-size="30" font-weight="700">Payment</text><text y="406" fill="#656B70" font-size="21">Partial or full</text><text y="438" fill="#656B70" font-size="21">auditable voiding</text></g>
+    <g transform="translate(1230 0)"><text y="274" fill="#345995" font-size="22" font-weight="700">05</text><text y="365" fill="#202428" font-size="30" font-weight="700">Reporting</text><text y="406" fill="#656B70" font-size="21">Derived balances</text><text y="438" fill="#656B70" font-size="21">and revenue</text></g>
+    <line x1="110" y1="560" x2="1490" y2="560" stroke="#D7D3CB" stroke-width="2"/>
+    <text x="110" y="625" fill="#656B70" font-size="18" font-weight="700">IMPLEMENTED BOUNDARIES</text>
+    <text x="110" y="681" fill="#202428" font-size="27">Local-first</text><text x="345" y="681" fill="#202428" font-size="27">EUR</text><text x="500" y="681" fill="#202428" font-size="27">SQLite</text><text x="700" y="681" fill="#202428" font-size="27">No cloud account</text><text x="1040" y="681" fill="#202428" font-size="27">Snapshot-safe PDF</text>
+    <rect x="110" y="758" width="16" height="16" fill="#3F6B58"/><text x="148" y="773" fill="#656B70" font-size="20">Complete in v1.0.0</text>
   </g>
-  <g font-family="Segoe UI, Arial" text-anchor="middle" filter="url(#shadow)">
-    <g transform="translate(185 450)"><circle r="92" fill="#14213D"/><path d="M-31-15h62v52h-62zM-18-35h36v20h-36z" fill="none" stroke="#66D9EF" stroke-width="7"/><text y="138" fill="#172033" font-size="23" font-weight="700">Company</text><text y="170" fill="#62728A" font-size="18">profile</text></g>
-    <g transform="translate(420 450)"><circle r="92" fill="#FFFFFF"/><path d="M-34-40h68v80h-68zM-20-15h40M-20 2h40M-20 19h28" fill="none" stroke="#2D6CDF" stroke-width="7" stroke-linecap="round"/><text y="138" fill="#172033" font-size="23" font-weight="700">Quote</text><text y="170" fill="#62728A" font-size="18">snapshot + VAT</text></g>
-    <g transform="translate(655 450)"><circle r="92" fill="#FFFFFF"/><path d="M-34-42h68v84h-68zM-20-17h40M-20 1h40M-20 19h40" fill="none" stroke="#2D6CDF" stroke-width="7" stroke-linecap="round"/><circle cx="27" cy="31" r="17" fill="#66D9EF"/><text y="138" fill="#172033" font-size="23" font-weight="700">Invoice</text><text y="170" fill="#62728A" font-size="18">safe numbering</text></g>
-    <g transform="translate(890 450)"><circle r="92" fill="#FFFFFF"/><path d="M-32-42h64v84h-64zM-17-14h34M-17 3h34" fill="none" stroke="#2D6CDF" stroke-width="7"/><text x="0" y="31" fill="#2D6CDF" font-size="22" font-weight="700">PDF</text><text y="138" fill="#172033" font-size="23" font-weight="700">Document</text><text y="170" fill="#62728A" font-size="18">reproducible</text></g>
-    <g transform="translate(1125 450)"><circle r="92" fill="#FFFFFF"/><circle r="40" fill="none" stroke="#2D6CDF" stroke-width="7"/><path d="M-19 1l13 13 28-31" fill="none" stroke="#66D9EF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><text y="138" fill="#172033" font-size="23" font-weight="700">Payment</text><text y="170" fill="#62728A" font-size="18">auditable history</text></g>
-    <g transform="translate(1360 450)"><circle r="92" fill="#2D6CDF"/><path d="M-42 35v-34h20v34M-10 35v-57h20v57M22 35v-78h20v78" fill="none" stroke="#FFFFFF" stroke-width="9"/><text y="138" fill="#172033" font-size="23" font-weight="700">Dashboard</text><text y="170" fill="#62728A" font-size="18">business insight</text></g>
-  </g>
-  <rect x="250" y="710" width="1100" height="76" rx="38" fill="#DCE8FB"/>
-  <text x="800" y="758" text-anchor="middle" fill="#2B4E83" font-family="Segoe UI, Arial" font-size="22">Local-first • EUR • SQLite • no cloud account required</text>
 </svg>

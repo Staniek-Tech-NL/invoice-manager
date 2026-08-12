@@ -36,6 +36,7 @@ public sealed class Milestone6InfrastructureTests
         Assert.Equal(3, await context.Customers.CountAsync());
         Assert.Equal(5, await context.Invoices.CountAsync());
         Assert.Equal(2, await context.Payments.CountAsync());
+        Assert.All(await context.Quotes.ToListAsync(), quote => Assert.StartsWith("Q-", quote.Number));
         Assert.Contains(await context.Invoices.ToListAsync(), invoice => invoice.Status == InvoiceStatus.Paid);
         Assert.Contains(await context.Invoices.ToListAsync(), invoice => invoice.Status == InvoiceStatus.Overdue);
         await Assert.ThrowsAsync<InvalidOperationException>(() => seeder.SeedAsync());

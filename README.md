@@ -1,14 +1,20 @@
 # Invoice Manager
 
-Invoice Manager is a Windows desktop application for freelancers and small businesses that need a focused way to manage customers, services, quotations, invoices, payments, and basic financial reporting.
+Invoice Manager is a release-ready, local-first Windows business application implementing a complete quotation-to-payment workflow with transactional numbering, immutable historical snapshots, auditable payments, reproducible PDFs, and automated persistence testing.
 
-![Invoice Manager portfolio cover](docs/images/presentation/portfolio-hero.png)
+**.NET 10 · WPF · MVVM · Clean Architecture · EF Core · SQLite**
+
+![Invoice Manager dashboard](docs/images/screenshots/01-dashboard.png)
 
 > Project status: `v1.0.0` portfolio release complete locally. The self-contained Windows package, release notes, screenshots, presentation assets, and publication workflow are ready; GitHub publication awaits a configured remote repository.
 
-## Product Scope
+## What It Solves
 
-The MVP supports one company profile and one currency (EUR). Its core workflow is:
+Freelancers and small businesses often duplicate customer, pricing, VAT, and payment data across spreadsheets and document templates. That approach makes status tracking fragile and can silently change historical output after a company address, customer record, service price, VAT rate, or logo is edited.
+
+Invoice Manager keeps the workflow and its business history in one local SQLite database. It supports one company profile and EUR without requiring a cloud account, and deliberately stops short of accounting or ERP scope.
+
+## Demo Workflow
 
 ```text
 Configure company -> Create customer -> Create service -> Create quote
@@ -16,7 +22,25 @@ Configure company -> Create customer -> Create service -> Create quote
 -> Update dashboard
 ```
 
-Invoice Manager is not intended to replace accounting software or an ERP system.
+Run a safe fictional dataset against a new database with `--demo`. The seeder refuses non-empty business databases, so evaluation data cannot be mixed accidentally with existing records.
+
+## Key Engineering Challenges
+
+### Historical snapshots
+
+Issued documents own persisted issuer, customer, line-item, and logo snapshots. Later edits affect new documents only, keeping historical PDFs reproducible.
+
+### Transactional numbering and conversion
+
+Yearly quote and invoice numbers are allocated only on first persistence. Sequence updates, aggregate persistence, and accepted-quote conversion are atomic, with database uniqueness constraints as a final safeguard.
+
+### Recorded and auditable payments
+
+Partial and full payments derive outstanding balances and invoice status. Records are immutable; an incorrect payment is voided once with a reason and UTC timestamp instead of rewriting history.
+
+### Deterministic time
+
+Business dates and UTC audit instants are separate concepts. An injected clock makes expiration, overdue, payment, and audit behavior repeatable in automated tests.
 
 ## Implemented Features
 
@@ -35,7 +59,7 @@ Invoice Manager is not intended to replace accounting software or an ERP system.
 - Transactional fictional demo data that can only be loaded into an empty database
 - Keyboard navigation, accessibility labels, empty states, validation feedback, and versioned release packaging
 
-## Product Preview
+## Screenshots
 
 | Dashboard | Quotation editor |
 |---|---|
@@ -73,6 +97,23 @@ InvoiceManager.Infrastructure implements persistence, PDF, and storage ports
 
 The Domain project has no dependencies. Business logic belongs in Domain or Application, never in WPF views, view models, or persistence code. See [Architecture](docs/architecture.md) and the [decision records](docs/decisions/README.md).
 
+![Invoice Manager architecture](docs/images/presentation/architecture.png)
+
+## Quality and Testing
+
+| Evidence | Result |
+|---|---|
+| Automated tests | **97 passed / 0 failed** |
+| Domain | **43 tests** |
+| Application | **26 tests** |
+| Infrastructure | **28 tests** |
+| Release build | **0 warnings / 0 errors** |
+| NuGet vulnerability audit | **0 known vulnerable dependencies** |
+| EF Core model | **No pending migrations** |
+| Windows package | **Verified self-contained win-x64 build** |
+
+Infrastructure coverage includes concurrent document numbering, transaction rollback, one-time quote conversion, competing payment registration, database constraints, migrations, snapshot persistence, safe demo seeding, and PDF generation. Representative application screens and PDFs are also reviewed visually.
+
 ## Repository Layout
 
 ```text
@@ -82,9 +123,9 @@ docs/       product and engineering documentation
 .github/    CI and collaboration templates
 ```
 
-The planned detailed layout is documented in [Architecture](docs/architecture.md).
+The detailed layout is documented in [Architecture](docs/architecture.md).
 
-## Getting Started
+## Running the Application
 
 ### Prerequisites
 
@@ -138,10 +179,6 @@ assets/
 
 Generated PDFs are exported separately to a location selected by the user.
 
-## Testing
-
-The project has 97 automated tests covering financial calculations, document numbering, snapshots, payments, demo-data safety, PDF generation, dashboard reporting, status transitions, use cases, database constraints, paths, and migrations. See the [Testing Strategy](docs/testing-strategy.md).
-
 ## Documentation
 
 - [Project overview](docs/project-overview.md)
@@ -153,15 +190,19 @@ The project has 97 automated tests covering financial calculations, document num
 - [Roadmap](docs/roadmap.md)
 - [Portfolio case study](docs/case-study.md)
 - [Presentation assets](docs/presentation-assets.md)
+- [Editable engineering case-study deck](docs/presentation/invoice-manager-engineering-case-study.pptx)
 - [Version 1.0.0 release notes](docs/releases/v1.0.0.md)
 - [Milestone reports](docs/milestone-reports/README.md)
-- [Architecture decisions](docs/decisions/README.md)
 - [Contributing](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
 
-## Roadmap
+## Engineering Decisions
 
-Development is split into seven completed milestones, from foundation through customers, quotes, invoices, payments, PDF generation, dashboard reporting, and portfolio polish. See the complete [Roadmap](docs/roadmap.md).
+Nine accepted ADRs document the major choices: Clean Architecture, WPF/MVVM, SQLite, first-save numbering, historical snapshots, recorded payments, explicit date/time policy, auditable payment voiding, and PDFsharp. See the [Architecture Decision Records](docs/decisions/README.md).
+
+## Project Status and Release
+
+All seven milestones are complete. The verified `v1.0.0` Windows x64 package and [release notes](docs/releases/v1.0.0.md) are ready for GitHub publication when a remote repository is configured. See the completed [Roadmap](docs/roadmap.md).
 
 ## License
 

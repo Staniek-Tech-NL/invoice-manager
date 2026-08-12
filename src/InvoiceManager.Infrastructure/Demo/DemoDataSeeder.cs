@@ -117,7 +117,7 @@ public sealed class DemoDataSeeder(
         foreach (var group in quotes.GroupBy(quote => quote.IssueDate.Year))
         {
             var number = 0;
-            foreach (var quote in group.OrderBy(quote => quote.IssueDate)) quote.AssignNumber($"QUO-{group.Key}-{++number:0000}");
+            foreach (var quote in group.OrderBy(quote => quote.IssueDate)) quote.AssignNumber($"Q-{group.Key}-{++number:0000}");
         }
     }
 

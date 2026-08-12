@@ -1,10 +1,22 @@
-# Invoice Manager Case Study
+# Invoice Manager — Engineering Case Study
 
-> Status: complete for the local `v1.0.0` portfolio release. GitHub publication remains pending until a remote repository is configured.
+Invoice Manager is a release-ready, local-first Windows application for freelancers and small businesses. It replaces duplicated spreadsheet and document-template work with one coherent quotation-to-payment workflow: reusable customer and service data, snapshot-safe quotes and invoices, recorded payments, reproducible PDFs, and live reporting.
+
+The engineering challenge was not basic CRUD. The product protects historical documents, allocates business numbers transactionally, converts accepted quotations exactly once, records payment corrections without deleting history, and keeps date-dependent status behavior deterministic.
+
+| Release | Platform | Architecture | Persistence |
+|---|---|---|---|
+| `v1.0.0` | Windows x64 | Clean Architecture + MVVM | EF Core + SQLite |
+
+| Automated tests | Build | Dependency audit | EF Core model |
+|---|---|---|---|
+| **97 passing** | **0 warnings / 0 errors** | **0 known vulnerable packages** | **No pending migrations** |
+
+> The local release, source documentation, screenshots, and verified Windows package are complete. Public GitHub publication awaits configuration of the target remote repository.
 
 ## Problem
 
-Small businesses need a dependable quotation-to-payment workflow without the operational overhead of a full accounting suite. Spreadsheet and document-template approaches duplicate data, make status tracking difficult, and can silently change historical output when source information is edited.
+Small businesses need a dependable quotation-to-payment workflow without the operational overhead of a full accounting suite. Spreadsheet and document-template approaches duplicate customer and service data, obscure document state, make partial payments difficult to track, and can silently change historical output when a source address, price, VAT rate, or logo is edited.
 
 ## Goals
 
@@ -59,7 +71,7 @@ Milestone 5 delivered transactional partial and full payments, outstanding balan
 
 Milestone 6 completed the operational workflow with local quotation and invoice PDF export plus live reporting. PDFsharp renders persisted document snapshots, including a logo copied into SQLite at document creation, so historical exports are reproducible after company or customer edits. The dashboard derives month and year revenue from active recorded payments and combines it with current outstanding and overdue balances, active record counts, recent invoices, and a zero-filled 12-month chart.
 
-Milestone 7 turned the completed workflow into a release-ready portfolio project. A transactional demo-data seeder creates a coherent fictional dataset only when the business database is empty. The desktop experience adds keyboard shortcuts, automation labels, empty states, explicit logo controls, and visible version information. An isolated capture mode produces reviewed product screenshots and a representative PDF without touching user data. A guarded release script builds a self-contained Windows x64 package, while a dedicated visual kit supplies a generated hero and editable workflow and architecture diagrams for presentations.
+Milestone 7 turned the completed workflow into a release-ready portfolio project. A transactional demo-data seeder creates a coherent fictional dataset only when the business database is empty. The desktop experience adds keyboard shortcuts, automation labels, empty states, explicit logo controls, and visible version information. An isolated capture mode produces reviewed product screenshots and a representative PDF without touching user data. A guarded release script builds a self-contained Windows x64 package, while an editable nine-slide engineering case study combines real product evidence with restrained workflow and architecture diagrams.
 
 ## Testing Strategy
 

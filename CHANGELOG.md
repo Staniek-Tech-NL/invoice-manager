@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `--demo` startup support, isolated data-directory override, and portfolio capture workflow.
 - Keyboard navigation, automation labels, empty states, company-logo browse/clear controls, and visible version information.
 - Final dashboard, quotation editor, and invoice PDF screenshots.
-- Presentation-ready hero, architecture, and business-workflow graphics in PNG and SVG formats.
+- Editorial engineering case-study deck, real product crops, and architecture/business-workflow graphics in PNG and SVG formats.
 - Guarded self-contained `win-x64` release packaging script and release notes.
 - Milestone 7 test coverage, bringing the suite to 97 tests.
 
@@ -53,6 +53,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Updated documentation with the completed Milestone 4 invoice and conversion behavior.
 - Updated documentation and milestone reporting with the completed Milestone 5 payment behavior.
 - Updated architecture and product documentation with the completed Milestone 6 PDF and dashboard behavior.
+- Reframed public documentation around implemented v1.0.0 evidence and removed stale planning language.
+- Replaced the abstract presentation direction with a real-product, editorial engineering case study.
+
+### Fixed
+
+- Aligned demo quotation numbers with the implemented `Q-YYYY-NNNN` format and added regression coverage.
 
 ## Release History
 

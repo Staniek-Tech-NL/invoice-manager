@@ -19,7 +19,7 @@ Milestone 7 completes the portfolio-ready MVP. The application now includes safe
 - Preserved the configured company logo in Settings with explicit browse and clear actions.
 - Added keyboard navigation, automation labels, visible empty states, and version information.
 - Added automated portfolio capture for the dashboard, quotation editor, and representative invoice PDF.
-- Added a 16:9 generated hero, clean-architecture diagram, and quote-to-payment workflow graphic in PNG/SVG formats.
+- Added an editable nine-slide engineering case-study deck, real product crops, and redesigned clean-architecture and quote-to-payment diagrams in PNG/SVG formats.
 - Added a guarded PowerShell release script and self-contained `win-x64` packaging.
 - Updated README, roadmap, testing strategy, case study, changelog, release notes, and milestone index.
 

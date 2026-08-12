@@ -56,9 +56,9 @@ Use cases should be small and cohesive. A generic service containing unrelated w
 
 ### Infrastructure
 
-- EF Core `DbContext`, configurations, migrations, and repositories
+- EF Core `InvoiceManagerDbContext`, configurations, migrations, and repositories
 - SQLite connection and local data directory management
-- PDF generator implementation
+- PDFsharp 6.2.4 document generator
 - File storage and logging adapters
 - Registration extension methods for infrastructure services
 
@@ -102,9 +102,11 @@ Business dates (`IssueDate`, `DueDate`, `ValidUntil`, and `PaymentDate`) use dat
 
 ## Consistency and Transactions
 
-Operations that allocate a document number and persist a document must be atomic. `DocumentType + Year` is unique for number sequences, and final document numbers must also be protected by database constraints. Quote conversion creates the invoice and copies its snapshots within one transaction.
+Document numbering combines a process-wide `SemaphoreSlim`, a SQLite serializable transaction, and database uniqueness constraints. The repository loads or creates the `DocumentNumberSequence` for `DocumentType + Year`, increments it, assigns the final number, persists the aggregate, and commits as one unit. A failed save rolls the sequence increment back; opening or abandoning an editor never allocates a number. Unique indexes protect both sequence keys and final quote or invoice numbers.
 
-SQLite concurrency behavior and the precise number-allocation transaction will be validated during implementation before the feature is considered complete.
+Accepted quote conversion uses the same allocation lock and serializable transaction. It loads the source quote with its item snapshots, rejects an existing `SourceQuoteId`, creates the invoice snapshot, allocates the invoice number, and persists the complete aggregate before commit. A unique database index on `Invoice.SourceQuoteId` provides the final one-time conversion guarantee. Failure or repetition rolls back without consuming a number.
+
+Payment registration and voiding use a separate process-wide lock and serializable transaction. The invoice and all payments are loaded together, the aggregate validates the requested operation against the current outstanding balance, and the result is committed atomically. Competing registrations therefore cannot both spend the same outstanding balance. These numbering, conversion, rollback, uniqueness, and competing-payment scenarios are covered by automated SQLite infrastructure tests.
 
 ## Dependency Injection and Hosting
 

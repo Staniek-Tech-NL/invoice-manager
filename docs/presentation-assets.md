@@ -1,12 +1,13 @@
 # Presentation Assets
 
-The files in `docs/images/presentation` and `docs/images/screenshots` form a ready-to-use visual kit for an English-language portfolio presentation.
+The editable PowerPoint deck in `docs/presentation` and the files in `docs/images/presentation` and `docs/images/screenshots` form a ready-to-use English-language portfolio kit.
 
 ## Recommended Slide Sequence
 
 | Slide | Asset | Purpose |
 |---|---|---|
-| Cover | `presentation/portfolio-hero.png` | Dark 16:9 background with clear title space on the left |
+| Complete deck | `presentation/invoice-manager-engineering-case-study.pptx` | Nine-slide editorial software engineering case study |
+| Cover | `screenshots/01-dashboard.png` or `presentation/dashboard-crop.png` | Establish that the product is real before introducing architecture |
 | Product overview | `screenshots/01-dashboard.png` | Show the live operational summary and visual language |
 | Business workflow | `presentation/workflow.svg` or `.png` | Explain the quote-to-payment journey |
 | Product detail | `screenshots/02-quote-editor.png` | Demonstrate a real editor and snapshot-based line items |
@@ -17,14 +18,23 @@ The files in `docs/images/presentation` and `docs/images/screenshots` form a rea
 
 - PNG files are ready for direct placement in PowerPoint, Keynote, Canva, and web portfolios.
 - SVG diagrams remain sharp at any slide size and can be recolored in tools that support editable SVG.
-- All presentation graphics use a 16:9 canvas and the product palette: navy `#14213D`, blue `#2D6CDF`, cyan, and soft white.
+- The deck and diagrams use an editorial palette: background `#F4F1EA`, text `#202428`, secondary text `#656B70`, rules `#D7D3CB`, accent `#345995`, success `#3F6B58`, and error `#A55345`.
+- The deck avoids gradients, decorative 3D artwork, glowing elements, icon bubbles, and startup-pitch styling.
 
 ## Demo Data
 
 All screenshots use fictional companies, contacts, addresses, identifiers, and `.example` email addresses. They contain no production or personal user data.
 
-## Generated Hero
+## Presentation Direction
 
-`portfolio-hero.png` was created with the built-in image generation workflow from this art direction:
+The first slide uses a real dashboard crop rather than abstract artwork. The nine-slide narrative is:
 
-> Premium 16:9 abstract financial-technology presentation background; deep navy, royal blue, white, and restrained cyan; layered documents and a subtle data path; generous negative space on the left; no text, logos, people, currency symbols, or UI mockups.
+1. Product proof
+2. Quote-to-payment workflow
+3. Engineering challenges
+4. Clean Architecture
+5. Live dashboard
+6. Quotation workflow
+7. Reproducible documents
+8. Quality and verification
+9. Release result
