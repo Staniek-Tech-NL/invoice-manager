@@ -10,11 +10,18 @@ updates:
       microsoft-dotnet:
         patterns:
           - "Microsoft.*"
+        exclude-patterns:
+          - "Microsoft.NET.Test.Sdk"
+        update-types:
+          - "minor"
+          - "patch"
       test-tooling:
         patterns:
           - "xunit*"
           - "Microsoft.NET.Test.Sdk"
-          - "coverlet.collector"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -25,3 +32,6 @@ updates:
       github-actions:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
