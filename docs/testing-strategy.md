@@ -55,6 +55,8 @@ The M4 suite verifies direct invoice creation and editing, shared financial calc
 
 The M5 suite verifies payment validation and rounding, partial and full balances, overpayment rollback, Paid and Overdue derivation, Draft and Cancelled priority, concurrent payment protection, cancellation restrictions, immutable payment history, and auditable voiding with status restoration. At M5 completion the suite contains 86 tests: 42 domain, 22 application, and 22 infrastructure tests.
 
+The M6 suite verifies PDF use-case delegation and validation, historical logo copying and persistence, logo file limits, readable quote and invoice PDF output, status refresh before dashboard queries, payment-based monthly and yearly revenue, balances, overdue totals, record counts, recent invoices, and the complete 12-month series. At M6 completion the suite contains 95 tests: 43 domain, 26 application, and 26 infrastructure tests. Representative invoice and quotation PDFs are also rendered to PNG and inspected for alignment, spacing, clipping, tables, totals, and footers.
+
 ### UI Tests
 
 The MVP prioritizes testable view models and manual workflow verification. Automated WPF UI testing may be added when it provides clear value, especially for navigation or critical editor behavior.

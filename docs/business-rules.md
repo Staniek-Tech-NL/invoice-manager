@@ -91,7 +91,7 @@ Each quote and invoice persists three historical boundaries:
 - customer snapshot: the customer details required to render the document;
 - line-item snapshots: description, unit, unit price, VAT rate, quantity, and calculated values.
 
-Later edits to `CompanySettings`, customer records, or catalog entries do not alter existing documents. The textual issuer snapshot is required from the first applicable document migration. Historical logo preservation is finalized with the PDF implementation in M6.
+Later edits to `CompanySettings`, customer records, or catalog entries do not alter existing documents. New documents copy the configured logo bytes into their issuer snapshot; changing, moving, or deleting the source logo file therefore does not alter regenerated PDFs. Documents created before the M6 migration remain valid and render without a logo.
 
 ## Customer Archiving
 

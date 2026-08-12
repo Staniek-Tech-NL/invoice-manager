@@ -2,7 +2,7 @@
 
 Invoice Manager is a Windows desktop application for freelancers and small businesses that need a focused way to manage customers, services, quotations, invoices, payments, and basic financial reporting.
 
-> Project status: Milestone 5 complete. Invoices now support recorded partial and full payments, outstanding balances, Paid and Overdue status derivation, overpayment protection, concurrency-safe registration, and auditable payment voiding. PDF export and dashboard reporting are next in Milestone 6.
+> Project status: Milestone 6 complete. Quotations and invoices can be exported as snapshot-safe PDFs, and the dashboard reports payment revenue, balances, overdue amounts, record counts, recent invoices, and a 12-month revenue chart. Portfolio polish is next in Milestone 7.
 
 ## Product Scope
 
@@ -27,12 +27,13 @@ Invoice Manager is not intended to replace accounting software or an ERP system.
 - One-time atomic conversion from an accepted quotation to a linked invoice
 - Recorded partial and full payments with outstanding balances, Paid and Overdue status, and overpayment protection
 - Immutable payment history with reasoned voiding instead of editing or deletion
+- Quote and invoice PDF export to a user-selected location
+- Persisted historical company logos for reproducible document output
+- Dashboard KPIs, recent invoices, and a 12-month payment-revenue chart
 
 ## Planned Features
 
-- Quote and invoice PDF export
-- Dashboard KPIs, recent invoices, and monthly revenue chart
-- Company logo and document branding
+- Demo data, final screenshots, accessibility review, and release packaging
 
 ## Technology
 
@@ -43,6 +44,7 @@ Invoice Manager is not intended to replace accounting software or an ERP system.
 | Desktop UI | WPF |
 | UI pattern | MVVM with CommunityToolkit.Mvvm |
 | Persistence | Entity Framework Core 10 and SQLite |
+| PDF | PDFsharp 6.2.4 |
 | Hosting and DI | Microsoft.Extensions.Hosting |
 | Testing | xUnit |
 | CI | GitHub Actions on Windows |
@@ -96,7 +98,7 @@ dotnet test InvoiceManager.sln --no-build --configuration Release
 dotnet run --project src/InvoiceManager.App/InvoiceManager.App.csproj
 ```
 
-On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI includes reusable records, company settings, quotations, invoices, accepted quote conversion, payment history, balances, and financial status workflows.
+On startup, the application creates its directories and applies pending EF Core migrations automatically. The current UI includes the complete company-to-payment workflow, PDF export, and live financial dashboard reporting.
 
 ## Local Data
 
@@ -108,11 +110,11 @@ logs/invoice-manager.log
 assets/
 ```
 
-Generated PDFs will be exported separately to a location selected by the user.
+Generated PDFs are exported separately to a location selected by the user.
 
 ## Testing
 
-The project targets 50–100 meaningful tests covering financial calculations, document numbering, snapshots, payments, status transitions, use cases, database constraints, and migrations. See the [Testing Strategy](docs/testing-strategy.md).
+The project has 95 automated tests covering financial calculations, document numbering, snapshots, payments, PDF generation, dashboard reporting, status transitions, use cases, database constraints, and migrations. See the [Testing Strategy](docs/testing-strategy.md).
 
 ## Documentation
 

@@ -1,3 +1,4 @@
+using InvoiceManager.Application.Common.Storage;
 using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Customers;
 using InvoiceManager.Application.Settings;
@@ -10,7 +11,8 @@ public sealed class CreateQuote(
     IQuoteRepository quoteRepository,
     ICustomerRepository customerRepository,
     ICompanySettingsRepository settingsRepository,
-    IApplicationClock clock)
+    IApplicationClock clock,
+    ILogoContentReader? logoContentReader = null)
 {
     public async Task<QuoteDetails> ExecuteAsync(
         QuoteInput input,
@@ -39,9 +41,12 @@ public sealed class CreateQuote(
             customer.Phone,
             customer.VatNumber);
 
+        var logoContent = logoContentReader is null
+            ? null
+            : await logoContentReader.ReadAsync(settings.LogoPath, cancellationToken);
         var quote = Quote.Create(
             customer.Id,
-            settings.CreateSnapshot(),
+            settings.CreateSnapshot(logoContent),
             customerSnapshot,
             input.IssueDate,
             input.ValidUntil,

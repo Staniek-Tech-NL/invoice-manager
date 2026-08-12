@@ -57,9 +57,11 @@ Milestone 4 added independent invoice creation and one-time conversion from acce
 
 Milestone 5 delivered transactional partial and full payments, outstanding balances, overpayment protection, and deterministic Paid and Overdue derivation. Concurrent registration is serialized within the desktop application so competing payments cannot exceed the balance. Incorrect entries are never edited or deleted: ADR-0008 defines one-time voiding with a reason and UTC timestamp, preserving the original record while immediately recalculating balance and status.
 
+Milestone 6 completed the operational workflow with local quotation and invoice PDF export plus live reporting. PDFsharp renders persisted document snapshots, including a logo copied into SQLite at document creation, so historical exports are reproducible after company or customer edits. The dashboard derives month and year revenue from active recorded payments and combines it with current outstanding and overdue balances, active record counts, recent invoices, and a zero-filled 12-month chart.
+
 ## Testing Strategy
 
-The project currently has 86 passing automated tests: 42 domain tests, 22 application tests, and 22 infrastructure tests. Coverage now includes reusable records, document calculations and lifecycles, snapshots, numbering, quote conversion, partial and full payments, overpayment rollback, concurrent registration, Paid and Overdue status, auditable voiding, SQLite persistence, filtering, and expiration. Clean-clone verification restores, builds, and tests the committed repository independently. Future milestones will add PDF and dashboard coverage.
+The project currently has 95 passing automated tests: 43 domain tests, 26 application tests, and 26 infrastructure tests. Coverage includes reusable records, calculations and lifecycles, snapshots and historical logos, numbering, quote conversion, payments and voiding, concurrency, PDF generation, dashboard summaries, SQLite persistence, filtering, and expiration. Representative PDFs are additionally rendered and reviewed visually. Clean-clone verification restores, builds, and tests the committed repository independently.
 
 ## Result
 

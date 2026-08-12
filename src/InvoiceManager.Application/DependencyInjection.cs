@@ -1,4 +1,6 @@
 using InvoiceManager.Application.Customers;
+using InvoiceManager.Application.Dashboard;
+using InvoiceManager.Application.Documents;
 using InvoiceManager.Application.Invoices;
 using InvoiceManager.Application.Payments;
 using InvoiceManager.Application.Products;
@@ -37,6 +39,9 @@ public static class DependencyInjection
         services.AddTransient<ConvertQuoteToInvoice>();
         services.AddTransient<RegisterPayment>();
         services.AddTransient<VoidPayment>();
+        services.AddTransient<GenerateInvoicePdf>();
+        services.AddTransient<GenerateQuotePdf>();
+        services.AddTransient<GetDashboardSummary>();
 
         return services;
     }

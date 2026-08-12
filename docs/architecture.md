@@ -120,7 +120,7 @@ Application and Domain code obtain `UtcNow` and the application-local `Today` th
 
 ## PDF Boundary
 
-Application code depends on an interface such as `IDocumentPdfGenerator`; Infrastructure owns the PDF library. The concrete library will be selected before Milestone 6 and recorded in a new ADR.
+Application code depends on `IDocumentPdfGenerator`; Infrastructure implements it with PDFsharp 6.2.4. The generator loads persisted document aggregates and renders only their issuer, customer, line-item, date, total, payment, and logo snapshots. The WPF layer supplies a user-selected output path. See [ADR-0009](decisions/0009-use-pdfsharp.md).
 
 ## Repository Structure
 

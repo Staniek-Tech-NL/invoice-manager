@@ -22,15 +22,16 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox Height="36" Padding="10,6" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
             <Button Grid.Column="1" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding SearchCommand}" Content="Search" />
-            <Button Grid.Column="3" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditSelectedCommand}" Content="Edit" />
-            <Button Grid.Column="4" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding MarkSentCommand}" Content="Mark sent" />
-            <Button Grid.Column="5" Margin="8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding CancelInvoiceCommand}" Content="Cancel invoice" />
-            <Button Grid.Column="6" Margin="0,0,8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding OpenPaymentPanelCommand}" Content="Payments" />
-            <Button Grid.Column="7" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding OpenCreateEditorCommand}" Content="+ New invoice" />
+            <Button Grid.Column="3" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding GeneratePdfCommand}" Content="Export PDF" />
+            <Button Grid.Column="4" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding EditSelectedCommand}" Content="Edit" />
+            <Button Grid.Column="5" Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding MarkSentCommand}" Content="Mark sent" />
+            <Button Grid.Column="6" Margin="8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding CancelInvoiceCommand}" Content="Cancel invoice" />
+            <Button Grid.Column="7" Margin="0,0,8,0" Style="{StaticResource SecondaryButtonStyle}" Command="{Binding OpenPaymentPanelCommand}" Content="Payments" />
+            <Button Grid.Column="8" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding OpenCreateEditorCommand}" Content="+ New invoice" />
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>

@@ -40,6 +40,7 @@ internal sealed class QuoteConfiguration : IEntityTypeConfiguration<Quote>
             issuer.Property(value => value.Iban).HasColumnName("IssuerIban").HasMaxLength(50);
             issuer.Property(value => value.Email).HasColumnName("IssuerEmail").HasMaxLength(254);
             issuer.Property(value => value.Phone).HasColumnName("IssuerPhone").HasMaxLength(50);
+            issuer.Property(value => value.LogoContent).HasColumnName("IssuerLogoContent");
         });
 
         builder.OwnsOne(quote => quote.Customer, customer =>

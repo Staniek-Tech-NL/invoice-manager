@@ -1,10 +1,12 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using InvoiceManager.App.Navigation;
 using InvoiceManager.App.Services;
 using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Customers;
+using InvoiceManager.Application.Documents;
 using InvoiceManager.Application.Invoices;
 using InvoiceManager.Application.Products;
 using InvoiceManager.Application.Quotes;
@@ -22,6 +24,7 @@ public sealed partial class QuotesViewModel(
     SearchProductServices searchProductServices,
     GetCompanySettings getCompanySettings,
     ConvertQuoteToInvoice convertQuoteToInvoice,
+    GenerateQuotePdf generateQuotePdf,
     IApplicationClock clock,
     IUserDialogService dialogService) : ObservableObject, IActivatableNavigationPage
 {
@@ -36,6 +39,7 @@ public sealed partial class QuotesViewModel(
     [NotifyCanExecuteChangedFor(nameof(RejectCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertToInvoiceCommand))]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GeneratePdfCommand))]
     private bool _isBusy;
 
     [ObservableProperty]
@@ -44,6 +48,7 @@ public sealed partial class QuotesViewModel(
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyCanExecuteChangedFor(nameof(RejectCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertToInvoiceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GeneratePdfCommand))]
     private QuoteDetails? _selectedQuote;
 
     [ObservableProperty]
@@ -250,6 +255,20 @@ public sealed partial class QuotesViewModel(
         });
     }
 
+    [RelayCommand(CanExecute = nameof(CanGeneratePdf))]
+    private async Task GeneratePdfAsync()
+    {
+        var quote = SelectedQuote!;
+        var path = dialogService.ChoosePdfSavePath(SafePdfFileName(quote.Number));
+        if (path is null) return;
+
+        await RunBusyAsync(async () =>
+        {
+            await generateQuotePdf.ExecuteAsync(quote.Id, path);
+            StatusMessage = $"Quote PDF exported to {path}.";
+        });
+    }
+
     private async Task ChangeStatusAsync(QuoteStatus status, string confirmation)
     {
         var quote = SelectedQuote!;
@@ -314,7 +333,7 @@ public sealed partial class QuotesViewModel(
         {
             await operation();
         }
-        catch (Exception exception) when (exception is ArgumentException or InvalidOperationException or KeyNotFoundException)
+        catch (Exception exception) when (exception is ArgumentException or InvalidOperationException or KeyNotFoundException or IOException or UnauthorizedAccessException)
         {
             ErrorMessage = exception.Message;
         }
@@ -340,5 +359,10 @@ public sealed partial class QuotesViewModel(
 
     private bool CanConvertToInvoice() => !IsBusy && SelectedQuote?.Status == QuoteStatus.Accepted;
 
+    private bool CanGeneratePdf() => !IsBusy && SelectedQuote is not null;
+
     private bool CanSave() => !IsBusy && IsEditorOpen;
+
+    private static string SafePdfFileName(string number) =>
+        string.Concat(number.Select(character => Path.GetInvalidFileNameChars().Contains(character) ? '-' : character)) + ".pdf";
 }

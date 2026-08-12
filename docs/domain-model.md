@@ -95,7 +95,7 @@ Documents must preserve what was issued. Each quote and invoice stores:
 
 The implementation may model the issuer fields as an owned type or value object such as `IssuerSnapshot`. The exact persistence shape may be refined before the document migration, but the snapshot boundary is mandatory. Historical rendering never reads current `CompanySettings` in place of the persisted issuer snapshot.
 
-Changing company settings, a customer address, catalog price, description, or VAT rate affects new documents only. Existing documents retain their stored snapshots. The strategy for preserving a historical logo asset is finalized with PDF implementation in M6; textual issuer fields are part of the document model from the first applicable migration.
+Changing company settings, a customer address, catalog price, description, VAT rate, or logo affects new documents only. Existing documents retain their stored snapshots. Since M6, `IssuerSnapshot` also stores optional logo bytes; pre-M6 documents keep a null logo and remain exportable.
 
 ## Date and Time Model
 

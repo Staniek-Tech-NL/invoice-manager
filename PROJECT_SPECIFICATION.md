@@ -6,7 +6,7 @@
 **Default project language:** English  
 **Primary audience:** Freelancers and small businesses  
 **MVP currency:** EUR  
-**Project status:** Milestone 5 complete / PDF and Dashboard next
+**Project status:** Milestone 6 complete / portfolio polish next
 
 ---
 
@@ -71,7 +71,7 @@ Project discussions may be conducted in other languages when appropriate, but re
 | Testing | xUnit |
 | CI | GitHub Actions |
 | Version Control | Git + GitHub |
-| PDF | Abstracted behind an interface; library selected before M6 |
+| PDF | PDFsharp 6.2.4 behind `IDocumentPdfGenerator` |
 
 ---
 
@@ -471,7 +471,7 @@ IssuerEmail
 IssuerPhone
 ```
 
-The implementation may use an owned type or value object such as `IssuerSnapshot`. Historical views and regenerated PDFs use the persisted issuer, customer, and line-item snapshots. They must not substitute current values from `CompanySettings`, `Customer`, or `ProductService`. Historical logo preservation is finalized with PDF implementation in M6.
+The implementation uses an owned value object named `IssuerSnapshot`. Historical views and regenerated PDFs use persisted issuer, customer, line-item, and logo snapshots. They do not substitute current values from `CompanySettings`, `Customer`, or `ProductService`. Since M6, new documents persist optional logo bytes; older documents remain valid with no logo.
 
 Example:
 
@@ -829,7 +829,7 @@ Infrastructure
 PDF library
 ```
 
-The PDF library is selected before Milestone 6.
+PDFsharp 6.2.4 is used in Infrastructure behind the Application interface. See ADR-0009.
 
 Historical PDF generation uses persisted issuer, customer, and line-item snapshots. It must not read current company, customer, or catalog values in place of document snapshots.
 
@@ -1308,7 +1308,7 @@ Overpayment protection
 Overdue logic
 ```
 
-### M6 — PDF & Dashboard
+### M6 — PDF & Dashboard — COMPLETE
 
 ```text
 Invoice PDF
@@ -1778,17 +1778,18 @@ Any AI working on the repository must follow these rules:
 | GitHub workflow | DESIGNED |
 | Documentation foundation | DONE |
 | ADR foundation | DONE |
-| PDF implementation | TO DECIDE — M6 |
+| PDF implementation | DONE — PDFsharp 6.2.4 |
 | Milestone 1 foundation | DONE |
 | Milestone 2 customers and services | DONE |
 | Milestone 3 quotations | DONE |
 | Milestone 4 invoices and quote conversion | DONE |
 | Milestone 5 payments and financial status | DONE |
-| Source code | M5 COMPLETE |
+| Milestone 6 PDF and dashboard | DONE |
+| Source code | M6 COMPLETE |
 | Local Git repository | DONE |
 | GitHub remote repository | NOT STARTED |
 | CI | CONFIGURED |
-| UI | SHELL, REUSABLE RECORDS, SETTINGS, QUOTE, INVOICE, AND PAYMENT WORKFLOWS DONE |
+| UI | COMPLETE MVP WORKFLOW, PDF EXPORT, AND DASHBOARD DONE |
 
 ---
 

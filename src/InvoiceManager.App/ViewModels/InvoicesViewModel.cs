@@ -1,11 +1,13 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using InvoiceManager.App.Navigation;
 using InvoiceManager.App.Services;
 using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Customers;
+using InvoiceManager.Application.Documents;
 using InvoiceManager.Application.Invoices;
 using InvoiceManager.Application.Payments;
 using InvoiceManager.Application.Products;
@@ -24,6 +26,7 @@ public sealed partial class InvoicesViewModel(
     GetCompanySettings getCompanySettings,
     RegisterPayment registerPayment,
     VoidPayment voidPayment,
+    GenerateInvoicePdf generateInvoicePdf,
     IApplicationClock clock,
     IUserDialogService dialogService) : ObservableObject, IActivatableNavigationPage
 {
@@ -38,6 +41,7 @@ public sealed partial class InvoicesViewModel(
     [NotifyCanExecuteChangedFor(nameof(OpenPaymentPanelCommand))]
     [NotifyCanExecuteChangedFor(nameof(SavePaymentCommand))]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GeneratePdfCommand))]
     private bool _isBusy;
 
     [ObservableProperty]
@@ -46,6 +50,7 @@ public sealed partial class InvoicesViewModel(
     [NotifyCanExecuteChangedFor(nameof(CancelInvoiceCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenPaymentPanelCommand))]
     [NotifyCanExecuteChangedFor(nameof(SavePaymentCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GeneratePdfCommand))]
     private InvoiceDetails? _selectedInvoice;
 
     [ObservableProperty]
@@ -325,6 +330,20 @@ public sealed partial class InvoicesViewModel(
     [RelayCommand(CanExecute = nameof(CanCancelInvoice))]
     private Task CancelInvoiceAsync() => ChangeStatusAsync(InvoiceStatus.Cancelled, "Cancel selected invoice?");
 
+    [RelayCommand(CanExecute = nameof(CanGeneratePdf))]
+    private async Task GeneratePdfAsync()
+    {
+        var invoice = SelectedInvoice!;
+        var path = dialogService.ChoosePdfSavePath(SafePdfFileName(invoice.Number));
+        if (path is null) return;
+
+        await RunBusyAsync(async () =>
+        {
+            await generateInvoicePdf.ExecuteAsync(invoice.Id, path);
+            StatusMessage = $"Invoice PDF exported to {path}.";
+        });
+    }
+
     private async Task ChangeStatusAsync(InvoiceStatus status, string confirmation)
     {
         var invoice = SelectedInvoice!;
@@ -392,7 +411,7 @@ public sealed partial class InvoicesViewModel(
         {
             await operation();
         }
-        catch (Exception exception) when (exception is ArgumentException or InvalidOperationException or KeyNotFoundException)
+        catch (Exception exception) when (exception is ArgumentException or InvalidOperationException or KeyNotFoundException or IOException or UnauthorizedAccessException)
         {
             ErrorMessage = exception.Message;
         }
@@ -427,6 +446,8 @@ public sealed partial class InvoicesViewModel(
 
     private bool CanOpenPaymentPanel() => !IsBusy && SelectedInvoice is not null;
 
+    private bool CanGeneratePdf() => !IsBusy && SelectedInvoice is not null;
+
     private bool CanSavePayment() =>
         !IsBusy &&
         IsPaymentPanelOpen &&
@@ -437,4 +458,7 @@ public sealed partial class InvoicesViewModel(
         SelectedPayment is { IsVoided: false };
 
     private bool CanSave() => !IsBusy && IsEditorOpen;
+
+    private static string SafePdfFileName(string number) =>
+        string.Concat(number.Select(character => Path.GetInvalidFileNameChars().Contains(character) ? '-' : character)) + ".pdf";
 }

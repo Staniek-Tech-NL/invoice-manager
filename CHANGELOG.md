@@ -29,6 +29,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Derived Paid and Overdue status, overpayment rollback, and concurrency-safe payment registration.
 - Auditable one-time payment voiding with a required reason and retained history.
 - A payment-voiding migration, ADR-0008, and Milestone 5 coverage bringing the suite to 86 tests.
+- PDFsharp-based quotation and invoice export with user-selected destinations and visually verified A4 layouts.
+- Snapshot-persisted company logos with an EF Core migration and ADR-0009.
+- Dashboard KPIs, active record counts, recent invoices, and a 12-month payment-revenue chart.
+- Milestone 6 application and infrastructure coverage bringing the suite to 95 tests.
 
 ### Changed
 
@@ -36,6 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Updated product and engineering documentation with the completed Milestone 3 behavior and rounding policy.
 - Updated documentation with the completed Milestone 4 invoice and conversion behavior.
 - Updated documentation and milestone reporting with the completed Milestone 5 payment behavior.
+- Updated architecture and product documentation with the completed Milestone 6 PDF and dashboard behavior.
 
 ## Planned Releases
 

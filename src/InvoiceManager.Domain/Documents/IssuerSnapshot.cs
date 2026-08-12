@@ -24,6 +24,8 @@ public sealed class IssuerSnapshot
 
     public string? Phone { get; private set; }
 
+    public byte[]? LogoContent { get; private set; }
+
     private IssuerSnapshot()
     {
     }
@@ -38,7 +40,8 @@ public sealed class IssuerSnapshot
         string? chamberOfCommerceNumber,
         string? iban,
         string? email,
-        string? phone)
+        string? phone,
+        byte[]? logoContent = null)
     {
         return new IssuerSnapshot
         {
@@ -52,6 +55,7 @@ public sealed class IssuerSnapshot
             Iban = TextRules.Optional(iban, nameof(iban), 50),
             Email = TextRules.Email(email, nameof(email)),
             Phone = TextRules.Optional(phone, nameof(phone), 50),
+            LogoContent = logoContent?.ToArray(),
         };
     }
 
@@ -67,6 +71,7 @@ public sealed class IssuerSnapshot
             ChamberOfCommerceNumber,
             Iban,
             Email,
-            Phone);
+            Phone,
+            LogoContent);
     }
 }

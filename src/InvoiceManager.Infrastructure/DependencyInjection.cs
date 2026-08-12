@@ -1,11 +1,15 @@
 using InvoiceManager.Application.Common.Storage;
 using InvoiceManager.Application.Common.Time;
 using InvoiceManager.Application.Customers;
+using InvoiceManager.Application.Dashboard;
+using InvoiceManager.Application.Documents;
 using InvoiceManager.Application.Invoices;
 using InvoiceManager.Application.Payments;
 using InvoiceManager.Application.Products;
 using InvoiceManager.Application.Quotes;
 using InvoiceManager.Application.Settings;
+using InvoiceManager.Infrastructure.Dashboard;
+using InvoiceManager.Infrastructure.Pdf;
 using InvoiceManager.Infrastructure.Persistence;
 using InvoiceManager.Infrastructure.Persistence.Repositories;
 using InvoiceManager.Infrastructure.Storage;
@@ -31,6 +35,7 @@ public static class DependencyInjection
         services.AddSingleton(TimeProvider.System);
         services.AddSingleton(TimeZoneInfo.Local);
         services.AddSingleton<IApplicationClock, SystemApplicationClock>();
+        services.AddSingleton<ILogoContentReader, LogoContentReader>();
 
         var connectionString = new SqliteConnectionStringBuilder
         {
@@ -47,6 +52,8 @@ public static class DependencyInjection
         services.AddSingleton<IInvoiceRepository, InvoiceRepository>();
         services.AddSingleton<IQuoteToInvoiceConverter, QuoteToInvoiceConverter>();
         services.AddSingleton<IInvoicePaymentService, InvoicePaymentService>();
+        services.AddSingleton<IDashboardQuery, DashboardQuery>();
+        services.AddSingleton<IDocumentPdfGenerator, PdfSharpDocumentGenerator>();
         services.AddHostedService<DatabaseInitializationService>();
 
         return services;

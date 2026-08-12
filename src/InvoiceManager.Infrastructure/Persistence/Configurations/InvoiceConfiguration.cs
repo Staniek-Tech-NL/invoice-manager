@@ -48,6 +48,7 @@ internal sealed class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
             issuer.Property(value => value.Iban).HasColumnName("IssuerIban").HasMaxLength(50);
             issuer.Property(value => value.Email).HasColumnName("IssuerEmail").HasMaxLength(254);
             issuer.Property(value => value.Phone).HasColumnName("IssuerPhone").HasMaxLength(50);
+            issuer.Property(value => value.LogoContent).HasColumnName("IssuerLogoContent");
         });
 
         builder.OwnsOne(invoice => invoice.Customer, customer =>

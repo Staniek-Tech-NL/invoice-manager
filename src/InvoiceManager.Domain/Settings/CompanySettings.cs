@@ -116,7 +116,7 @@ public sealed class CompanySettings
         LogoPath = TextRules.Optional(logoPath, nameof(logoPath), 500);
     }
 
-    public IssuerSnapshot CreateSnapshot()
+    public IssuerSnapshot CreateSnapshot(byte[]? logoContent = null)
     {
         return IssuerSnapshot.Create(
             CompanyName,
@@ -128,6 +128,7 @@ public sealed class CompanySettings
             ChamberOfCommerceNumber,
             Iban,
             Email,
-            Phone);
+            Phone,
+            logoContent);
     }
 }

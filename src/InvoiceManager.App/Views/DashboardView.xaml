@@ -7,57 +7,60 @@
             <Setter Property="BorderBrush" Value="#E5EAF2" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="10" />
-            <Setter Property="Padding" Value="20" />
-            <Setter Property="Margin" Value="0,0,16,0" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Margin" Value="0,0,12,12" />
         </Style>
     </UserControl.Resources>
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="24" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <UniformGrid Columns="3">
+                <Border Style="{StaticResource MetricCardStyle}"><StackPanel><TextBlock Foreground="#6E7B91" Text="Revenue this month" /><TextBlock Margin="0,8,0,0" FontSize="23" FontWeight="SemiBold" Text="{Binding RevenueThisMonth, StringFormat={}{0:N2} EUR}" /></StackPanel></Border>
+                <Border Style="{StaticResource MetricCardStyle}"><StackPanel><TextBlock Foreground="#6E7B91" Text="Revenue this year" /><TextBlock Margin="0,8,0,0" FontSize="23" FontWeight="SemiBold" Text="{Binding RevenueThisYear, StringFormat={}{0:N2} EUR}" /></StackPanel></Border>
+                <Border Style="{StaticResource MetricCardStyle}"><StackPanel><TextBlock Foreground="#6E7B91" Text="Outstanding" /><TextBlock Margin="0,8,0,0" FontSize="23" FontWeight="SemiBold" Foreground="#2D6CDF" Text="{Binding OutstandingAmount, StringFormat={}{0:N2} EUR}" /></StackPanel></Border>
+                <Border Style="{StaticResource MetricCardStyle}"><StackPanel><TextBlock Foreground="#6E7B91" Text="Overdue" /><TextBlock Margin="0,8,0,0" FontSize="23" FontWeight="SemiBold" Foreground="#D55252" Text="{Binding OverdueAmount, StringFormat={}{0:N2} EUR}" /></StackPanel></Border>
+                <Border Style="{StaticResource MetricCardStyle}"><StackPanel><TextBlock Foreground="#6E7B91" Text="Invoices" /><TextBlock Margin="0,8,0,0" FontSize="23" FontWeight="SemiBold" Text="{Binding InvoiceCount}" /></StackPanel></Border>
+                <Border Style="{StaticResource MetricCardStyle}"><StackPanel><TextBlock Foreground="#6E7B91" Text="Active customers" /><TextBlock Margin="0,8,0,0" FontSize="23" FontWeight="SemiBold" Text="{Binding CustomerCount}" /></StackPanel></Border>
+            </UniformGrid>
 
-            <Border Grid.Column="0" Style="{StaticResource MetricCardStyle}">
-                <StackPanel>
-                    <TextBlock Foreground="#6E7B91" Text="Revenue this month" />
-                    <TextBlock Margin="0,10,0,0" FontSize="24" FontWeight="SemiBold" Foreground="#172033" Text="€0.00" />
-                </StackPanel>
-            </Border>
-            <Border Grid.Column="1" Style="{StaticResource MetricCardStyle}">
-                <StackPanel>
-                    <TextBlock Foreground="#6E7B91" Text="Revenue this year" />
-                    <TextBlock Margin="0,10,0,0" FontSize="24" FontWeight="SemiBold" Foreground="#172033" Text="€0.00" />
-                </StackPanel>
-            </Border>
-            <Border Grid.Column="2" Style="{StaticResource MetricCardStyle}">
-                <StackPanel>
-                    <TextBlock Foreground="#6E7B91" Text="Outstanding" />
-                    <TextBlock Margin="0,10,0,0" FontSize="24" FontWeight="SemiBold" Foreground="#2D6CDF" Text="€0.00" />
-                </StackPanel>
-            </Border>
-            <Border Grid.Column="3" Style="{StaticResource MetricCardStyle}" Margin="0">
-                <StackPanel>
-                    <TextBlock Foreground="#6E7B91" Text="Overdue" />
-                    <TextBlock Margin="0,10,0,0" FontSize="24" FontWeight="SemiBold" Foreground="#D55252" Text="€0.00" />
-                </StackPanel>
-            </Border>
+            <Grid Grid.Row="1" Margin="0,4,12,16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="16" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border Padding="20" Background="White" BorderBrush="#E5EAF2" BorderThickness="1" CornerRadius="10">
+                    <StackPanel>
+                        <TextBlock FontSize="17" FontWeight="SemiBold" Text="Revenue by month" />
+                        <ItemsControl Margin="0,18,0,0" ItemsSource="{Binding RevenueChart}">
+                            <ItemsControl.ItemsPanel><ItemsPanelTemplate><UniformGrid Rows="1" /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="160" Margin="3,0">
+                                        <Grid.RowDefinitions><RowDefinition Height="*" /><RowDefinition Height="20" /></Grid.RowDefinitions>
+                                        <Border Width="24" Height="{Binding Height}" VerticalAlignment="Bottom" Background="#2D6CDF" CornerRadius="4,4,0,0" ToolTip="{Binding Amount, StringFormat={}{0:N2} EUR}" />
+                                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" FontSize="10" Foreground="#6E7B91" Text="{Binding Label}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Padding="20" Background="White" BorderBrush="#E5EAF2" BorderThickness="1" CornerRadius="10">
+                    <StackPanel>
+                        <TextBlock FontSize="17" FontWeight="SemiBold" Text="Recent invoices" />
+                        <DataGrid Margin="0,12,0,0" Height="190" ItemsSource="{Binding RecentInvoices}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" RowHeaderWidth="0" BorderThickness="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*" Header="Number" Binding="{Binding Number}" />
+                                <DataGridTextColumn Width="2*" Header="Customer" Binding="{Binding CustomerCompanyName}" />
+                                <DataGridTextColumn Width="*" Header="Status" Binding="{Binding Status}" />
+                                <DataGridTextColumn Width="*" Header="Outstanding" Binding="{Binding OutstandingAmount, StringFormat={}{0:N2}}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <TextBlock Grid.Row="2" Margin="0,0,12,0" Foreground="#C43D3D" Text="{Binding ErrorMessage}" />
         </Grid>
-
-        <Border Grid.Row="2" Padding="32" Background="White" BorderBrush="#E5EAF2" BorderThickness="1" CornerRadius="10">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="SemiBold" Foreground="#172033" Text="Your business overview will appear here" />
-                <TextBlock Margin="0,10,0,0" HorizontalAlignment="Center" Foreground="#6E7B91" Text="Create customers, quotes, and invoices to populate the dashboard." />
-            </StackPanel>
-        </Border>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

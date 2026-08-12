@@ -52,11 +52,15 @@ Exit criterion: achieved. Invoices work independently, use safe yearly numbering
 
 Exit criterion: achieved. Partial, full, excessive, concurrent, overdue, and voided-payment scenarios preserve correct balances, statuses, transactions, and audit history.
 
-## M6 — PDF and Dashboard (`0.6.0`)
+## M6 — PDF and Dashboard (`0.6.0`) — Complete
 
 - Select and document the PDF library
 - Generate quote and invoice PDFs
 - Dashboard KPIs, recent invoices, and monthly revenue chart
+- Persist historical logo bytes with each document snapshot
+- Verify PDF layout visually and cover PDF/dashboard behavior with automated tests
+
+Exit criterion: achieved. Users can export professional snapshot-safe documents and see accurate payment-based business summaries.
 
 Exit criterion: users can export professional documents and see accurate business summaries.
 
